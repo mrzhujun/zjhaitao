@@ -22,7 +22,7 @@ class Token extends Api
      * 检测Token是否过期
      *
      */
-    public function check()
+    protected function check()
     {
         $token = $this->auth->getToken();
         $tokenInfo = \app\common\library\Token::get($token);
@@ -33,7 +33,7 @@ class Token extends Api
      * 刷新Token
      *
      */
-    public function refresh()
+    protected function refresh()
     {
         $token = $this->auth->getToken();
         $tokenInfo = \app\common\library\Token::get($token);

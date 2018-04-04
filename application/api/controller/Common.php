@@ -14,7 +14,7 @@ use think\Config;
 class Common extends Api
 {
 
-    protected $noNeedLogin = ['init'];
+    protected $noNeedLogin = ['*'];
     protected $noNeedRight = '*';
 
     public function _initialize()
@@ -29,7 +29,7 @@ class Common extends Api
      * @param string $lng 经度
      * @param string $lat 纬度
      */
-    public function init()
+    protected function init()
     {
         if ($version = $this->request->request('version'))
         {
@@ -51,10 +51,11 @@ class Common extends Api
 
     /**
      * 上传文件
-     * 
+     *
+     * @ApiMethod (POST)
      * @param File $file 文件流
      */
-    public function upload()
+    protected function upload()
     {
         $file = $this->request->file('file');
         if (empty($file))

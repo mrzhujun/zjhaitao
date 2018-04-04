@@ -15,7 +15,7 @@ class Ems extends Api
     protected $noNeedLogin = '*';
     protected $noNeedRight = '*';
 
-    public function _initialize()
+    protected function _initialize()
     {
         parent::_initialize();
         \think\Hook::add('ems_send', function($params) {
@@ -35,7 +35,7 @@ class Ems extends Api
      * @param string    $email      邮箱
      * @param string    $event      事件名称
      */
-    public function send()
+    protected function send()
     {
         $email = $this->request->request("email");
         $event = $this->request->request("event");
@@ -83,7 +83,7 @@ class Ems extends Api
      * @param string    $event      事件名称
      * @param string    $captcha    验证码
      */
-    public function check()
+    protected function check()
     {
         $email = $this->request->request("email");
         $event = $this->request->request("event");

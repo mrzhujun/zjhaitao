@@ -26,7 +26,7 @@ class Sms extends Api
      * @param string    $mobile     手机号
      * @param string    $event      事件名称
      */
-    public function send()
+    protected function send()
     {
         $mobile = $this->request->request("mobile");
         $event = $this->request->request("event");
@@ -74,7 +74,7 @@ class Sms extends Api
      * @param string    $event      事件名称
      * @param string    $captcha    验证码
      */
-    public function check()
+    protected function check()
     {
         $mobile = $this->request->request("mobile");
         $event = $this->request->request("event");

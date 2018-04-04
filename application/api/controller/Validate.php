@@ -15,7 +15,7 @@ class Validate extends Api
     protected $layout = '';
     protected $error = null;
 
-    public function _initialize()
+    protected function _initialize()
     {
         parent::_initialize();
     }
@@ -26,7 +26,7 @@ class Validate extends Api
      * @param string $email 邮箱
      * @param string $id 排除会员ID
      */
-    public function check_email_available()
+    protected function check_email_available()
     {
         $email = $this->request->request('email');
         $id = (int) $this->request->request('id');
@@ -44,7 +44,7 @@ class Validate extends Api
      * @param string $username 用户名
      * @param string $id 排除会员ID
      */
-    public function check_username_available()
+    protected function check_username_available()
     {
         $email = $this->request->request('username');
         $id = (int) $this->request->request('id');
@@ -62,7 +62,7 @@ class Validate extends Api
      * @param string $mobile 手机号
      * @param string $id 排除会员ID
      */
-    public function check_mobile_available()
+    protected function check_mobile_available()
     {
         $mobile = $this->request->request('mobile');
         $id = (int) $this->request->request('id');
@@ -79,7 +79,7 @@ class Validate extends Api
      * 
      * @param string $mobile 手机号
      */
-    public function check_mobile_exist()
+    protected function check_mobile_exist()
     {
         $mobile = $this->request->request('mobile');
         $count = User::where('mobile', '=', $mobile)->count();
@@ -95,7 +95,7 @@ class Validate extends Api
      * 
      * @param string $mobile 邮箱
      */
-    public function check_email_exist()
+    protected function check_email_exist()
     {
         $email = $this->request->request('email');
         $count = User::where('email', '=', $email)->count();
@@ -113,7 +113,7 @@ class Validate extends Api
      * @param string $captcha   验证码
      * @param string $event     事件
      */
-    public function check_sms_correct()
+    protected function check_sms_correct()
     {
         $mobile = $this->request->request('mobile');
         $captcha = $this->request->request('captcha');
@@ -132,7 +132,7 @@ class Validate extends Api
      * @param string $captcha   验证码
      * @param string $event     事件
      */
-    public function check_ems_correct()
+    protected function check_ems_correct()
     {
         $email = $this->request->request('email');
         $captcha = $this->request->request('captcha');
