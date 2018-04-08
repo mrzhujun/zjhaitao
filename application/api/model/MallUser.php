@@ -14,4 +14,6 @@ use think\Model;
 class MallUser extends Model
 {
     protected $autoWriteTimestamp = true;
+
+
 }
