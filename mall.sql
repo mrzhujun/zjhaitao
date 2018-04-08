@@ -10,13 +10,14 @@ create table fa_brand(
 )engine=MyISAM charset=utf8;
 
 #创建商品类别表
-create table fa_category(
+create table fa_cat(
     cat_id smallint unsigned not null auto_increment primary key comment '商品类别ID',
+    cat_pid smallint unsigned not null default 0 comment '商品类别父ID：0代表一级分类',
     cat_name varchar(30) not null default '' comment '商品类别名称',
     image varchar(80) not null default '' comment '商品类别图片',
     cat_desc varchar(255) not null default '' comment '商品类别描述',
     sort_order tinyint not null default 50 comment '填数字从小到大排序',
-    is_show tinyint not null default 1 comment '是否显示，默认显示:0=否,1=是',
+    is_show tinyint not null default 1 comment '是否显示，默认显示:0=否,1=是'
 )engine=MyISAM charset=utf8;
 
 #创建商品属性表
@@ -26,9 +27,9 @@ create table fa_attribute(
     attr_value varchar(255) not null default '' comment '属性值',
     attr_price decimal(10,2) not null default 0 comment '属性价格',
     goods_id int unsigned not null default 0 comment '商品ID',
-    attr_value text comment '属性的值',
+    goods_number smallint unsigned not null default 0 comment '商品库存',
     sort_order tinyint not null default 50 comment '属性排序依据',
-    index goods_id(goods_id),
+    index goods_id(goods_id)
 )engine=MyISAM charset=utf8;
 
 #创建商品表
@@ -46,21 +47,15 @@ create table fa_goods(
     promote_start_time int unsigned not null default 0 comment '促销起始时间',
     promote_end_time int unsigned not null default 0 comment '促销截止时间',
     goods_img varchar(50) not null default '' comment '商品图片',
-    goods_thumb varchar(50) not null default '' comment '商品缩略图',
-    goods_number smallint unsigned not null default 0 comment '商品库存',
     sell_count int unsigned not null default 0 comment '销售数量',
     click_count int unsigned not null default 0 comment '点击次数',
-    type_id smallint unsigned not null default 0 comment '商品类型ID',
     is_promote tinyint unsigned not null default 0 comment '是否促销，默认为0不促销',
     is_limit tinyint unsigned not null default 0 comment '是否限定,默认为0:0=否,1=是',
-    is_best tinyint unsigned not null default 0 comment '是否精品,默认为0:0=否,1=是',
     is_new tinyint unsigned not null default 0 comment '是否新品，默认为0:0=否,1=是',
-    is_hot tinyint unsigned not null default 0 comment '是否热卖,默认为0:0=否,1=是',
     is_onsale tinyint unsigned not null default 1 comment '是否上架,默认为1:0=否,1=是',
     add_time int unsigned not null default 0 comment '添加时间',
     index cat_id(cat_id),
-    index brand_id(brand_id),
-    index type_id(type_id)
+    index brand_id(brand_id)
 )engine=MyISAM charset=utf8;
 
 #创建商品相册表

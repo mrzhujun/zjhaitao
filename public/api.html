@@ -33,7 +33,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="http://www.fastadmin.net" target="_blank">Mr.Z</a>
+                    <a class="navbar-brand" href="http://www.fastadmin.net" target="_blank">奥莱海淘商城项目</a>
                 </div>
                 <div class="navbar-collapse collapse">
                     <form class="navbar-form navbar-right">
@@ -61,12 +61,12 @@
 
         <div class="container">
             <div class="panel-group" id="accordion">
-                                <h2>首页接口</h2>
+                                <h2>用户</h2>
                 <hr>
                                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <span class="label label-success">GET</span> <a data-toggle="collapse" data-parent="#accordion0" href="#collapseOne0"> /api/index/index</a>
+                            <span class="label label-primary">POST</span> <a data-toggle="collapse" data-parent="#accordion0" href="#collapseOne0"> /api/user/user_status</a> <span>返回用户注册状态</span>
                         </h4>
                     </div>
                     <div id="collapseOne0" class="panel-collapse collapse">
@@ -83,18 +83,38 @@
                             <div class="tab-content">
 
                                 <div class="tab-pane active" id="info0">
-                                    <div class="well">
-                                        首页                                    </div>
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading"><strong>Headers</strong></div>
-                                        <div class="panel-body">
-                                                                                        无
-                                                                                    </div>
-                                    </div>
+                                    <!--<div class="well">-->
+                                        <!--返回用户注册状态-->
+                                    <!--</div>-->
+                                    <!--<div class="panel panel-default">-->
+                                        <!--<div class="panel-heading"><strong>Headers</strong></div>-->
+                                        <!--<div class="panel-body">-->
+                                            <!---->
+                                            <!--无-->
+                                            <!---->
+                                        <!--</div>-->
+                                    <!--</div>-->
                                     <div class="panel panel-default">
                                         <div class="panel-heading"><strong>参数</strong></div>
                                         <div class="panel-body">
-                                                                                        无
+                                                                                        <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>名称</th>
+                                                        <th>类型</th>
+                                                        <th>必选</th>
+                                                        <th>描述</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                                                                        <tr>
+                                                        <td>open_id</td>
+                                                        <td>string</td>
+                                                        <td>是</td>
+                                                        <td>open_id</td>
+                                                    </tr>
+                                                                                                    </tbody>
+                                            </table>
                                                                                     </div>
                                     </div>
                                     <div class="panel panel-default">
@@ -110,9 +130,10 @@
                                                                                         <div class="panel panel-default">
                                                 <div class="panel-heading"><strong>参数</strong></div>
                                                 <div class="panel-body">
-                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/index/index" method="get" name="form0" id="form0">
+                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/user/user_status" method="POST" name="form0" id="form0">
                                                                                                                 <div class="form-group">
-                                                            无
+                                                            <label class="control-label" for="open_id">open_id</label>
+                                                            <input type="string" class="form-control input-sm" id="open_id" required placeholder="open_id" name="open_id">
                                                         </div>
                                                                                                                 <div class="form-group">
                                                             <button type="submit" class="btn btn-success send" rel="0">提交</button>
@@ -144,7 +165,16 @@
                                 <div class="tab-pane" id="sample0">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <pre id="sample_response0">无</pre>
+                                            <pre id="sample_response0">{
+     'code':'1/0',
+     'msg':'返回成功/失败',
+     'time':'1523173262',
+     'data':{
+             'status':'0/1/2',
+              'msg':'该用户还未注册/该用户已存在且不用上传头像昵称/需要继续上传昵称头像',
+              'data':{'user_id':1,'open_id':'open_id1','wx_name':'name1','wx_headimage':'image1'}
+     }
+     }</pre>
                                         </div>
                                     </div>
                                 </div><!-- #sample -->
@@ -153,12 +183,10 @@
                         </div>
                     </div>
                 </div>
-                                <h2>新闻测试接口</h2>
-                <hr>
                                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <span class="label label-success">GET</span> <a data-toggle="collapse" data-parent="#accordion1" href="#collapseOne1"> /api/news/read</a>
+                            <span class="label label-primary">POST</span> <a data-toggle="collapse" data-parent="#accordion1" href="#collapseOne1"> /api/user/register</a> <span>用户注册及更新头像昵称方法</span>
                         </h4>
                     </div>
                     <div id="collapseOne1" class="panel-collapse collapse">
@@ -175,14 +203,17 @@
                             <div class="tab-content">
 
                                 <div class="tab-pane active" id="info1">
-                                    <div class="well">
-                                        测试方法                                    </div>
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading"><strong>Headers</strong></div>
-                                        <div class="panel-body">
-                                                                                        无
-                                                                                    </div>
-                                    </div>
+                                    <!--<div class="well">-->
+                                        <!--用户注册及更新头像昵称方法-->
+                                    <!--</div>-->
+                                    <!--<div class="panel panel-default">-->
+                                        <!--<div class="panel-heading"><strong>Headers</strong></div>-->
+                                        <!--<div class="panel-body">-->
+                                            <!---->
+                                            <!--无-->
+                                            <!---->
+                                        <!--</div>-->
+                                    <!--</div>-->
                                     <div class="panel panel-default">
                                         <div class="panel-heading"><strong>参数</strong></div>
                                         <div class="panel-body">
@@ -197,10 +228,22 @@
                                                 </thead>
                                                 <tbody>
                                                                                                         <tr>
-                                                        <td>id</td>
-                                                        <td>integer</td>
+                                                        <td>open_id</td>
+                                                        <td>string</td>
                                                         <td>是</td>
-                                                        <td>会员ID</td>
+                                                        <td>open_id</td>
+                                                    </tr>
+                                                                                                        <tr>
+                                                        <td>wx_name</td>
+                                                        <td>string</td>
+                                                        <td>是</td>
+                                                        <td>微信昵称</td>
+                                                    </tr>
+                                                                                                        <tr>
+                                                        <td>wx_headimage</td>
+                                                        <td>file</td>
+                                                        <td>是</td>
+                                                        <td>微信头像</td>
                                                     </tr>
                                                                                                     </tbody>
                                             </table>
@@ -219,10 +262,18 @@
                                                                                         <div class="panel panel-default">
                                                 <div class="panel-heading"><strong>参数</strong></div>
                                                 <div class="panel-body">
-                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/news/read" method="get" name="form1" id="form1">
+                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/user/register" method="POST" name="form1" id="form1">
                                                                                                                 <div class="form-group">
-                                                            <label class="control-label" for="id">id</label>
-                                                            <input type="integer" class="form-control input-sm" id="id" required placeholder="会员ID" name="id">
+                                                            <label class="control-label" for="open_id">open_id</label>
+                                                            <input type="string" class="form-control input-sm" id="open_id" required placeholder="open_id" name="open_id">
+                                                        </div>
+                                                                                                                <div class="form-group">
+                                                            <label class="control-label" for="wx_name">wx_name</label>
+                                                            <input type="string" class="form-control input-sm" id="wx_name" required placeholder="微信昵称" name="wx_name">
+                                                        </div>
+                                                                                                                <div class="form-group">
+                                                            <label class="control-label" for="wx_headimage">wx_headimage</label>
+                                                            <input type="file" class="form-control input-sm" id="wx_headimage" required placeholder="微信头像" name="wx_headimage">
                                                         </div>
                                                                                                                 <div class="form-group">
                                                             <button type="submit" class="btn btn-success send" rel="1">提交</button>
@@ -255,424 +306,15 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <pre id="sample_response1">{
-  'code':'0',
-  'mesg':'返回成功'
-  'data':'data'
- }</pre>
-                                        </div>
-                                    </div>
-                                </div><!-- #sample -->
-
-                            </div><!-- .tab-content -->
-                        </div>
-                    </div>
-                </div>
-                                <h2>朱俊接口</h2>
-                <hr>
-                                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <span class="label label-success">GET</span> <a data-toggle="collapse" data-parent="#accordion2" href="#collapseOne2"> /api/test/zhujun</a>
-                        </h4>
-                    </div>
-                    <div id="collapseOne2" class="panel-collapse collapse">
-                        <div class="panel-body">
-
-                            <!-- Nav tabs -->
-                            <ul class="nav nav-tabs" id="doctab2">
-                                <li class="active"><a href="#info2" data-toggle="tab">基础信息</a></li>
-                                <li><a href="#sandbox2" data-toggle="tab">在线测试</a></li>
-                                <li><a href="#sample2" data-toggle="tab">返回示例</a></li>
-                            </ul>
-
-                            <!-- Tab panes -->
-                            <div class="tab-content">
-
-                                <div class="tab-pane active" id="info2">
-                                    <div class="well">
-                                        朱俊的测试方法                                    </div>
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading"><strong>Headers</strong></div>
-                                        <div class="panel-body">
-                                                                                        <table class="table table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th>名称</th>
-                                                        <th>类型</th>
-                                                        <th>必选</th>
-                                                        <th>描述</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                                                                        <tr>
-                                                        <td>token</td>
-                                                        <td>string</td>
-                                                        <td>是</td>
-                                                        <td>请求的Token</td>
-                                                    </tr>
-                                                                                                    </tbody>
-                                            </table>
-                                                                                    </div>
-                                    </div>
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading"><strong>参数</strong></div>
-                                        <div class="panel-body">
-                                                                                        <table class="table table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th>名称</th>
-                                                        <th>类型</th>
-                                                        <th>必选</th>
-                                                        <th>描述</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                                                                        <tr>
-                                                        <td>id</td>
-                                                        <td>integer</td>
-                                                        <td>是</td>
-                                                        <td>会员ID</td>
-                                                    </tr>
-                                                                                                    </tbody>
-                                            </table>
-                                                                                    </div>
-                                    </div>
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading"><strong>正文</strong></div>
-                                        <div class="panel-body">
-                                            无                                        </div>
-                                    </div>
-                                </div><!-- #info -->
-
-                                <div class="tab-pane" id="sandbox2">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                                                                        <div class="panel panel-default">
-                                                <div class="panel-heading"><strong>Headers</strong></div>
-                                                <div class="panel-body">
-                                                    <div class="headers">
-                                                                                                                <div class="form-group">
-                                                            <label class="control-label" for="token">token</label>
-                                                            <input type="string" class="form-control input-sm" id="token" required placeholder="请求的Token - Ex: " name="token">
-                                                        </div>
-                                                                                                            </div>
-                                                </div>
-                                            </div>
-                                                                                        <div class="panel panel-default">
-                                                <div class="panel-heading"><strong>参数</strong></div>
-                                                <div class="panel-body">
-                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/test/zhujun" method="get" name="form2" id="form2">
-                                                                                                                <div class="form-group">
-                                                            <label class="control-label" for="id">id</label>
-                                                            <input type="integer" class="form-control input-sm" id="id" required placeholder="会员ID" name="id">
-                                                        </div>
-                                                                                                                <div class="form-group">
-                                                            <button type="submit" class="btn btn-success send" rel="2">提交</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                            <div class="panel panel-default">
-                                                <div class="panel-heading"><strong>响应输出</strong></div>
-                                                <div class="panel-body">
-                                                    <div class="row">
-                                                        <div class="col-md-12" style="overflow-x:auto">
-                                                            <pre id="response_headers2"></pre>
-                                                            <pre id="response2"></pre>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="panel panel-default">
-                                                <div class="panel-heading"><strong>返回参数</strong></div>
-                                                <div class="panel-body">
-                                                                                                        无
-                                                                                                    </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div><!-- #sandbox -->
-
-                                <div class="tab-pane" id="sample2">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <pre id="sample_response2">无</pre>
-                                        </div>
-                                    </div>
-                                </div><!-- #sample -->
-
-                            </div><!-- .tab-content -->
-                        </div>
-                    </div>
-                </div>
-                                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <span class="label label-success">GET</span> <a data-toggle="collapse" data-parent="#accordion3" href="#collapseOne3"> /api/test/index</a>
-                        </h4>
-                    </div>
-                    <div id="collapseOne3" class="panel-collapse collapse">
-                        <div class="panel-body">
-
-                            <!-- Nav tabs -->
-                            <ul class="nav nav-tabs" id="doctab3">
-                                <li class="active"><a href="#info3" data-toggle="tab">基础信息</a></li>
-                                <li><a href="#sandbox3" data-toggle="tab">在线测试</a></li>
-                                <li><a href="#sample3" data-toggle="tab">返回示例</a></li>
-                            </ul>
-
-                            <!-- Tab panes -->
-                            <div class="tab-content">
-
-                                <div class="tab-pane active" id="info3">
-                                    <div class="well">
-                                        首页                                    </div>
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading"><strong>Headers</strong></div>
-                                        <div class="panel-body">
-                                                                                        无
-                                                                                    </div>
-                                    </div>
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading"><strong>参数</strong></div>
-                                        <div class="panel-body">
-                                                                                        无
-                                                                                    </div>
-                                    </div>
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading"><strong>正文</strong></div>
-                                        <div class="panel-body">
-                                            无                                        </div>
-                                    </div>
-                                </div><!-- #info -->
-
-                                <div class="tab-pane" id="sandbox3">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                                                                        <div class="panel panel-default">
-                                                <div class="panel-heading"><strong>参数</strong></div>
-                                                <div class="panel-body">
-                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/test/index" method="get" name="form3" id="form3">
-                                                                                                                <div class="form-group">
-                                                            无
-                                                        </div>
-                                                                                                                <div class="form-group">
-                                                            <button type="submit" class="btn btn-success send" rel="3">提交</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                            <div class="panel panel-default">
-                                                <div class="panel-heading"><strong>响应输出</strong></div>
-                                                <div class="panel-body">
-                                                    <div class="row">
-                                                        <div class="col-md-12" style="overflow-x:auto">
-                                                            <pre id="response_headers3"></pre>
-                                                            <pre id="response3"></pre>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="panel panel-default">
-                                                <div class="panel-heading"><strong>返回参数</strong></div>
-                                                <div class="panel-body">
-                                                                                                        无
-                                                                                                    </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div><!-- #sandbox -->
-
-                                <div class="tab-pane" id="sample3">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <pre id="sample_response3">无</pre>
-                                        </div>
-                                    </div>
-                                </div><!-- #sample -->
-
-                            </div><!-- .tab-content -->
-                        </div>
-                    </div>
-                </div>
-                                <h2>测试分组</h2>
-                <hr>
-                                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <span class="label label-primary">POST</span> <a data-toggle="collapse" data-parent="#accordion4" href="#collapseOne4"> /api/test/test</a>
-                        </h4>
-                    </div>
-                    <div id="collapseOne4" class="panel-collapse collapse">
-                        <div class="panel-body">
-
-                            <!-- Nav tabs -->
-                            <ul class="nav nav-tabs" id="doctab4">
-                                <li class="active"><a href="#info4" data-toggle="tab">基础信息</a></li>
-                                <li><a href="#sandbox4" data-toggle="tab">在线测试</a></li>
-                                <li><a href="#sample4" data-toggle="tab">返回示例</a></li>
-                            </ul>
-
-                            <!-- Tab panes -->
-                            <div class="tab-content">
-
-                                <div class="tab-pane active" id="info4">
-                                    <div class="well">
-                                        测试描述信息                                    </div>
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading"><strong>Headers</strong></div>
-                                        <div class="panel-body">
-                                                                                        <table class="table table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th>名称</th>
-                                                        <th>类型</th>
-                                                        <th>必选</th>
-                                                        <th>描述</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                                                                        <tr>
-                                                        <td>token</td>
-                                                        <td>string</td>
-                                                        <td>是</td>
-                                                        <td>请求的Token</td>
-                                                    </tr>
-                                                                                                    </tbody>
-                                            </table>
-                                                                                    </div>
-                                    </div>
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading"><strong>参数</strong></div>
-                                        <div class="panel-body">
-                                                                                        <table class="table table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th>名称</th>
-                                                        <th>类型</th>
-                                                        <th>必选</th>
-                                                        <th>描述</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                                                                        <tr>
-                                                        <td>id</td>
-                                                        <td>integer</td>
-                                                        <td>是</td>
-                                                        <td>会员ID</td>
-                                                    </tr>
-                                                                                                        <tr>
-                                                        <td>name</td>
-                                                        <td>string</td>
-                                                        <td>是</td>
-                                                        <td>用户名</td>
-                                                    </tr>
-                                                                                                        <tr>
-                                                        <td>data</td>
-                                                        <td>object</td>
-                                                        <td>是</td>
-                                                        <td>扩展数据</td>
-                                                    </tr>
-                                                                                                    </tbody>
-                                            </table>
-                                                                                    </div>
-                                    </div>
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading"><strong>正文</strong></div>
-                                        <div class="panel-body">
-                                            无                                        </div>
-                                    </div>
-                                </div><!-- #info -->
-
-                                <div class="tab-pane" id="sandbox4">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                                                                        <div class="panel panel-default">
-                                                <div class="panel-heading"><strong>Headers</strong></div>
-                                                <div class="panel-body">
-                                                    <div class="headers">
-                                                                                                                <div class="form-group">
-                                                            <label class="control-label" for="token">token</label>
-                                                            <input type="string" class="form-control input-sm" id="token" required placeholder="请求的Token - Ex: " name="token">
-                                                        </div>
-                                                                                                            </div>
-                                                </div>
-                                            </div>
-                                                                                        <div class="panel panel-default">
-                                                <div class="panel-heading"><strong>参数</strong></div>
-                                                <div class="panel-body">
-                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/test/test" method="POST" name="form4" id="form4">
-                                                                                                                <div class="form-group">
-                                                            <label class="control-label" for="id">id</label>
-                                                            <input type="integer" class="form-control input-sm" id="id" required placeholder="会员ID" name="id">
-                                                        </div>
-                                                                                                                <div class="form-group">
-                                                            <label class="control-label" for="name">name</label>
-                                                            <input type="string" class="form-control input-sm" id="name" required placeholder="用户名" name="name">
-                                                        </div>
-                                                                                                                <div class="form-group">
-                                                            <label class="control-label" for="data">data</label>
-                                                            <input type="object" class="form-control input-sm" id="data" required placeholder="扩展数据 - 例: {'user_id':'int','user_name':'string','profile':{'email':'string','age':'integer'}}" name="data">
-                                                        </div>
-                                                                                                                <div class="form-group">
-                                                            <button type="submit" class="btn btn-success send" rel="4">提交</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                            <div class="panel panel-default">
-                                                <div class="panel-heading"><strong>响应输出</strong></div>
-                                                <div class="panel-body">
-                                                    <div class="row">
-                                                        <div class="col-md-12" style="overflow-x:auto">
-                                                            <pre id="response_headers4"></pre>
-                                                            <pre id="response4"></pre>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="panel panel-default">
-                                                <div class="panel-heading"><strong>返回参数</strong></div>
-                                                <div class="panel-body">
-                                                                                                        <table class="table table-hover">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>名称</th>
-                                                                <th>类型</th>
-                                                                <th>描述</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                                                                                        <tr>
-                                                                <td>code</td>
-                                                                <td>integer</td>
-                                                                <td></td>
-                                                            </tr>
-                                                                                                                        <tr>
-                                                                <td>msg</td>
-                                                                <td>string</td>
-                                                                <td></td>
-                                                            </tr>
-                                                                                                                        <tr>
-                                                                <td>data</td>
-                                                                <td>object</td>
-                                                                <td>扩展数据返回</td>
-                                                            </tr>
-                                                                                                                    </tbody>
-                                                    </table>
-                                                                                                    </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div><!-- #sandbox -->
-
-                                <div class="tab-pane" id="sample4">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <pre id="sample_response4">{
-  'code':'0',
-  'mesg':'返回成功'
- }</pre>
+     'code':'1/0',
+     'msg':'返回成功/失败',
+     'time':'1523173262',
+     'data':{
+             'status':'0/1/2',
+              'msg':'该用户还未注册/该用户已存在且不用上传头像昵称/需要继续上传昵称头像',
+              'data':{'user_id':1,'open_id':'open_id1','wx_name':'name1','wx_headimage':'image1'}
+     }
+     }</pre>
                                         </div>
                                     </div>
                                 </div><!-- #sample -->
@@ -687,7 +329,7 @@
 
             <div class="row mt0 footer">
                 <div class="col-md-6" align="left">
-                    Generated on 2018-04-07 11:41:49                </div>
+                    Generated on 2018-04-08 16:49:25                </div>
                 <div class="col-md-6" align="right">
                     <a href="https://github.com/mrzhujun/zjhaitao" target="_blank">项目下载</a>
                 </div>

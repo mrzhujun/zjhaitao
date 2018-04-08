@@ -54,10 +54,11 @@ class Common extends Api
      *
      * @ApiMethod (POST)
      * @param File $file 文件流
+     * @param name $name 关键字
      */
-    protected function upload()
+    protected function upload($name)
     {
-        $file = $this->request->file('file');
+        $file = $this->request->file($name);
         if (empty($file))
         {
             $this->error(__('No file upload or server upload limit exceeded'));
@@ -129,14 +130,20 @@ class Common extends Api
             $attachment->data(array_filter($params));
             $attachment->save();
             \think\Hook::listen("upload_after", $attachment);
-            $this->success(__('Upload successful'), [
-                'url' => $uploadDir . $splInfo->getSaveName()
-            ]);
+            $return['code'] = 1;
+            $return['msg'] = '上传成功';
+            $return['time'] = time();
+            $return['data'] = [
+                'url'=>$uploadDir . $splInfo->getSaveName()
+            ];
+            return $return;
         }
         else
         {
-            // 上传失败获取错误信息
-            $this->error($file->getError());
+            $return['code'] = 0;
+            $return['msg'] = '上传失败';
+            $return['time'] = time();
+            return $return;
         }
     }
 
