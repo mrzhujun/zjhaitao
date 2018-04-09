@@ -74,6 +74,15 @@ class Category extends Backend
                 }
 
             $total = count($list);
+
+            foreach ($list as $k => $v){
+                if ($v['type'] == 'category') {
+                    $list[$k]['type'] = '分类';
+                }
+                if ($v['type'] == 'brand') {
+                    $list[$k]['type'] = '品牌';
+                }
+            }
             $result = array("total" => $total, "rows" => $list);
 
             return json($result);
