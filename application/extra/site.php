@@ -15,10 +15,8 @@ return array (
   'fixedpage' => 'dashboard',
   'categorytype' => 
   array (
-    'default' => 'Default',
-    'page' => 'Page',
-    'article' => 'Article',
-    'test' => 'Test',
+    'category' => '分类',
+    'brand' => '品牌',
   ),
   'configgroup' => 
   array (

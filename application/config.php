@@ -55,13 +55,13 @@ return [
     // | 模块设置
     // +----------------------------------------------------------------------
     // 默认模块名
-    'default_module'         => 'admin',
+    'default_module'         => '',
     // 禁止访问模块
     'deny_module_list'       => [''],
     // 默认控制器名
-    'default_controller'     => 'index',
+    'default_controller'     => '',
     // 默认操作名
-    'default_action'         => 'login',
+    'default_action'         => 'index',
     // 默认验证器
     'default_validate'       => '',
     // 默认的空控制器名
