@@ -1,1 +1,1 @@
-#写文档脑壳痛
+# 下载好了请在application目录配置database.php
