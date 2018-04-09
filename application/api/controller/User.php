@@ -9,6 +9,7 @@
 namespace app\api\controller;
 
 
+use app\api\model\MallQiandao;
 use app\api\model\MallUser;
 use app\api\controller\Common;
 use think\Exception;
@@ -81,7 +82,7 @@ class User extends Common
     public function register($open_id,$wx_name)
     {
         if (!$open_id || !$wx_name) {
-            throw new Exception('信息填写不完整');
+            $this->error('信息填写不完整');
         }
         $model = new MallUser();
         $userObj = $model::get(['open_id'=>$open_id]);
@@ -144,6 +145,7 @@ class User extends Common
         }
         $this->success('获取成功',$userObj);
     }
+
 
 
 }

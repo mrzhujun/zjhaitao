@@ -17,38 +17,6 @@ class Common extends Api
     protected $noNeedLogin = ['*'];
     protected $noNeedRight = '*';
 
-    public function _initialize()
-    {
-        parent::_initialize();
-    }
-
-    /**
-     * 加载初始化
-     * 
-     * @param string $version 版本号
-     * @param string $lng 经度
-     * @param string $lat 纬度
-     */
-    protected function init()
-    {
-        if ($version = $this->request->request('version'))
-        {
-            $lng = $this->request->request('lng');
-            $lat = $this->request->request('lat');
-            $content = [
-                'citydata'    => Area::getCityFromLngLat($lng, $lat),
-                'versiondata' => Version::check($version),
-                'uploaddata'  => Config::get('upload'),
-                'coverdata'   => Config::get("cover"),
-            ];
-            $this->success('', $content);
-        }
-        else
-        {
-            $this->error(__('Invalid parameters'));
-        }
-    }
-
     /**
      * 上传文件
      *
@@ -145,6 +113,20 @@ class Common extends Api
             $return['time'] = time();
             return $return;
         }
+    }
+
+    /**
+     * @param $array
+     * @param $field
+     * 将二维数组中的一个字段取出放入以为数组
+     */
+    protected function array2array($array,$field)
+    {
+        $newArr = [];
+        foreach ($array as $k => $v){
+            $newArr[] = $v[$field];
+        }
+        return $newArr;
     }
 
 }
