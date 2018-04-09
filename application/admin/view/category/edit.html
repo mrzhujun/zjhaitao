@@ -16,9 +16,9 @@
         <label for="c-pid" class="control-label col-xs-12 col-sm-2">{:__('Pid')}:</label>
         <div class="col-xs-12 col-sm-8">
 
-            <select id="c-pid" data-rule="required" class="form-control selectpicker" name="row[pid]">
+            <select id="c-pid" data-rule="required" class="form-control selectpicker" name="row[pid]" onchange="hidden_it()">
                 {foreach name="parentList" item="vo"}
-                <option data-type="{$vo.type}" class="{:$vo.type==$row.type||$vo.type=='all'?'':'hide'}" value="{$key}" {in name="key" value="$row.pid"}selected{/in}>{$vo.name}</option>
+                <option data-type="{$vo.type}" data-pid="{$vo['pid']}" class="{:$vo.type==$row.type||$vo.type=='all'?'':'hide'}" value="{$key}" {in name="key" value="$row.pid"}selected{/in}>{$vo.name}</option>
                 {/foreach}
             </select>
 
@@ -62,6 +62,22 @@
             <ul class="row list-inline plupload-preview" id="p-image"></ul>
         </div>
     </div>
+    <!--todo 选pid不等于0时这个才显示-->
+    <div class="form-group" id="bigimage">
+        <label for="c-image" class="control-label col-xs-12 col-sm-2">{:__('BigImage')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="input-group">
+                <input id="c-big_image" class="form-control" size="50" name="row[big_image]" type="text" value="{$row.big_image}">
+                <div class="input-group-addon no-border no-padding">
+                    <span><button type="button" id="plupload-big_image" class="btn btn-danger plupload" data-input-id="c-big_image" data-mimetype="image/gif,image/jpeg,image/png,image/jpg,image/bmp" data-multiple="false" data-preview-id="p-big_image"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                    <span><button type="button" id="fachoose-big_image" class="btn btn-primary fachoose" data-input-id="c-big_image" data-mimetype="image/*" data-multiple="false"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                </div>
+                <span class="msg-box n-right"></span>
+            </div>
+            <ul class="row list-inline plupload-preview" id="p-big_image"></ul>
+        </div>
+    </div>
+
     <!--<div class="form-group">-->
         <!--<label for="c-keywords" class="control-label col-xs-12 col-sm-2">{:__('Keywords')}:</label>-->
         <!--<div class="col-xs-12 col-sm-8">-->
@@ -94,3 +110,26 @@
         </div>
     </div>
 </form>
+
+<script type="application/javascript">
+    var  myselect=document.getElementById("c-pid");
+    var index=myselect.selectedIndex ;
+    var value = myselect.options[index].value;
+    hidden(value)
+
+    function hidden_it() {
+        var index=myselect.selectedIndex ;
+        var value = myselect.options[index].getAttribute("data-pid");
+        console.log(value)
+        hidden(value)
+    }
+
+    function hidden(value) {
+        if (value == 0) {
+            document.getElementById("c-big_image").value = '';
+            document.getElementById("bigimage").style.visibility="hidden";//隐藏
+        }else{
+            document.getElementById("bigimage").style.visibility="visible";//隐藏
+        }
+    }
+</script>

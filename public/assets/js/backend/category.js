@@ -33,6 +33,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         // {field: 'nickname', title: __('Nickname')},
                         // {field: 'flag', title: __('Flag'), operate: false, formatter: Table.api.formatter.flag},
                         {field: 'image', title: __('Image'), operate: false, formatter: Table.api.formatter.image},
+                        // {field: 'big_image', title: __('BigImage'), operate: false, formatter: Table.api.formatter.image},
                         {field: 'weigh', title: __('Weigh')},
                         {field: 'status', title: __('Status'), operate: false, formatter: Table.api.formatter.status},
                         {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}

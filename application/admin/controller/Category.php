@@ -33,6 +33,9 @@ class Category extends Backend
         {
             $categorydata[$v['id']] = $v;
         }
+        $categorydata[0]['pid'] = 0;
+
+
         $this->view->assign("flagList", $this->model->getFlagList());
         $this->view->assign("typeList", CategoryModel::getTypeList());
         $this->view->assign("parentList", $categorydata);
