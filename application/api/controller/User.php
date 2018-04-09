@@ -87,18 +87,18 @@ class User extends Common
         $model = new MallUser();
         $userObj = $model::get(['open_id'=>$open_id]);
         if ($userObj && $userObj->wx_name && $userObj->wx_headimage && $userObj->update_time+30*24*3600>time()) {
-            throw new Exception('该用户暂不需要修改状态');
+            $this->error('该用户暂不需要修改状态',$userObj);
         }
-        $filePath = $this->upload('wx_headimage');
+        $filePath = $this->upload('wx_headimage',1);
         if ($filePath['code'] != 1) {
             $this->error('上传头像失败');
         }
         //存入数据库
         $_POST['wx_headimage'] = $filePath['data']['url'];
         if (!$userObj) {
-            $rst = $userObj->allowField(true)->save($_POST);
+            $rst = $model->allowField(true)->save($_POST);
         }else{
-            $rst = $userObj->allowField(true)->save($_POST,['open_id'=>$open_id]);
+            $rst = $model->allowField(true)->save($_POST,['open_id'=>$open_id]);
         }
         if (!$rst) {
             $this->error('更新用户信息失败',$userObj);

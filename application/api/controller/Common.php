@@ -23,8 +23,9 @@ class Common extends Api
      * @ApiMethod (POST)
      * @param File $file 文件流
      * @param name $name 关键字
+     * @param type $type 保存类型：0=>普通文件，1=>头像
      */
-    protected function upload($name)
+    protected function upload($name,$img_type=0)
     {
         $file = $this->request->file($name);
         if (empty($file))
@@ -70,6 +71,9 @@ class Common extends Api
         $savekey = str_replace(array_keys($replaceArr), array_values($replaceArr), $savekey);
 
         $uploadDir = substr($savekey, 0, strripos($savekey, '/') + 1);
+        if ($img_type == 1) {
+            $uploadDir = '/assets/wx_headimage/';
+        }
         $fileName = substr($savekey, strripos($savekey, '/') + 1);
         //
         $splInfo = $file->validate(['size' => $size])->move(ROOT_PATH . '/public' . $uploadDir, $fileName);
