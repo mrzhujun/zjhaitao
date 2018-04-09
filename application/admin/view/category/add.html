@@ -18,7 +18,7 @@
 
             <select id="c-pid" data-rule="required" class="form-control selectpicker" name="row[pid]" onchange="hidden_it()">
                 {foreach name="parentList" item="vo"}
-                <option data-type="{$vo.type}" value="{$key}" {in name="key" value=""}selected{/in}>{$vo.name}</option>
+                <option data-type="{$vo.type}" data-pid="{$vo['pid']}"  value="{$key}" {in name="key" value=""}selected{/in}>{$vo.name}</option>
                 {/foreach}
             </select>
 
@@ -101,12 +101,20 @@
 </form>
 <script type="application/javascript">
     var  myselect=document.getElementById("c-pid");
-    hidden_it()
+    var index=myselect.selectedIndex ;
+    var value = myselect.options[index].value;
+    hidden(value)
+
     function hidden_it() {
         var index=myselect.selectedIndex ;
-        var value = myselect.options[index].value;
+        var value = myselect.options[index].getAttribute("data-pid");
         console.log(value)
+        hidden(value)
+    }
+
+    function hidden(value) {
         if (value == 0) {
+            document.getElementById("c-big_image").value = '';
             document.getElementById("bigimage").style.visibility="hidden";//隐藏
         }else{
             document.getElementById("bigimage").style.visibility="visible";//隐藏
