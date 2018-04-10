@@ -1,0 +1,160 @@
+<form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+
+    <div class="form-group">
+        <label for="c-goods_sn" class="control-label col-xs-12 col-sm-2">{:__('Goods_sn')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-goods_sn" class="form-control" name="row[goods_sn]" type="text" value="{$row.goods_sn}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-goods_name" class="control-label col-xs-12 col-sm-2">{:__('Goods_name')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-goods_name" data-rule="required" class="form-control" name="row[goods_name]" type="text" value="{$row.goods_name}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-goods_brief" class="control-label col-xs-12 col-sm-2">{:__('Goods_brief')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-goods_brief" data-rule="required" class="form-control" name="row[goods_brief]" type="text" value="{$row.goods_brief}">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="c-cat_id" class="control-label col-xs-12 col-sm-2">{:__('Cat_id')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-cat_id" data-rule="required" data-source="category/index_cate" class="form-control selectpage" name="row[cat_id]" type="text" value="{$row.cat_id}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-brand_id" class="control-label col-xs-12 col-sm-2">{:__('Brand_id')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-brand_id" data-rule="required" data-source="category/index_brand" class="form-control selectpage" name="row[brand_id]" type="text" value="{$row.brand_id}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-market_price" class="control-label col-xs-12 col-sm-2">{:__('Market_price')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-market_price" data-rule="required" class="form-control" step="0.01" name="row[market_price]" type="number" value="{$row.market_price}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-shop_price" class="control-label col-xs-12 col-sm-2">{:__('Shop_price')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-shop_price" data-rule="required" class="form-control" step="0.01" name="row[shop_price]" type="number" value="{$row.shop_price}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-is_promote" class="control-label col-xs-12 col-sm-2">{:__('Is_promote')}:</label>
+        <div class="col-xs-12 col-sm-8">
+
+            <select  id="c-is_promote" data-rule="required" class="form-control selectpicker" name="row[is_promote]">
+                {foreach name="isPromoteList" item="vo"}
+                <option value="{$key}" {in name="key" value="$row.is_promote"}selected{/in}>{$vo}</option>
+                {/foreach}
+            </select>
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-promote_price" class="control-label col-xs-12 col-sm-2">{:__('Promote_price')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-promote_price" data-rule="required" class="form-control" step="0.01" name="row[promote_price]" type="number" value="{$row.promote_price}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-promote_start_time" class="control-label col-xs-12 col-sm-2">{:__('Promote_start_time')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-promote_start_time" data-rule="required" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[promote_start_time]" type="text" value="{$row.promote_start_time|datetime}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-promote_end_time" class="control-label col-xs-12 col-sm-2">{:__('Promote_end_time')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-promote_end_time" data-rule="required" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[promote_end_time]" type="text" value="{$row.promote_end_time|datetime}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-goods_images" class="control-label col-xs-12 col-sm-2">{:__('Goods_images')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="input-group">
+                <input id="c-goods_images" data-rule="required" class="form-control" size="50" name="row[goods_images]" type="text" value="{$row.goods_images}">
+                <div class="input-group-addon no-border no-padding">
+                    <span><button type="button" id="plupload-goods_images" class="btn btn-danger plupload" data-input-id="c-goods_images" data-mimetype="image/gif,image/jpeg,image/png,image/jpg,image/bmp" data-multiple="true" data-preview-id="p-goods_images"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                    <span><button type="button" id="fachoose-goods_images" class="btn btn-primary fachoose" data-input-id="c-goods_images" data-mimetype="image/*" data-multiple="true"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                </div>
+                <span class="msg-box n-right" for="c-goods_images"></span>
+            </div>
+            <ul class="row list-inline plupload-preview" id="p-goods_images"></ul>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="c-goods_desc" class="control-label col-xs-12 col-sm-2">{:__('Goods_desc')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <textarea id="c-goods_desc" class="form-control editor" rows="5" name="row[goods_desc]" cols="50">{$row.goods_desc}</textarea>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label for="c-is_new" class="control-label col-xs-12 col-sm-2">{:__('Is_new')}:</label>
+        <div class="col-xs-12 col-sm-8">
+                        
+            <select  id="c-is_new" data-rule="required" class="form-control selectpicker" name="row[is_new]">
+                {foreach name="isNewList" item="vo"}
+                    <option value="{$key}" {in name="key" value="$row.is_new"}selected{/in}>{$vo}</option>
+                {/foreach}
+            </select>
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-is_onsale" class="control-label col-xs-12 col-sm-2">{:__('Is_onsale')}:</label>
+        <div class="col-xs-12 col-sm-8">
+                        
+            <select  id="c-is_onsale" data-rule="required" class="form-control selectpicker" name="row[is_onsale]">
+                {foreach name="isOnsaleList" item="vo"}
+                    <option value="{$key}" {in name="key" value="$row.is_onsale"}selected{/in}>{$vo}</option>
+                {/foreach}
+            </select>
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-is_jifen" class="control-label col-xs-12 col-sm-2">{:__('Is_jifen')}:</label>
+        <div class="col-xs-12 col-sm-8">
+                        
+            <select  id="c-is_jifen" data-rule="required" class="form-control selectpicker" name="row[is_jifen]">
+                {foreach name="isJifenList" item="vo"}
+                    <option value="{$key}" {in name="key" value="$row.is_jifen"}selected{/in}>{$vo}</option>
+                {/foreach}
+            </select>
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-need_jifen" class="control-label col-xs-12 col-sm-2">{:__('Need_jifen')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-need_jifen" class="form-control" name="row[need_jifen]" type="number" value="{$row.need_jifen}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-goods_count" class="control-label col-xs-12 col-sm-2">{:__('Goods_count')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-goods_count" data-rule="required" class="form-control" name="row[goods_count]" type="number" value="{$row.goods_count}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-add_time" class="control-label col-xs-12 col-sm-2">{:__('Add_time')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-add_time" data-rule="required" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[add_time]" type="text" value="{$row.add_time|datetime}">
+        </div>
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

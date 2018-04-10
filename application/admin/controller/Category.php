@@ -103,4 +103,98 @@ class Category extends Backend
         return parent::selectpage();
     }
 
+    /**
+     * 查看品牌
+     */
+    public function index_brand()
+    {
+        if ($this->request->isAjax())
+        {
+            $search = $this->request->request("search");
+            $type = $this->request->request("type");
+
+            //构造父类select列表选项数据
+            $list = [];
+
+            foreach ($this->categorylist as $k => $v)
+            {
+                    if ($search) {
+                        if ($v['type'] == $type && stripos($v['name'], $search) !== false || stripos($v['nickname'], $search) !== false)
+                        {
+                            if($type == "all" || $type == null) {
+                                $list = $this->categorylist;
+                            } else {
+                                $list[] = $v;
+                            }
+                        }
+                    } else {
+                        if($type == "all" || $type == null) {
+                            $list = $this->categorylist;
+                        } else if ($v['type'] == $type){
+                            $list[] = $v;
+                        }
+
+                    }
+            }
+            $list2 = [];
+            foreach ($list as $k => $v){
+                if ($v['type'] == 'brand') {
+                    $list2[] = $v;
+                }
+            }
+            $total = count($list2);
+            $result = array("total" => $total, "rows" => $list2);
+
+            return json($result);
+        }
+        return $this->view->fetch();
+    }
+
+    /**
+     * 查看品牌
+     */
+    public function index_cate()
+    {
+        if ($this->request->isAjax())
+        {
+            $search = $this->request->request("search");
+            $type = $this->request->request("type");
+
+            //构造父类select列表选项数据
+            $list = [];
+
+            foreach ($this->categorylist as $k => $v)
+            {
+                if ($search) {
+                    if ($v['type'] == $type && stripos($v['name'], $search) !== false || stripos($v['nickname'], $search) !== false)
+                    {
+                        if($type == "all" || $type == null) {
+                            $list = $this->categorylist;
+                        } else {
+                            $list[] = $v;
+                        }
+                    }
+                } else {
+                    if($type == "all" || $type == null) {
+                        $list = $this->categorylist;
+                    } else if ($v['type'] == $type){
+                        $list[] = $v;
+                    }
+
+                }
+            }
+            $list2 = [];
+            foreach ($list as $k => $v){
+                if ($v['type'] == 'category') {
+                    $list2[] = $v;
+                }
+            }
+            $total = count($list2);
+            $result = array("total" => $total, "rows" => $list2);
+
+            return json($result);
+        }
+        return $this->view->fetch();
+    }
+
 }

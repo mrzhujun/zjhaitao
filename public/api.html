@@ -61,12 +61,12 @@
 
         <div class="container">
             <div class="panel-group" id="accordion">
-                                <h2>签到</h2>
+                                <h2>商品</h2>
                 <hr>
                                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <span class="label label-primary">POST</span> <a data-toggle="collapse" data-parent="#accordion0" href="#collapseOne0"> /api/qiandao/add</a> <span>今日签到</span>
+                            <span class="label label-success">GET</span> <a data-toggle="collapse" data-parent="#accordion0" href="#collapseOne0"> /api/goods/goods_detail</a> <span>商品详细信息获取页面</span>
                         </h4>
                     </div>
                     <div id="collapseOne0" class="panel-collapse collapse">
@@ -84,7 +84,7 @@
 
                                 <div class="tab-pane active" id="info0">
                                     <!--<div class="well">-->
-                                        <!--今日签到-->
+                                        <!--商品详细信息获取页面-->
                                     <!--</div>-->
                                     <!--<div class="panel panel-default">-->
                                         <!--<div class="panel-heading"><strong>Headers</strong></div>-->
@@ -108,10 +108,10 @@
                                                 </thead>
                                                 <tbody>
                                                                                                         <tr>
-                                                        <td>user_id</td>
+                                                        <td>goods_id</td>
                                                         <td>int</td>
                                                         <td>是</td>
-                                                        <td>user_id</td>
+                                                        <td>商品id</td>
                                                     </tr>
                                                                                                     </tbody>
                                             </table>
@@ -130,10 +130,10 @@
                                                                                         <div class="panel panel-default">
                                                 <div class="panel-heading"><strong>参数</strong></div>
                                                 <div class="panel-body">
-                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/qiandao/add" method="POST" name="form0" id="form0">
+                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/goods/goods_detail" method="get" name="form0" id="form0">
                                                                                                                 <div class="form-group">
-                                                            <label class="control-label" for="user_id">user_id</label>
-                                                            <input type="int" class="form-control input-sm" id="user_id" required placeholder="user_id" name="user_id">
+                                                            <label class="control-label" for="goods_id">goods_id</label>
+                                                            <input type="int" class="form-control input-sm" id="goods_id" required placeholder="商品id" name="goods_id">
                                                         </div>
                                                                                                                 <div class="form-group">
                                                             <button type="submit" class="btn btn-success send" rel="0">提交</button>
@@ -169,11 +169,7 @@
      'code':'1/0',
      'msg':'返回成功/失败',
      'time':'1523173262',
-     'data':{
-             'status':'1/0',
-              'msg':'签到成功/失败',
-              'data':[{'id':1,'user_id':30,'date':20180408},{'id':1,'user_id':30,'date':20180409}]
-     }
+     'data':'商品+商品规格+商品活动信息'
      }</pre>
                                         </div>
                                     </div>
@@ -183,10 +179,12 @@
                         </div>
                     </div>
                 </div>
+                                <h2>签到</h2>
+                <hr>
                                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <span class="label label-success">GET</span> <a data-toggle="collapse" data-parent="#accordion1" href="#collapseOne1"> /api/qiandao/index</a> <span>获取用户签到总览</span>
+                            <span class="label label-primary">POST</span> <a data-toggle="collapse" data-parent="#accordion1" href="#collapseOne1"> /api/qiandao/add</a> <span>今日签到</span>
                         </h4>
                     </div>
                     <div id="collapseOne1" class="panel-collapse collapse">
@@ -204,7 +202,7 @@
 
                                 <div class="tab-pane active" id="info1">
                                     <!--<div class="well">-->
-                                        <!--获取用户签到总览-->
+                                        <!--今日签到-->
                                     <!--</div>-->
                                     <!--<div class="panel panel-default">-->
                                         <!--<div class="panel-heading"><strong>Headers</strong></div>-->
@@ -250,7 +248,7 @@
                                                                                         <div class="panel panel-default">
                                                 <div class="panel-heading"><strong>参数</strong></div>
                                                 <div class="panel-body">
-                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/qiandao/index" method="get" name="form1" id="form1">
+                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/qiandao/add" method="POST" name="form1" id="form1">
                                                                                                                 <div class="form-group">
                                                             <label class="control-label" for="user_id">user_id</label>
                                                             <input type="int" class="form-control input-sm" id="user_id" required placeholder="user_id" name="user_id">
@@ -290,7 +288,9 @@
      'msg':'返回成功/失败',
      'time':'1523173262',
      'data':{
-             [{'id':1,'user_id':30,'date':20180408},{'id':1,'user_id':30,'date':20180409}]
+             'status':'1/0',
+              'msg':'签到成功/失败',
+              'data':[20180408,20180409]
      }
      }</pre>
                                         </div>
@@ -301,12 +301,10 @@
                         </div>
                     </div>
                 </div>
-                                <h2>用户</h2>
-                <hr>
                                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <span class="label label-primary">POST</span> <a data-toggle="collapse" data-parent="#accordion2" href="#collapseOne2"> /api/user/user_status</a> <span>返回用户注册状态</span>
+                            <span class="label label-success">GET</span> <a data-toggle="collapse" data-parent="#accordion2" href="#collapseOne2"> /api/qiandao/index</a> <span>获取用户签到总览</span>
                         </h4>
                     </div>
                     <div id="collapseOne2" class="panel-collapse collapse">
@@ -323,6 +321,126 @@
                             <div class="tab-content">
 
                                 <div class="tab-pane active" id="info2">
+                                    <!--<div class="well">-->
+                                        <!--获取用户签到总览-->
+                                    <!--</div>-->
+                                    <!--<div class="panel panel-default">-->
+                                        <!--<div class="panel-heading"><strong>Headers</strong></div>-->
+                                        <!--<div class="panel-body">-->
+                                            <!---->
+                                            <!--无-->
+                                            <!---->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><strong>参数</strong></div>
+                                        <div class="panel-body">
+                                                                                        <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>名称</th>
+                                                        <th>类型</th>
+                                                        <th>必选</th>
+                                                        <th>描述</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                                                                        <tr>
+                                                        <td>user_id</td>
+                                                        <td>int</td>
+                                                        <td>是</td>
+                                                        <td>user_id</td>
+                                                    </tr>
+                                                                                                    </tbody>
+                                            </table>
+                                                                                    </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><strong>正文</strong></div>
+                                        <div class="panel-body">
+                                            无                                        </div>
+                                    </div>
+                                </div><!-- #info -->
+
+                                <div class="tab-pane" id="sandbox2">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                                                                        <div class="panel panel-default">
+                                                <div class="panel-heading"><strong>参数</strong></div>
+                                                <div class="panel-body">
+                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/qiandao/index" method="get" name="form2" id="form2">
+                                                                                                                <div class="form-group">
+                                                            <label class="control-label" for="user_id">user_id</label>
+                                                            <input type="int" class="form-control input-sm" id="user_id" required placeholder="user_id" name="user_id">
+                                                        </div>
+                                                                                                                <div class="form-group">
+                                                            <button type="submit" class="btn btn-success send" rel="2">提交</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading"><strong>响应输出</strong></div>
+                                                <div class="panel-body">
+                                                    <div class="row">
+                                                        <div class="col-md-12" style="overflow-x:auto">
+                                                            <pre id="response_headers2"></pre>
+                                                            <pre id="response2"></pre>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading"><strong>返回参数</strong></div>
+                                                <div class="panel-body">
+                                                                                                        无
+                                                                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!-- #sandbox -->
+
+                                <div class="tab-pane" id="sample2">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <pre id="sample_response2">{
+     'code':'1/0',
+     'msg':'返回成功/失败',
+     'time':'1523173262',
+     'data':{
+             [{'id':1,'user_id':30,'date':20180408},{'id':1,'user_id':30,'date':20180409}]
+     }
+     }</pre>
+                                        </div>
+                                    </div>
+                                </div><!-- #sample -->
+
+                            </div><!-- .tab-content -->
+                        </div>
+                    </div>
+                </div>
+                                <h2>用户</h2>
+                <hr>
+                                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <span class="label label-primary">POST</span> <a data-toggle="collapse" data-parent="#accordion3" href="#collapseOne3"> /api/user/user_status</a> <span>返回用户注册状态</span>
+                        </h4>
+                    </div>
+                    <div id="collapseOne3" class="panel-collapse collapse">
+                        <div class="panel-body">
+
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" id="doctab3">
+                                <li class="active"><a href="#info3" data-toggle="tab">基础信息</a></li>
+                                <li><a href="#sandbox3" data-toggle="tab">在线测试</a></li>
+                                <li><a href="#sample3" data-toggle="tab">返回示例</a></li>
+                            </ul>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+
+                                <div class="tab-pane active" id="info3">
                                     <!--<div class="well">-->
                                         <!--返回用户注册状态-->
                                     <!--</div>-->
@@ -364,19 +482,19 @@
                                     </div>
                                 </div><!-- #info -->
 
-                                <div class="tab-pane" id="sandbox2">
+                                <div class="tab-pane" id="sandbox3">
                                     <div class="row">
                                         <div class="col-md-12">
                                                                                         <div class="panel panel-default">
                                                 <div class="panel-heading"><strong>参数</strong></div>
                                                 <div class="panel-body">
-                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/user/user_status" method="POST" name="form2" id="form2">
+                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/user/user_status" method="POST" name="form3" id="form3">
                                                                                                                 <div class="form-group">
                                                             <label class="control-label" for="open_id">open_id</label>
                                                             <input type="string" class="form-control input-sm" id="open_id" required placeholder="open_id" name="open_id">
                                                         </div>
                                                                                                                 <div class="form-group">
-                                                            <button type="submit" class="btn btn-success send" rel="2">提交</button>
+                                                            <button type="submit" class="btn btn-success send" rel="3">提交</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -386,8 +504,8 @@
                                                 <div class="panel-body">
                                                     <div class="row">
                                                         <div class="col-md-12" style="overflow-x:auto">
-                                                            <pre id="response_headers2"></pre>
-                                                            <pre id="response2"></pre>
+                                                            <pre id="response_headers3"></pre>
+                                                            <pre id="response3"></pre>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -402,10 +520,10 @@
                                     </div>
                                 </div><!-- #sandbox -->
 
-                                <div class="tab-pane" id="sample2">
+                                <div class="tab-pane" id="sample3">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <pre id="sample_response2">{
+                                            <pre id="sample_response3">{
      'code':'1/0',
      'msg':'返回成功/失败',
      'time':'1523173262',
@@ -426,23 +544,23 @@
                                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <span class="label label-primary">POST</span> <a data-toggle="collapse" data-parent="#accordion3" href="#collapseOne3"> /api/user/register</a> <span>用户注册及更新头像昵称</span>
+                            <span class="label label-primary">POST</span> <a data-toggle="collapse" data-parent="#accordion4" href="#collapseOne4"> /api/user/register</a> <span>用户注册及更新头像昵称</span>
                         </h4>
                     </div>
-                    <div id="collapseOne3" class="panel-collapse collapse">
+                    <div id="collapseOne4" class="panel-collapse collapse">
                         <div class="panel-body">
 
                             <!-- Nav tabs -->
-                            <ul class="nav nav-tabs" id="doctab3">
-                                <li class="active"><a href="#info3" data-toggle="tab">基础信息</a></li>
-                                <li><a href="#sandbox3" data-toggle="tab">在线测试</a></li>
-                                <li><a href="#sample3" data-toggle="tab">返回示例</a></li>
+                            <ul class="nav nav-tabs" id="doctab4">
+                                <li class="active"><a href="#info4" data-toggle="tab">基础信息</a></li>
+                                <li><a href="#sandbox4" data-toggle="tab">在线测试</a></li>
+                                <li><a href="#sample4" data-toggle="tab">返回示例</a></li>
                             </ul>
 
                             <!-- Tab panes -->
                             <div class="tab-content">
 
-                                <div class="tab-pane active" id="info3">
+                                <div class="tab-pane active" id="info4">
                                     <!--<div class="well">-->
                                         <!--用户注册及更新头像昵称-->
                                     <!--</div>-->
@@ -496,13 +614,13 @@
                                     </div>
                                 </div><!-- #info -->
 
-                                <div class="tab-pane" id="sandbox3">
+                                <div class="tab-pane" id="sandbox4">
                                     <div class="row">
                                         <div class="col-md-12">
                                                                                         <div class="panel panel-default">
                                                 <div class="panel-heading"><strong>参数</strong></div>
                                                 <div class="panel-body">
-                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/user/register" method="POST" name="form3" id="form3">
+                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/user/register" method="POST" name="form4" id="form4">
                                                                                                                 <div class="form-group">
                                                             <label class="control-label" for="open_id">open_id</label>
                                                             <input type="string" class="form-control input-sm" id="open_id" required placeholder="open_id" name="open_id">
@@ -516,7 +634,7 @@
                                                             <input type="file" class="form-control input-sm" id="wx_headimage" required placeholder="微信头像" name="wx_headimage">
                                                         </div>
                                                                                                                 <div class="form-group">
-                                                            <button type="submit" class="btn btn-success send" rel="3">提交</button>
+                                                            <button type="submit" class="btn btn-success send" rel="4">提交</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -526,8 +644,8 @@
                                                 <div class="panel-body">
                                                     <div class="row">
                                                         <div class="col-md-12" style="overflow-x:auto">
-                                                            <pre id="response_headers3"></pre>
-                                                            <pre id="response3"></pre>
+                                                            <pre id="response_headers4"></pre>
+                                                            <pre id="response4"></pre>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -542,10 +660,10 @@
                                     </div>
                                 </div><!-- #sandbox -->
 
-                                <div class="tab-pane" id="sample3">
+                                <div class="tab-pane" id="sample4">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <pre id="sample_response3">{
+                                            <pre id="sample_response4">{
      'code':'1/0',
      'msg':'更新成功/失败',
      'time':'1523173262',
@@ -566,23 +684,23 @@
                                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <span class="label label-success">GET</span> <a data-toggle="collapse" data-parent="#accordion4" href="#collapseOne4"> /api/user/user_info</a> <span>获取用户信息</span>
+                            <span class="label label-success">GET</span> <a data-toggle="collapse" data-parent="#accordion5" href="#collapseOne5"> /api/user/user_info</a> <span>获取用户信息</span>
                         </h4>
                     </div>
-                    <div id="collapseOne4" class="panel-collapse collapse">
+                    <div id="collapseOne5" class="panel-collapse collapse">
                         <div class="panel-body">
 
                             <!-- Nav tabs -->
-                            <ul class="nav nav-tabs" id="doctab4">
-                                <li class="active"><a href="#info4" data-toggle="tab">基础信息</a></li>
-                                <li><a href="#sandbox4" data-toggle="tab">在线测试</a></li>
-                                <li><a href="#sample4" data-toggle="tab">返回示例</a></li>
+                            <ul class="nav nav-tabs" id="doctab5">
+                                <li class="active"><a href="#info5" data-toggle="tab">基础信息</a></li>
+                                <li><a href="#sandbox5" data-toggle="tab">在线测试</a></li>
+                                <li><a href="#sample5" data-toggle="tab">返回示例</a></li>
                             </ul>
 
                             <!-- Tab panes -->
                             <div class="tab-content">
 
-                                <div class="tab-pane active" id="info4">
+                                <div class="tab-pane active" id="info5">
                                     <!--<div class="well">-->
                                         <!--获取用户信息-->
                                     <!--</div>-->
@@ -624,19 +742,19 @@
                                     </div>
                                 </div><!-- #info -->
 
-                                <div class="tab-pane" id="sandbox4">
+                                <div class="tab-pane" id="sandbox5">
                                     <div class="row">
                                         <div class="col-md-12">
                                                                                         <div class="panel panel-default">
                                                 <div class="panel-heading"><strong>参数</strong></div>
                                                 <div class="panel-body">
-                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/user/user_info" method="get" name="form4" id="form4">
+                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/user/user_info" method="get" name="form5" id="form5">
                                                                                                                 <div class="form-group">
                                                             <label class="control-label" for="user_id">user_id</label>
                                                             <input type="int" class="form-control input-sm" id="user_id" required placeholder="用户user_id" name="user_id">
                                                         </div>
                                                                                                                 <div class="form-group">
-                                                            <button type="submit" class="btn btn-success send" rel="4">提交</button>
+                                                            <button type="submit" class="btn btn-success send" rel="5">提交</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -646,8 +764,8 @@
                                                 <div class="panel-body">
                                                     <div class="row">
                                                         <div class="col-md-12" style="overflow-x:auto">
-                                                            <pre id="response_headers4"></pre>
-                                                            <pre id="response4"></pre>
+                                                            <pre id="response_headers5"></pre>
+                                                            <pre id="response5"></pre>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -662,10 +780,10 @@
                                     </div>
                                 </div><!-- #sandbox -->
 
-                                <div class="tab-pane" id="sample4">
+                                <div class="tab-pane" id="sample5">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <pre id="sample_response4">{
+                                            <pre id="sample_response5">{
      'code':'1/0',
      'msg':'获取成功/失败',
      'time':'1523173262',
@@ -687,7 +805,7 @@
 
             <div class="row mt0 footer">
                 <div class="col-md-6" align="left">
-                    Generated on 2018-04-09 10:46:12                </div>
+                    Generated on 2018-04-10 16:40:36                </div>
                 <div class="col-md-6" align="right">
                     <a href="https://github.com/mrzhujun/zjhaitao" target="_blank">项目下载</a>
                 </div>
