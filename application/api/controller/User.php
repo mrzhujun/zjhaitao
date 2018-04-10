@@ -70,12 +70,15 @@ class User extends Common
      * @ApiParams (name="wx_headimage", type="file", required=true, description="微信头像")
      * @ApiReturn   (data="{
      *     'code':'1/0',
-     *     'msg':'更新成功/失败',
+     *     'msg':'更新成功/更新用户信息失败',
      *     'time':'1523173262',
      *     'data':{
-     *             'status':'0/1/2',
-     *              'msg':'该用户还未注册/该用户已存在且不用上传头像昵称/需要继续上传昵称头像',
-     *              'data':{'user_id':1,'open_id':'open_id1','wx_name':'name1','wx_headimage':'image1'}
+     *              'user_id': 30,
+     *              'wx_name': '123',
+     *              'wx_headimage': '/assets/wx_headimage/00e3a19b3ce8a84dcaa16146233e9e9a.jpg',
+     *              'jifen': 150,
+     *              'jifen_total': 150,
+     *              'update_time': 1523355625
      *     }
      *     }")
      */
@@ -85,7 +88,7 @@ class User extends Common
             $this->error('信息填写不完整');
         }
         $model = new MallUser();
-        $userObj = $model::get(['open_id'=>$open_id]);
+        $userObj = $model::where(['open_id'=>$open_id])->field('user_id,wx_name,wx_headimage,jifen,jifen_total,update_time')->find();
         if ($userObj && $userObj->wx_name && $userObj->wx_headimage && $userObj->update_time+30*24*3600>time()) {
             $this->error('该用户暂不需要修改状态',$userObj);
         }
