@@ -24,7 +24,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 columns: [
                     [
                         {checkbox: true},
-                        {field: 'goods_id', title: __('Goods_id')},
+                        // {field: 'goods_id', title: __('Goods_id')},
                         {field: 'goods_sn', title: __('Goods_sn')},
                         {field: 'goods_name', title: __('Goods_name')},
                         // {field: 'goods_brief', title: __('Goods_brief')},

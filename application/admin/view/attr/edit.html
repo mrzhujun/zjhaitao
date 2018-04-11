@@ -3,7 +3,7 @@
     <div class="form-group">
         <label for="c-goods_id" class="control-label col-xs-12 col-sm-2">{:__('Goods_id')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-goods_id" data-rule="required" data-source="goods/index" class="form-control selectpage" name="row[goods_id]" type="text" value="{$row.goods_id}">
+            <input id="c-goods_id" data-rule="required"  data-source="goods/index" data-field="goods_name" data-primary-key="goods_id" data-order-by="goods_id DESC"  class="form-control selectpage" name="row[goods_id]" type="text" value="{$row.goods_id}">
         </div>
     </div>
     <div class="form-group">
