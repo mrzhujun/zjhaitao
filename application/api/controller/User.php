@@ -12,6 +12,7 @@ namespace app\api\controller;
 use app\api\model\MallQiandao;
 use app\api\model\MallUser;
 use app\api\controller\Common;
+use app\wx\controller\Wx;
 use think\Exception;
 
 /**
@@ -24,6 +25,31 @@ class User extends Common
     // 无需要判断权限规则的方法
     protected $noNeedRight = ['*'];
 
+
+    /**
+     * 获取用户open_id
+     * @ApiMethod   (GET)
+     * @ApiParams   (name="code", type="string", required=true, description="微信登陆获取到的code")
+     * @ApiReturn   (data="{
+     *     'code':'1/0',
+     *     'msg':'返回成功/失败',
+     *     'time':'1523173262',
+     *     'data':{
+     *             'status':'1/0',
+     *              'msg':'获取成功/失败',
+     *              'data':{'open_id':'open_id1'}
+     *     }
+     *     }")
+     */
+    public function getopenid($code) {
+        $wx = new Wx();
+        try {
+            $open_id = $wx->getopenid($code);
+        }catch (Exception $e){
+            $this->error($e->getMessage(),'',500);
+        }
+        $this->success('获取成功',$open_id,201);
+    }
 
     /**
      * 返回用户注册状态
