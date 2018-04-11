@@ -86,7 +86,6 @@ class Builder
             );
             $paramslist[] = $tr;
         }
-
         return $paramslist;
     }
 
@@ -193,6 +192,7 @@ class Builder
         }
 
         return $docslist;
+
     }
 
     public function getView()

@@ -375,6 +375,7 @@
                 $('body').on('click', '.send', function (e) {
                     e.preventDefault();
                     var form = $(this).closest('form');
+                    console.log()
                     //added /g to get all the matched params instead of only first
                     var matchedParamsInRoute = $(form).attr('action').match(/[^{]+(?=\})/g);
                     var theId = $(this).attr('rel');
@@ -425,7 +426,8 @@
 
                     $.ajax({
                         url: $('#apiUrl').val() + url,
-                        data: $(form).attr('method') == 'get' ? $(form).serialize() : serializedData,
+                        // data: $(form).attr('method') == 'get' ? $(form).serialize() : serializedData,//不高便化请求参数
+                        data: $(form).serialize(),
                         type: $(form).attr('method') + '',
                         dataType: 'json',
                         contentType: false,

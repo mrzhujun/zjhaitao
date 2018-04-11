@@ -52,4 +52,9 @@ class MallUser extends Model
             return false;
         }
     }
+
+    public function malladdresss()
+    {
+        return $this->hasMany('MallAddress','user_id')->field('address_id,name,phone,address,address_detail,is_default');
+    }
 }

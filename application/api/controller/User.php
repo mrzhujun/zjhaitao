@@ -24,6 +24,7 @@ class User extends Common
     // 无需要判断权限规则的方法
     protected $noNeedRight = ['*'];
 
+
     /**
      * 返回用户注册状态
      * @ApiMethod   (POST)
@@ -150,5 +151,26 @@ class User extends Common
     }
 
 
-
+    /**
+     * 获取用户所有地址列表
+     *
+     * @ApiParams (name="user_id", type="int", required=true, description="用户user_id")
+     * @ApiReturn   (data="{
+     *     'code':'1/0',
+     *     'msg':'获取成功/失败',
+     *     'time':'1523173262',
+     *     'data':{
+     *              'data':{'user_id':1,'open_id':'open_id1','wx_name':'name1','wx_headimage':'image1'}
+     *     }
+     *     }")
+     */
+    public function address_list($user_id)
+    {
+        $userObj = MallUser::get($user_id);
+        if (!$userObj) {
+            $this->error('该用户不存在');
+        }
+        $list = $userObj->malladdresss()->select();
+        $this->success('返回成功',$list);
+    }
 }
