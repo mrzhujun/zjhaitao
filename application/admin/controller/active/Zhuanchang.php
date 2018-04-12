@@ -1,30 +1,27 @@
 <?php
 
-namespace app\admin\controller;
+namespace app\admin\controller\active;
 
 use app\common\controller\Backend;
 
 /**
- * 商品管理
+ * 活动管理
  *
  * @icon fa fa-circle-o
  */
-class Goods extends Backend
+class Zhuanchang extends Backend
 {
     
     /**
-     * MallGoods模型对象
+     * MallActive模型对象
      */
     protected $model = null;
 
     public function _initialize()
     {
         parent::_initialize();
-        $this->model = model('MallGoods');
-        $this->view->assign("isPromoteList", $this->model->getIsPromoteList());
-        $this->view->assign("isNewList", $this->model->getIsNewList());
-        $this->view->assign("isOnsaleList", $this->model->getIsOnsaleList());
-        $this->view->assign("isJifenList", $this->model->getIsJifenList());
+        $this->model = model('MallActive');
+        $this->view->assign("activeTypeList", $this->model->getActiveTypeList());
     }
     
     /**
@@ -43,7 +40,7 @@ class Goods extends Backend
         if ($this->request->isAjax())
         {
             //如果发送的来源是Selectpage，则转发到Selectpage
-            if ($this->request->request('keyField'))
+            if ($this->request->request('pkey_name'))
             {
                 return $this->selectpage();
             }
@@ -60,13 +57,17 @@ class Goods extends Backend
                 ->select();
 
             $list = collection($list)->toArray();
+            $n = 0;
+            $arr = [];
             foreach ($list as $k => $v){
-                $cate = db('category')->where("id={$v['cat_id']}")->field('name')->find();
-                $brand = db('category')->where("id={$v['brand_id']}")->field('name')->find();
-                $list[$k]['brand_id'] = $brand['name'];
-                $list[$k]['cat_id'] = $cate['name'];
+                if ($v['active_type'] != 4) {
+                    unset($list[$k]);
+                    $n++;
+                }else{
+                    $arr[] = $v;
+                }
             }
-            $result = array("total" => $total, "rows" => $list);
+            $result = array("total" => $total-$n, "rows" => $arr);
 
             return json($result);
         }
