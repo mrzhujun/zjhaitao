@@ -11,6 +11,9 @@ use app\api\model\MallArticle;
 use app\api\model\MallGoods;
 use app\common\controller\Api;
 
+/**
+ * 文章
+ */
 class Article extends Api
 {
     // 无需验证登录的方法
@@ -29,12 +32,7 @@ class Article extends Api
      */
     public function all()
     {
-        $list = MallArticle::all(function ($query){
-            $query->order('article_id','DESC');
-        });
-        foreach ($list as $k => $v){
-            $v->goods;
-        }
+        $list = MallArticle::hasWhere('goodss')->with('goodss')->order('article_id','DESC')->select();
         $this->success('获取成功',$list,'200');
     }
 }
