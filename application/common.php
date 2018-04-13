@@ -333,3 +333,13 @@ if (!function_exists('var_export_short'))
     }
 
 }
+
+/**
+ * 给相对地址url添加上前缀
+ */
+if (!function_exists('add_url')) {
+    function add_url($url)
+    {
+        return config('setting.img_prefix').$url;
+    }
+}

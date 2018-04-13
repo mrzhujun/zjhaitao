@@ -15,4 +15,15 @@ class MallArticle extends Model
     {
         return $this->hasOne('MallGoods','goods_id','goods_id')->field('goods_id,shop_price,goods_images');
     }
+
+    public function getContentAttr($value)
+    {
+        return str_replace('/uploads/',config('setting.img_prefix').'/uploads/',$value);
+    }
+
+    public function getImageAttr($value)
+    {
+        return add_url($value);
+    }
+
 }

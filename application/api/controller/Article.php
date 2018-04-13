@@ -32,7 +32,10 @@ class Article extends Api
      */
     public function all()
     {
-        $list = MallArticle::hasWhere('goodss')->with('goodss')->order('article_id','DESC')->select();
+        $list = MallArticle::with('goodss')->order('article_id','DESC')->select();
+        foreach ($list as $k => $v){
+            $list[$k]['goodss']['goods_images'] = config('setting.img_prefix').$v['goodss']['goods_images'];
+        }
         $this->success('获取成功',$list,'200');
     }
 }

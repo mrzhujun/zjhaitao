@@ -22,4 +22,9 @@ class MallActive extends Model
        return $goods_list;
    }
 
+   public function getActiveImageAttr($value)
+   {
+       return add_url($value);
+   }
+
 }

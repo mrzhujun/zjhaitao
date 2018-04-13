@@ -66,9 +66,13 @@ class User extends Common
      *     }
      *     }")
      */
-    public function user_status($open_id)
+    public function user_status()
     {
+        dump(input());exit();
+        $open_id = $this->request->param()['open_id'];
+
         $userObj = MallUser::where("open_id='{$open_id}'")->field('user_id,open_id,wx_name,wx_headimage,update_time')->find();
+        dump($userObj);exit();
         if (!$userObj) {
             $return['status'] = 0;
             $return['msg'] = '该用户还未注册';

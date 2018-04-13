@@ -1,27 +1,27 @@
 <?php
 
-namespace app\admin\controller;
+namespace app\admin\controller\shop;
 
 use app\common\controller\Backend;
 
 /**
- * 商城店铺信息
+ * 店铺图标管理
  *
  * @icon fa fa-circle-o
  */
-class Shop extends Backend
+class Ico extends Backend
 {
     
     /**
-     * MallShop模型对象
+     * MallIco模型对象
      */
     protected $model = null;
 
     public function _initialize()
     {
         parent::_initialize();
-        $this->model = model('MallShop');
-
+        $this->model = model('MallIco');
+        $this->view->assign("icoTypeList", $this->model->getIcoTypeList());
     }
     
     /**

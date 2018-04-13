@@ -30,7 +30,7 @@ class Goods extends Api
     {
         parent::__construct($request);
         $goods_id = $request->param()['goods_id'];
-        if (!$goods_id) {
+        if (!$goods_id ||!is_numeric($goods_id)) {
             $this->error('参数错误');
         }
         $goodsObj = MallGoods::where('goods_id',$goods_id)->field('goods_id,goods_name,goods_brief,goods_desc,cat_id,brand_id,shop_price,goods_images,sell_count,is_onsale')->find();
@@ -54,8 +54,8 @@ class Goods extends Api
     public function goods_detail()
     {
         if ($this->goodsObj) {
-            $this->goodsObj->attr = $this->goodsObj->mallattrs()->where('goods_id',$this->goodsObj->goods_id)->select();
-            $this->success('返回成功',$this->goodsObj);
+            $goodsDetail = MallGoods::with('mallattrs')->find();
+            $this->success('返回成功',$goodsDetail);
         }else{
             $this->error('商品不存在');
         }
@@ -90,7 +90,7 @@ class Goods extends Api
         }
         foreach ($list as $k => $v){
             $arr = explode(',',$v->goods_images);
-            $list[$k]->goods_images = $arr[0];
+            $list[$k]->goods_images = add_url($arr[0]);
         }
         $this->success('返回成功',$list);
     }
@@ -124,7 +124,7 @@ class Goods extends Api
         }
         foreach ($list as $k => $v){
             $arr = explode(',',$v->goods_images);
-            $list[$k]->goods_images = $arr[0];
+            $list[$k]->goods_images = add_url($arr[0]);
         }
         $this->success('返回成功',$list);
     }

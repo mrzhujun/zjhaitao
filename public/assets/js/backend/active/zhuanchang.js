@@ -30,7 +30,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'active_type_text', title: __('Active_type'), operate:false},
                         {field: 'active_image', title: __('Active_image'), formatter: Table.api.formatter.image},
                         {field: 'active_image2', title: __('Active_image2'), formatter: Table.api.formatter.image},
-                        {field: 'goods_id', title: __('Goods_id')},
+                        // {field: 'goods_id', title: __('Goods_id')},
                         {field: 'start_time', title: __('Start_time'), operate:'RANGE', addclass:'datetimerange', formatter: Table.api.formatter.datetime},
                         {field: 'end_time', title: __('End_time'), operate:'RANGE', addclass:'datetimerange', formatter: Table.api.formatter.datetime},
                         {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}

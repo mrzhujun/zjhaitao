@@ -1,8 +1,4 @@
 <?php
-/**
- * Author: zhujun
- * DateTime: 2018/4/13 9:25
- */
 
 namespace app\api\controller;
 
@@ -12,9 +8,7 @@ use app\api\model\MallGoods;
 use app\api\model\MallShop;
 use app\common\controller\Api;
 
-/**
- * 首页
- */
+
 class Index extends Api
 {
     // 无需验证登录的方法
@@ -23,31 +17,21 @@ class Index extends Api
     protected $noNeedRight = ['*'];
 
     /**
-     * 顶部店标及关于我们图片获取
-     * @ApiMethod   (GET)
-     * @ApiReturn   (data="{
-     *     'code':'1/0',
-     *     'msg':'返回成功/暂无活动商品',
-     *     'time':'1523173262',
-     *     'data': 'data'
-     *     }")
+     * get: 顶部店标及关于我们图片获取
+     * path: shop_image
      */
     public function shop_image()
     {
         $return = db('mall_shop')->field('head_image,intro_image')->find();
+        $return['head_image'] = add_url($return['head_image']);
+        $return['intro_image'] = add_url($return['intro_image']);
         $this->success('返回成功',$return);
     }
 
 
     /**
-     * 新人活动
-     * @ApiMethod   (GET)
-     * @ApiReturn   (data="{
-     *     'code':'1/0',
-     *     'msg':'返回成功/暂无活动商品',
-     *     'time':'1523173262',
-     *     'data': 'data'
-     *     }")
+     * get: 新人活动
+     * path: new_people
      */
     public function new_people()
     {
@@ -67,14 +51,8 @@ class Index extends Api
     }
 
     /**
-     * 尖货铺
-     * @ApiMethod   (GET)
-     * @ApiReturn   (data="{
-     *     'code':'1/0',
-     *     'msg':'返回成功/暂无活动商品',
-     *     'time':'1523173262',
-     *     'data': '测试获取'
-     *     }")
+     * get: 尖货铺
+     * path: the_best
      */
     public function the_best()
     {
@@ -95,14 +73,8 @@ class Index extends Api
 
 
     /**
-     * 限时特卖
-     * @ApiMethod   (GET)
-     * @ApiReturn   (data="{
-     *     'code':'1/0',
-     *     'msg':'返回成功/不在特卖活动时间内',
-     *     'time':'1523173262',
-     *     'data': '测试获取'
-     *     }")
+     * get: 限时特卖
+     * path: flash_sale
      */
     public function flash_sale()
     {
@@ -125,16 +97,11 @@ class Index extends Api
         $this->success('获取成功',$return);
     }
 
+
     /**
-     * 专场
-     * @ApiMethod   (GET)
-     * @ApiParams   (name="page", type="int", required=true, description="页数")
-     * @ApiReturn   (data="{
-     *     'code':'1/0',
-     *     'msg':'返回成功/不在特卖活动时间内',
-     *     'time':'1523173262',
-     *     'data': '测试获取'
-     *     }")
+     * get: 专场
+     * path: special
+     * param: page - {int} 页数
      */
     public function special($page = 1)
     {
@@ -151,7 +118,7 @@ class Index extends Api
         foreach ($activeList as $k => $v){
             $goodsList = db('mall_goods')->where("goods_id in ({$v['goods_id']})")->field('goods_id,goods_images,goods_name,shop_price')->select();
             foreach ($goodsList as $kk => $vv){
-                $goodsList[$kk]['goods_images'] = explode(',',$vv['goods_images'])[0];
+                $goodsList[$kk]['goods_images'] = add_url(explode(',',$vv['goods_images'])[0]);
             }
             $activeList[$k]['goods_list'] = $goodsList;
             unset($activeList[$k]['goods_id']);
