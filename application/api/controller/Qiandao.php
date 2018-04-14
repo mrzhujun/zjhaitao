@@ -34,21 +34,22 @@ class Qiandao extends Common
         }
         $userModel = new MallUser();
         $rst = $userModel->jifen_add($user_id);
-        if (!$rst) {
+
+        if (!$rst['status']) {
             $list = $this->array2array($list,'date');
-            $this->error('积分增加失败',$list,500);
+            $this->error('积分增加失败'.$list['msg'],$list,500);
         }
         $qiandao = MallQiandao::create([
             'user_id' => $user_id,
             'date' => date('Ymd'),
-            'keep_date'=>$rst
+            'keep_date'=>$rst['keepdate']
         ]);
         $list = $modelQiandao->where("user_id={$user_id} and date like '{$thisMonth}%'")->field('date')->select();
         if ($qiandao) {
             $list = $this->array2array($list,'date');
             $this->success('签到成功',$list,201);
         }else{
-            $this->error('签到失败');
+            $this->error('签到失败',$list,500);
         }
     }
 
@@ -63,10 +64,11 @@ class Qiandao extends Common
         $qiandaoModel = new MallQiandao();
         $list = $qiandaoModel->where("user_id={$user_id}")->field('date')->select();
         if (!$list) {
-            $this->error('获取失败');
+            $this->error('暂无数据',$list,404);
         }
 
-        $this->success('获取成功',$list);
+        $list = $this->array2array($list,'date');
+        $this->success('获取成功',$list,200);
     }
 
 

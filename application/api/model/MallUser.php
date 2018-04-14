@@ -9,12 +9,18 @@
 namespace app\api\model;
 
 
+use think\Exception;
 use think\Model;
 
-class MallUser extends Model
+class MallUser extends BaseModel
 {
     protected $autoWriteTimestamp = true;
+    protected $hidden = ['create_time','update_time','from','user_id'];
 
+    public function getWxHeadimageAttr($value,$data)
+    {
+        return self::returnImageAttr($value,$data['from']);
+    }
     /**
      * 签到增加用户积分
      */
@@ -37,20 +43,28 @@ class MallUser extends Model
         }
 
         //本月签到则月积分累加
-        if ($modelQiandao[0]) {
+        if ($monthQiandao) {
             $jifenMonth = $userObj['jifen_month'] + $keepDate * 10;
         }else{//本月未签到月积分清零
             $jifenMonth = $keepDate * 10;
         }
 
-        $update1 = $this::where(['user_id'=>$user_id])->setInc('jifen',$keepDate*10,2);
-        $update2 = $this::where(['user_id'=>$user_id])->setInc('jifen_total',$keepDate*10,2);
-        $update3 = $this::where(['user_id'=>$user_id])->update(['jifen_month'=>$jifenMonth]);
-        if ($update1 && $update2 && $update3) {
-            return $keepDate;
-        }else{
-            return false;
+        try {
+            $this::where(['user_id' => $user_id])->setInc('jifen', $keepDate * 10, 2);
+            $this::where(['user_id' => $user_id])->setInc('jifen_total', $keepDate * 10, 2);
+            $this::where(['user_id' => $user_id])->update(['jifen_month' => $jifenMonth]);
+        }catch (Exception $e)
+        {
+            $return['status'] = false;
+            $return['msg'] = $e->getMessage();
+            return $return;
         }
+
+            $return['status'] = true;
+            $return['msg'] = '签到成功';
+            $return['keepdate'] = $keepDate;
+            return $return;
+
     }
 
     public function malladdresss()
