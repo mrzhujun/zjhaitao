@@ -16,22 +16,12 @@ class MallActive extends BaseModel
         return $this->hasMany('MallGoods','goods_id','goods_id');
     }
 
-   public static function getGoodsById($goods_id)
-   {
-       $goods_list = self::with('goodss')->select($goods_id);
-       return $goods_list;
-   }
 
    public function getActiveImageAttr($value,$data)
    {
        return self::returnImageAttr($value,$data['from']);
    }
 
-   //专场获取商品列表
-   public static function get_goods_list($goods_id_list)
-   {
-       $arr = MallGoods::get($goods_id_list);
-       dump($arr->getData());
-   }
+
 
 }

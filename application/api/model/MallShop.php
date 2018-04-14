@@ -13,15 +13,15 @@ class MallShop extends BaseModel
 {
     public function getHeadImageAttr($value)
     {
-        return self::returnImageAttr($value);
+        return self::returnImageAttr($value,0);
     }
     public function getXinImageAttr($value)
     {
-        return self::returnImageAttr($value);
+        return self::returnImageAttr($value,0);
     }
     public function getTemaiImageAttr($value)
     {
-        return self::returnImageAttr($value);
+        return self::returnImageAttr($value,0);
     }
 
 }

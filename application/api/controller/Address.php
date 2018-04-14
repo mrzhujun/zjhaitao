@@ -63,7 +63,7 @@ class Address extends Api
      * param: c - {string} 市
      * param: t - {string} 区
      * param: address_detail - {string} 具体地址
-     * param: is_default - {int}  = [0|1|2|3|4] 是否设为默认(0: 否, 1: 是)
+     * param: is_default - {int}  = [0|1] 是否设为默认(0: 否, 1: 是)
      */
     public function edit()
     {
@@ -79,7 +79,7 @@ class Address extends Api
             'is_default' => 'in:0,1'
         ]);
         if (!$validate->check($params)) {
-            $this->error($validate->getError(),'',400);
+            $this->error($validate->getError(),'',403);
         }
 
         $params['address'] = $params['p'].','.$params['c'].','.$params['t'];

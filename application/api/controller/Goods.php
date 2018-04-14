@@ -26,11 +26,14 @@ class Goods extends Api
         parent::__construct($request);
         $goods_id = $request->param()['goods_id'];
         if (!$goods_id ||!is_numeric($goods_id)) {
-            $this->error('参数错误');
+            $this->error('参数错误','',403);
         }
         $goodsObj = MallGoods::where('goods_id',$goods_id)->field('goods_id,goods_name,goods_brief,goods_desc,cat_id,brand_id,shop_price,goods_images,sell_count,is_onsale')->find();
+        if (!$goodsObj) {
+            $this->error('商品不存在','',400);
+        }
         if (!$goodsObj->is_onsale) {
-            $this->error('该商品暂未出售');
+            $this->error('该商品暂未出售','',403);
         }else{
             $this->goodsObj = $goodsObj;
         }
@@ -46,9 +49,9 @@ class Goods extends Api
     {
         if ($this->goodsObj) {
             $goodsDetail = MallGoods::with('mallattrs')->find();
-            $this->success('返回成功',$goodsDetail);
+            $this->success('返回成功',$goodsDetail,200);
         }else{
-            $this->error('商品不存在');
+            $this->error('商品不存在','',404);
         }
     }
 
@@ -62,13 +65,9 @@ class Goods extends Api
     {
         $list = MallGoods::where('cat_id',$this->goodsObj->cat_id)->where('goods_id','<>',$this->goodsObj->goods_id)->field('goods_name,shop_price,goods_images')->select();
         if (!$list) {
-            $this->error('没有推荐信息');
+            $this->error('没有推荐信息',$list,400);
         }
-        foreach ($list as $k => $v){
-            $arr = explode(',',$v->goods_images);
-            $list[$k]->goods_images = add_url($arr[0]);
-        }
-        $this->success('返回成功',$list);
+        $this->success('返回成功',$list,200);
     }
 
 
@@ -81,13 +80,10 @@ class Goods extends Api
     {
         $list = MallGoods::where('brand_id',$this->goodsObj->brand_id)->where('goods_id','<>',$this->goodsObj->goods_id)->field('goods_name,shop_price,goods_images')->select();
         if (!$list) {
-            $this->error('没有推荐信息');
+            $this->error('没有推荐信息',$list,400);
         }
-        foreach ($list as $k => $v){
-            $arr = explode(',',$v->goods_images);
-            $list[$k]->goods_images = add_url($arr[0]);
-        }
-        $this->success('返回成功',$list);
+
+        $this->success('返回成功',$list,200);
     }
     
 }

@@ -19,9 +19,9 @@ class MallArticle extends BaseModel
         return self::returnContentAttr($value);
     }
 
-    public function getImageAttr($value)
+    public function getImageAttr($value,$data)
     {
-        return self::returnImageAttr($value);
+        return self::returnImageAttr($value,$data['from']);
     }
 
 }
