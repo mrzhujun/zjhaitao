@@ -4,6 +4,7 @@ namespace app\api\controller;
 
 
 use app\api\model\MallAddress;
+use app\api\model\MallUser;
 use app\common\controller\Api;
 
 /**
@@ -18,7 +19,7 @@ class Address extends Api
 
     /**
      * post: 新增地址
-     * path: address_add
+     * path: add
      * param: user_id - {int} 用户id
      * param: name - {string} 收货人
      * param: phone - {int} 手机号
@@ -28,7 +29,7 @@ class Address extends Api
      * param: address_detail - {string} 具体地址
      * param: is_default - {int}  = [0|1|2|3|4] 是否设为默认(0: 否, 1: 是)
      */
-    public function address_add()
+    public function add()
     {
         $validate = new \think\Validate([
             'user_id' => 'require|number',
@@ -54,7 +55,7 @@ class Address extends Api
 
     /**
      * put: 修改地址
-     * path: address_edit
+     * path: edit
      * param: address_id - {int} 地址id
      * param: name - {string} 收货人
      * param: phone - {int} 手机号
@@ -64,8 +65,9 @@ class Address extends Api
      * param: address_detail - {string} 具体地址
      * param: is_default - {int}  = [0|1|2|3|4] 是否设为默认(0: 否, 1: 是)
      */
-    public function address_edit()
+    public function edit()
     {
+        dump(input());exit();
         $params = $this->request->param();
         $validate = new \think\Validate([
             'address_id' => 'require|number',
@@ -92,6 +94,41 @@ class Address extends Api
         $this->success('更改成功',$addressObj,'201');
     }
 
+    /**
+     * delete: 删除地址
+     * path: delete
+     * param: address_id - {int} 地址id
+     */
+    public function delete()
+    {
+        $params = $this->request->param();
+        $validate = new \think\Validate([
+            'address_id' => 'require|number',
+        ]);
+        if (!$validate->check($params)) {
+            $this->error($validate->getError(),'',400);
+        }
+        $rst = MallAddress::destroy($params['address_id']);
+        if ($rst) {
+            $this->success('删除成功','',204);
+        }else{
+            $this->error('删除失败','',500);
+        }
+    }
 
+    /**
+     * get: 获取用户所有地址列表
+     * path: address_list
+     * param: user_id - {int} 用户user_id
+     */
+    public function address_list($user_id)
+    {
+        $userObj = MallUser::get($user_id);
+        if (!$userObj) {
+            $this->error('该用户不存在');
+        }
+        $list = $userObj->malladdresss()->select();
+        $this->success('返回成功',$list,200);
+    }
 
 }

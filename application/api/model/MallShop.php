@@ -9,19 +9,19 @@ namespace app\api\model;
 
 use think\Model;
 
-class MallShop extends Model
+class MallShop extends BaseModel
 {
     public function getHeadImageAttr($value)
     {
-        return add_url($value);
+        return self::returnImageAttr($value);
     }
     public function getXinImageAttr($value)
     {
-        return add_url($value);
+        return self::returnImageAttr($value);
     }
     public function getTemaiImageAttr($value)
     {
-        return add_url($value);
+        return self::returnImageAttr($value);
     }
 
 }

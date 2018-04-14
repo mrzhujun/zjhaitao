@@ -9,9 +9,7 @@
 namespace app\api\model;
 
 
-use think\Model;
-
-class MallGoods extends Model
+class MallGoods extends BaseModel
 {
     protected $visible = ['goods_id','goods_name','goods_brief','goods_desc','cat_id','brand_id','shop_price','goods_images','sell_count','is_onsale'];
 
@@ -22,7 +20,7 @@ class MallGoods extends Model
 
     public function getGoodsDescAttr($value)
     {
-        return str_replace('/uploads/',config('setting.img_prefix').'/uploads/',$value);
+        return self::returnContentAttr($value);
     }
 
     public function getGoodsImagesAttr($value)

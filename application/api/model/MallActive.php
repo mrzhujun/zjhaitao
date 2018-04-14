@@ -7,13 +7,13 @@
 namespace app\api\model;
 
 
-use think\Model;
 
-class MallActive extends Model
+class MallActive extends BaseModel
 {
+    protected $visible = ['active_id','goods_id','active_title','active_image'];
     public function goodss()
     {
-        return $this->hasMany('MallGoods','goods_id');
+        return $this->hasMany('MallGoods','goods_id','goods_id');
     }
 
    public static function getGoodsById($goods_id)
@@ -22,9 +22,16 @@ class MallActive extends Model
        return $goods_list;
    }
 
-   public function getActiveImageAttr($value)
+   public function getActiveImageAttr($value,$data)
    {
-       return add_url($value);
+       return self::returnImageAttr($value,$data['from']);
+   }
+
+   //专场获取商品列表
+   public static function get_goods_list($goods_id_list)
+   {
+       $arr = MallGoods::get($goods_id_list);
+       dump($arr->getData());
    }
 
 }

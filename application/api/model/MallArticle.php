@@ -7,9 +7,7 @@
 namespace app\api\model;
 
 
-use think\Model;
-
-class MallArticle extends Model
+class MallArticle extends BaseModel
 {
     public function goodss()
     {
@@ -18,12 +16,12 @@ class MallArticle extends Model
 
     public function getContentAttr($value)
     {
-        return str_replace('/uploads/',config('setting.img_prefix').'/uploads/',$value);
+        return self::returnContentAttr($value);
     }
 
     public function getImageAttr($value)
     {
-        return add_url($value);
+        return self::returnImageAttr($value);
     }
 
 }

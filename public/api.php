@@ -59,7 +59,7 @@ while(($module_name = readdir($module_dir)) !== false) {
                                     $func_contents = $func_matches[0][$i];
 
                                     // 方法说明
-                                    if(!preg_match_all('/(get|post|delete)\s*:\s*([^\n]+)/i', $func_contents, $matches)) {
+                                    if(!preg_match_all('/(get|post|delete|put)\s*:\s*([^\n]+)/i', $func_contents, $matches)) {
                                         break;
                                     }
                                     $method = $matches[1][0];
@@ -100,7 +100,7 @@ while(($module_name = readdir($module_dir)) !== false) {
 
                                         $params_count = count($names);
                                         for($j = 0; $j < $params_count; $j++) {
-                                            $in = $method == 'get' ? 'query' : 'formData';
+                                            $in = $method == 'get'||$method == 'delete' ? 'query' : 'formData';
                                             if(strpos($path, '{'.$names[$j].'}') !== false) {
                                                 $in = 'path';
                                             }

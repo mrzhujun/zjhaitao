@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2018/4/8
- * Time: 11:51
- */
 
 namespace app\api\controller;
 use app\api\model\MallQiandao;
@@ -13,7 +7,7 @@ use app\common\controller\Api;
 
 
 /**
- * 签到
+ * swagger: 签到
  */
 class Qiandao extends Common
 {
@@ -22,20 +16,11 @@ class Qiandao extends Common
     // 无需要判断权限规则的方法
     protected $noNeedRight = ['*'];
 
+
     /**
-     * 今日签到
-     * @ApiMethod   (POST)
-     * @ApiParams   (name="user_id", type="int", required=true, description="user_id")
-     * @ApiReturn   (data="{
-     *     'code':'1/0',
-     *     'msg':'返回成功/失败',
-     *     'time':'1523173262',
-     *     'data':{
-     *             'status':'1/0',
-     *              'msg':'签到成功/失败',
-     *              'data':[20180408,20180409]
-     *     }
-     *     }")
+     * get: 今日签到
+     * path: add
+     * param: user_id - {int} user_id
      */
     public function add($user_id)
     {
@@ -45,13 +30,13 @@ class Qiandao extends Common
         $list = $modelQiandao->where("user_id={$user_id} and date like '{$thisMonth}%'")->field('date')->select();
         if ($isQiandao != 0) {
             $list = $this->array2array($list,'date');
-            $this->error('已经签到',$list);
+            $this->error('已经签到',$list,403);
         }
         $userModel = new MallUser();
         $rst = $userModel->jifen_add($user_id);
         if (!$rst) {
             $list = $this->array2array($list,'date');
-            $this->error('积分增加失败',$list);
+            $this->error('积分增加失败',$list,500);
         }
         $qiandao = MallQiandao::create([
             'user_id' => $user_id,
@@ -61,23 +46,17 @@ class Qiandao extends Common
         $list = $modelQiandao->where("user_id={$user_id} and date like '{$thisMonth}%'")->field('date')->select();
         if ($qiandao) {
             $list = $this->array2array($list,'date');
-            $this->success('签到成功',$list);
+            $this->success('签到成功',$list,201);
         }else{
             $this->error('签到失败');
         }
     }
 
+
     /**
-     * 获取用户签到总览
-     * @ApiParams   (name="user_id", type="int", required=true, description="user_id")
-     * @ApiReturn   (data="{
-     *     'code':'1/0',
-     *     'msg':'返回成功/失败',
-     *     'time':'1523173262',
-     *     'data':{
-     *             [{'id':1,'user_id':30,'date':20180408},{'id':1,'user_id':30,'date':20180409}]
-     *     }
-     *     }")
+     * get: 获取用户签到总览
+     * path: index
+     * param: user_id - {int} user_id
      */
     public function index($user_id)
     {

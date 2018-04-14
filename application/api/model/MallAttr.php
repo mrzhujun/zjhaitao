@@ -13,8 +13,5 @@ use think\Model;
 
 class MallAttr extends Model
 {
-    public function mallgoods()
-    {
 
-    }
 }

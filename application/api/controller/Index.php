@@ -8,7 +8,9 @@ use app\api\model\MallGoods;
 use app\api\model\MallShop;
 use app\common\controller\Api;
 
-
+/**
+ * swagger: 首页
+ */
 class Index extends Api
 {
     // 无需验证登录的方法
@@ -114,18 +116,14 @@ class Index extends Api
         if ($page>$maxPage) {
             $this->error('没有下一页了');
         }
-        $activeList = MallActive::where("active_type",4)->field('active_id,goods_id,active_title,active_image')->limit($page-1,$num)->select();
+        $activeList = MallActive::where("active_type",4)->limit($page-1,$num)->select();
+
         foreach ($activeList as $k => $v){
-            $goodsList = db('mall_goods')->where("goods_id in ({$v['goods_id']})")->field('goods_id,goods_images,goods_name,shop_price')->select();
-            foreach ($goodsList as $kk => $vv){
-                $goodsList[$kk]['goods_images'] = add_url(explode(',',$vv['goods_images'])[0]);
-            }
-            $activeList[$k]['goods_list'] = $goodsList;
-            unset($activeList[$k]['goods_id']);
+            $activeList[$k]['goods_id'] = MallGoods::where("goods_id in ({$v['goods_id']})")->field('goods_id,goods_name,shop_price,goods_images')->select();
         }
         $return['page_detail'] = $pageDetail;
         $return['active_list'] = $activeList;
-        $this->success('获取成功',$return);
+        $this->success('获取成功',$return,200);
     }
 
 }

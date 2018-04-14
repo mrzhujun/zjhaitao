@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2018/4/10
- * Time: 10:18
- */
+
 
 namespace app\api\controller;
 
@@ -15,7 +10,7 @@ use think\Request;
 
 
 /**
- * 商品
+ * swagger: 商品
  */
 class Goods extends Api
 {
@@ -41,15 +36,11 @@ class Goods extends Api
         }
     }
 
+
     /**
-     * 商品详细信息获取页面
-     * @ApiParams   (name="goods_id", type="int", required=true, description="商品id")
-     * @ApiReturn   (data="{
-     *     'code':'1/0',
-     *     'msg':'返回成功/失败',
-     *     'time':'1523173262',
-     *     'data':'商品+商品规格+商品活动信息'
-     *     }")
+     * get: 商品详细信息获取页面
+     * path: goods_detail
+     * param: goods_id - {int} 商品id
      */
     public function goods_detail()
     {
@@ -61,26 +52,11 @@ class Goods extends Api
         }
     }
 
+
     /**
-     * 相似商品推荐
-     * @ApiParams   (name="goods_id", type="int", required=true, description="商品id")
-     * @ApiReturn   (data="{
-     *     'code':'1/0',
-     *     'msg':'返回成功/失败',
-     *     'time':'1523173262',
-     *     'data': [
-     *          {
-     *           'goods_name': '急救美人 First aid beauty|FAB修复面霜',
-     *           'shop_price': '88.00',
-     *           'goods_images': '/uploads/20180410/cdcc64a5a96c8ff9b3aabe3f02625408.jpg'
-     *           },
-     *           {
-     *           'goods_name': '迪奥 Dior|2018限量真皮完美恒久气垫',
-     *           'shop_price': '436.00',
-     *           'goods_images': '/uploads/20180410/f554e7ff3c6a5c74e19524620d5dde37.jpg'
-     *           }
-     *       ]
-     *     }")
+     * get: 相似商品推荐
+     * path: recommend_similar
+     * param: goods_id - {int} 商品id
      */
     public function recommend_similar()
     {
@@ -95,26 +71,11 @@ class Goods extends Api
         $this->success('返回成功',$list);
     }
 
+
     /**
-     * 品牌推荐
-     * @ApiParams   (name="goods_id", type="int", required=true, description="商品id")
-     * @ApiReturn   (data="{
-     *     'code':'1/0',
-     *     'msg':'返回成功/失败',
-     *     'time':'1523173262',
-     *     'data': [
-     *          {
-     *           'goods_name': '急救美人 First aid beauty|FAB修复面霜',
-     *           'shop_price': '88.00',
-     *           'goods_images': '/uploads/20180410/cdcc64a5a96c8ff9b3aabe3f02625408.jpg'
-     *           },
-     *           {
-     *           'goods_name': '迪奥 Dior|2018限量真皮完美恒久气垫',
-     *           'shop_price': '436.00',
-     *           'goods_images': '/uploads/20180410/f554e7ff3c6a5c74e19524620d5dde37.jpg'
-     *           }
-     *       ]
-     *     }")
+     * get: 品牌推荐
+     * path: recommend_brand
+     * param: goods_id - {int} 商品id
      */
     public function recommend_brand()
     {
