@@ -63,6 +63,7 @@ class MallUser extends BaseModel
             $return['status'] = true;
             $return['msg'] = '签到成功';
             $return['keepdate'] = $keepDate;
+            $return['getjifen'] = $keepDate * 10;
             return $return;
 
     }

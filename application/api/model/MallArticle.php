@@ -9,9 +9,9 @@ namespace app\api\model;
 
 class MallArticle extends BaseModel
 {
-    public function goodss()
+    public function goods()
     {
-        return $this->hasOne('MallGoods','goods_id','goods_id')->field('goods_id,shop_price,goods_images');
+        return $this->belongsTo('MallGoods','goods_id','goods_id');
     }
 
     public function getContentAttr($value)

@@ -19,38 +19,26 @@ class Goods extends Api
     // 无需要判断权限规则的方法
     protected $noNeedRight = ['*'];
 
-    protected $goodsObj;
-
     public function __construct(Request $request = null)
     {
         parent::__construct($request);
-        $goods_id = $request->param()['goods_id'];
-        if (!$goods_id ||!is_numeric($goods_id)) {
+        if (!input('goods_id') ||!is_numeric(input('goods_id'))) {
             $this->error('参数错误','',403);
         }
-        $goodsObj = MallGoods::where('goods_id',$goods_id)->field('goods_id,goods_name,goods_brief,goods_desc,cat_id,brand_id,shop_price,goods_images,sell_count,is_onsale')->find();
-        if (!$goodsObj) {
-            $this->error('商品不存在','',400);
-        }
-        if (!$goodsObj->is_onsale) {
-            $this->error('该商品暂未出售','',403);
-        }else{
-            $this->goodsObj = $goodsObj;
-        }
     }
-
 
     /**
      * get: 商品详细信息获取页面
      * path: goods_detail
      * param: goods_id - {int} 商品id
      */
-    public function goods_detail()
+    public function goods_detail($goods_id)
     {
-        if ($this->goodsObj) {
-            $goodsDetail = MallGoods::with('mallattrs')->find();
+        $goodsDetail = MallGoods::with('mallattrs')->find($goods_id);
+        if ($goodsDetail) {
+            $goodsDetail['active'] = MallGoods::active($goods_id);
             $this->success('返回成功',$goodsDetail,200);
-        }else{
+        } else{
             $this->error('商品不存在','',404);
         }
     }
@@ -61,9 +49,13 @@ class Goods extends Api
      * path: recommend_similar
      * param: goods_id - {int} 商品id
      */
-    public function recommend_similar()
+    public function recommend_similar($goods_id)
     {
-        $list = MallGoods::where('cat_id',$this->goodsObj->cat_id)->where('goods_id','<>',$this->goodsObj->goods_id)->field('goods_name,shop_price,goods_images')->select();
+        $goodsObj = db('mall_goods')->where("goods_id={$goods_id}")->field('cat_id')->find();
+        if (!$goodsObj) {
+            $this->error('商品不存在','',404);
+        }
+        $list = db('mall_goods')->where("goods_id!={$goods_id} and cat_id={$goodsObj['cat_id']}")->field('goods_id,goods_name,shop_price,goods_images')->select();
         if (!$list) {
             $this->error('没有推荐信息',$list,400);
         }
@@ -76,9 +68,13 @@ class Goods extends Api
      * path: recommend_brand
      * param: goods_id - {int} 商品id
      */
-    public function recommend_brand()
+    public function recommend_brand($goods_id)
     {
-        $list = MallGoods::where('brand_id',$this->goodsObj->brand_id)->where('goods_id','<>',$this->goodsObj->goods_id)->field('goods_name,shop_price,goods_images')->select();
+        $goodsObj = db('mall_goods')->where("goods_id={$goods_id}")->field('brand_id')->find();
+        if (!$goodsObj) {
+            $this->error('商品不存在','',404);
+        }
+        $list = db('mall_goods')->where("goods_id!={$goods_id} and brand_id={$goodsObj['brand_id']}")->field('goods_id,goods_name,shop_price,goods_images')->select();
         if (!$list) {
             $this->error('没有推荐信息',$list,400);
         }

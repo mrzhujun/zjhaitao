@@ -45,11 +45,14 @@ class Qiandao extends Common
             'keep_date'=>$rst['keepdate']
         ]);
         $list = $modelQiandao->where("user_id={$user_id} and date like '{$thisMonth}%'")->field('date')->select();
+        $return['keepdate'] = $rst['keepdate'];
+        $return['getjifen'] = $rst['getjifen'];
+        $list = $this->array2array($list,'date');
+        $return['datelist'] = $list;
         if ($qiandao) {
-            $list = $this->array2array($list,'date');
-            $this->success('签到成功',$list,201);
+            $this->success('签到成功',$return,201);
         }else{
-            $this->error('签到失败',$list,500);
+            $this->error('签到失败',$return,500);
         }
     }
 

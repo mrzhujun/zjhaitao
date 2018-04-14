@@ -9,9 +9,21 @@
 namespace app\api\model;
 
 
-use think\Model;
-
-class Category extends Model
+class Category extends BaseModel
 {
+    protected $visible = ['id','name','image','cate_child','big_image','goodss'];
 
+    public function getImageAttr($value,$data)
+    {
+        return self::returnImageAttr($value,$data['image_from']);
+    }
+    public function getBigImageAttr($value,$data)
+    {
+        return self::returnImageAttr($value,$data['big_image_from']);
+    }
+
+    public function goodss()
+    {
+        return $this->hasMany('MallGoods','cat_id','id')->field('goods_id,goods_name,goods_images,shop_price,sell_count,cat_id,from');
+    }
 }

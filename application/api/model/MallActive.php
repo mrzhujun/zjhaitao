@@ -24,4 +24,5 @@ class MallActive extends BaseModel
 
 
 
+
 }

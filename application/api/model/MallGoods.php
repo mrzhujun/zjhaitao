@@ -11,7 +11,7 @@ namespace app\api\model;
 
 class MallGoods extends BaseModel
 {
-    protected $visible = ['goods_id','goods_name','goods_brief','goods_desc','cat_id','brand_id','shop_price','goods_images','sell_count','is_onsale'];
+    protected $visible = ['goods_id','goods_name','goods_brief','goods_desc','shop_price','goods_images','sell_count','is_onsale','mallattrs','active'];
 
     public function mallattrs()
     {
@@ -23,12 +23,51 @@ class MallGoods extends BaseModel
         return self::returnContentAttr($value);
     }
 
-    public function getGoodsImagesAttr($value)
+    public function getGoodsImagesAttr($value,$data)
     {
         $arr = explode(',',$value);
-        foreach ($arr as $k => $v){
-            $arr[$k] = add_url($v);
+        if ($data['from'] == 0) {
+            foreach ($arr as $k => $v){
+                $arr[$k] = add_url($v);
+            }
         }
         return $arr;
+    }
+
+
+
+    /**
+     * 返回商品活动信息
+     * @param $goods_id
+     * @return mixed
+     * @throws \think\exception\DbException
+     */
+    public static function active($goods_id)
+    {
+        $goodsObj = self::get($goods_id);
+        if ($goodsObj->active_id == 0 || $goodsObj->promote_start_time>time() || $goodsObj->promote_end_time<time())
+        {
+            $return['msg'] = '该商品不在活动中';
+            $return['status'] = false;
+            return $return;
+        }
+        $return['msg'] = '该商品正在活动中';
+        $return['status'] = true;
+        $return['promote_price'] = $goodsObj->promote_price;
+        $return['promote_end_time'] = $goodsObj->promote_end_time;
+        $activeObj = MallActive::get($goodsObj->active_id);
+        switch ($activeObj->active_type){
+            case 0:
+                $return['active_name'] = '秒杀';
+                break;
+            case 1:
+                $return['active_name'] = '新人专享';
+                break;
+            case 3:
+                $return['active_name'] = '限时特卖';
+                break;
+        }
+        $return['active_type'] = $activeObj->active_type;
+        return $return;
     }
 }
