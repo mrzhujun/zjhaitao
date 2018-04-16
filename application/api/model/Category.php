@@ -11,7 +11,7 @@ namespace app\api\model;
 
 class Category extends BaseModel
 {
-    protected $visible = ['id','name','image','big_image','goodss','description'];
+    protected $visible = ['id','name','image','big_image','goodss','description','cate_child'];
 
     public function getImageAttr($value,$data)
     {

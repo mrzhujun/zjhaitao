@@ -22,11 +22,24 @@ class Cate extends Api
      */
     public function category()
     {
-        $list = Category::where("type='category' and pid='0'")->field('id,name,image,image_from')->select();
-        foreach ($list as $k => $v){
-            $list[$k]->cate_child = Category::where('pid',$v['id'])->select();
+        //普通分类
+        $list = Category::where("type='category' and pid='0'")->field('id,name,image,description,image_from')->select();
+        if (!$list) {
+            $this->error('没有获取到分类列表','',404);
         }
-        $this->success('获取成功',$list,200);
+
+        foreach ($list as $k => $v){
+            $list[$k]->cate_child = Category::where('pid',$v['id'])->field('id,name,image,image_from')->select();
+        }
+        //品牌分类
+        $list2 = Category::where("type='brand' and pid='0'")->field('id,name,image,description,image_from')->select();
+        foreach ($list2 as $k => $v){
+            $list2[$k]->cate_child = Category::where('pid',$v['id'])->field('id,name,image,image_from')->select();
+        }
+        $return['category'] = $list;
+        $return['brand'] = $list2;
+
+        $this->success('获取成功',$return,200);
     }
 
     /**
