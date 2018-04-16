@@ -25,4 +25,5 @@ class BaseModel extends Model
         }
         return $value;
     }
+
 }

@@ -18,7 +18,7 @@ class Qiandao extends Common
 
 
     /**
-     * get: 今日签到
+     * post: 今日签到
      * path: add
      * param: user_id - {int} user_id
      */

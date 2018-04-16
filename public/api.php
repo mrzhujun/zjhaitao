@@ -159,16 +159,16 @@ closedir($module_dir);
 $swagger = array(
     'swagger'	=> '2.0',
     'info'		=> array(
-        'description'	=> 'APP 后台服务',
+        'description'	=> '',
         'version'		=> '1.0.0',
-        'title'			=> '［我的APP］Swagger',
+        'title'			=> '［奥莱海淘API］Swagger',
         'termsOfService'=> '#',
         'contact'		=> array(
             'email'		=> ''
         ),
         'license'		=> array(
-            'name'		=> 'Apache 2.0',
-            'url'		=> '#'
+            'name'		=> '代码地址',
+            'url'		=> 'https://github.com/mrzhujun/zjhaitao'
         )
     ),
     'host'		=> $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'].'/api',

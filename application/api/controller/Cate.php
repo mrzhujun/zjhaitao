@@ -35,13 +35,15 @@ class Cate extends Api
      * param:  category_id - {int} 分类ID
      * param:  by - {int} = [0|1|2] 排序类型(0: 推荐排序, 1: 销量, 2: 价格)
      * param:  order - {int} = [0|1] 排序规则(0: 从高到低, 1: 从低到高)
+     * param:  or - {int} = [0|1] 普通分类or品牌(0: 普通分类, 1: 品牌)
      */
     public function category_goods_list()
     {
         $validate = new \think\Validate([
             'category_id' => 'require|number',
             'by' => 'in:0,1,2',
-            'order' => 'in:0,1'
+            'order' => 'in:0,1',
+            'or' => 'in:0,1'
         ]);
         $rst = $validate->check(input());
         if (!$rst) {
@@ -64,8 +66,13 @@ class Cate extends Api
                 $by = 'shop_price';
                 break;
         }
-        $return['goods_list'] = MallGoods::where('cat_id',input('category_id'))->order($by,$order)->select();
-        $return['category_detail'] = Category::get(input('category'));
+        if (input('or') == 0) {
+            $return['goods_list'] = MallGoods::where('cat_id',input('category_id'))->order($by,$order)->select();
+        }else{
+            $return['goods_list'] = MallGoods::where('brand_id',input('category_id'))->order($by,$order)->select();
+        }
+
+        $return['category_detail'] = Category::get(input('category_id'));
 
         $this->success('获取成功',$return,200);
     }

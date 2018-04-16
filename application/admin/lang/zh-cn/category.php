@@ -5,7 +5,7 @@ return [
     'Pid'         => '父ID',
     'Type'        => '栏目类型',
     'All'         => '全部',
-    'Image'       => '图片',
+    'Image'       => '图片或logo',
     'BigImage'    => '展示页顶部图片',
     'Keywords'    => '关键字',
     'Description' => '描述',
