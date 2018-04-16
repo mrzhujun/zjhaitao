@@ -6,6 +6,9 @@ namespace app\api\controller;
 use app\api\model\MallAddress;
 use app\api\model\MallUser;
 use app\common\controller\Api;
+use app\api\validate\Address as ValidateAddress;
+use app\api\service\Token as ServiceToken;
+use app\lib\exception\UserException;
 
 /**
  * swagger: 用户地址
@@ -20,7 +23,7 @@ class Address extends Api
     /**
      * post: 新增地址
      * path: add
-     * param: user_id - {int} 用户id
+     * param: token - {string} token方法获取
      * param: name - {string} 收货人
      * param: phone - {int} 手机号
      * param: p - {string} 省
@@ -31,20 +34,17 @@ class Address extends Api
      */
     public function add()
     {
-        $validate = new \think\Validate([
-            'user_id' => 'require|number',
-            'phone' => 'require|length:11',
-            'p' => 'require',
-            'c' => 'require',
-            't' => 'require',
-            'address_detail' => 'require',
-            'is_default' => 'in:0,1'
-        ]);
-        if (!$validate->check($_POST)) {
-            $this->error($validate->getError(),'',400);
+        $rst = (new ValidateAddress())->goCheck();
+        if (!$rst['status']) {
+            $this->error($rst['msg'],'',400);
         }
-
+        $user_id = ServiceToken::getCurrentUserId();
+        $userObj = MallUser::get($user_id);
+        if (!$userObj) {
+            throw new UserException();
+        }
         $_POST['address'] = $_POST['p'].','.$_POST['c'].','.$_POST['t'];
+        $_POST['user_id'] = $user_id;
         $model = new MallAddress($_POST);
         if (!$model->allowField(true)->save()) {
             $this->error('数据保存出错','','500');
@@ -56,6 +56,7 @@ class Address extends Api
     /**
      * put: 修改地址
      * path: edit
+     * param: token - {string} token方法获取
      * param: address_id - {int} 地址id
      * param: name - {string} 收货人
      * param: phone - {int} 手机号
@@ -67,7 +68,11 @@ class Address extends Api
      */
     public function edit()
     {
-        dump(input());exit();
+        $user_id = ServiceToken::getCurrentUserId();
+        $userObj = MallUser::get($user_id);
+        if (!$userObj) {
+            throw new UserException();
+        }
         $params = $this->request->param();
         $validate = new \think\Validate([
             'address_id' => 'require|number',
@@ -97,11 +102,18 @@ class Address extends Api
     /**
      * delete: 删除地址
      * path: delete
+     * param: token - {string} token方法获取
      * param: address_id - {int} 地址id
      */
     public function delete()
     {
+        $user_id = ServiceToken::getCurrentUserId();
+        $userObj = MallUser::get($user_id);
+        if (!$userObj) {
+            throw new UserException();
+        }
         $params = $this->request->param();
+
         $validate = new \think\Validate([
             'address_id' => 'require|number',
         ]);
@@ -119,10 +131,15 @@ class Address extends Api
     /**
      * get: 获取用户所有地址列表
      * path: address_list
-     * param: user_id - {int} 用户user_id
+     * param: token - {string} token方法获取
      */
-    public function address_list($user_id)
+    public function address_list()
     {
+        $user_id = ServiceToken::getCurrentUserId();
+        $userObj = MallUser::get($user_id);
+        if (!$userObj) {
+            throw new UserException();
+        }
         $userObj = MallUser::get($user_id);
         if (!$userObj) {
             $this->error('该用户不存在');

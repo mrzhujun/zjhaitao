@@ -2,3 +2,4 @@
 runtime/*
 application/database.php
 public/uploads/*
+application/extra/*

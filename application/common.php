@@ -343,3 +343,43 @@ if (!function_exists('add_url')) {
         return config('setting.img_prefix').$url;
     }
 }
+
+
+if (!function_exists('curl_get')) {
+    /**
+     * curl get请求
+     * @param $url
+     * @param int $httpCode
+     * @return mixed
+     */
+    function curl_get($url,&$httpCode = 0)
+    {
+        $ch = curl_init();
+        curl_setopt($ch,CURLOPT_URL,$url);
+        curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+        //不做证书校验，部署在Linux环境改为true
+        curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);
+        curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,10);
+        $file_contents = curl_exec($ch);
+        $httpCode = curl_getinfo($ch,CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        return $file_contents;
+    }
+}
+
+
+function getRandChars($length = 32)
+{
+// 密码字符集，可任意添加你需要的字符
+        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_ []{}<>~`+=,.;:/?|';
+        $password = '';
+        for ( $i = 0; $i < $length; $i++ )
+        {
+        // 这里提供两种字符获取方式
+        // 第一种是使用 substr 截取$chars中的任意一位字符；
+        // 第二种是取字符数组 $chars 的任意元素
+        // $password .= substr($chars, mt_rand(0, strlen($chars) – 1), 1);
+            $password .= $chars[ mt_rand(0, strlen($chars) - 1) ];
+        }
+        return $password;
+}

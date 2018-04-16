@@ -3,7 +3,8 @@
 namespace app\api\controller;
 use app\api\model\MallQiandao;
 use app\api\model\MallUser;
-use app\common\controller\Api;
+use app\api\service\Token as ServiceToken;
+use app\lib\exception\UserException;
 
 
 /**
@@ -20,10 +21,15 @@ class Qiandao extends Common
     /**
      * post: 今日签到
      * path: add
-     * param: user_id - {int} user_id
+     * param: token - {string} token方法获取
      */
-    public function add($user_id)
+    public function add()
     {
+        $user_id = ServiceToken::getCurrentUserId();
+        $userObj = MallUser::get($user_id);
+        if (!$userObj) {
+            throw new UserException();
+        }
         $modelQiandao = new MallQiandao();
         $isQiandao = $modelQiandao->where("user_id",$user_id)->where('date',date('Ymd'))->count();
         $thisMonth = date('Ym');
@@ -60,10 +66,15 @@ class Qiandao extends Common
     /**
      * get: 获取用户签到总览
      * path: index
-     * param: user_id - {int} user_id
+     * param: token - {string} token方法获取
      */
-    public function index($user_id)
+    public function index()
     {
+        $user_id = ServiceToken::getCurrentUserId();
+        $userObj = MallUser::get($user_id);
+        if (!$userObj) {
+            throw new UserException();
+        }
         $qiandaoModel = new MallQiandao();
         $list = $qiandaoModel->where("user_id={$user_id}")->field('date')->select();
         if (!$list) {

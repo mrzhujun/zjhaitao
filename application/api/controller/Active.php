@@ -4,13 +4,13 @@
 namespace app\api\controller;
 
 
-use app\api\model\BaseModel;
+use app\common\controller\Api;
 
 
 /**
  * swagger: 活动
  */
-class Active extends BaseModel
+class Active extends Api
 {
     // 无需验证登录的方法
     protected $noNeedLogin = ['*'];

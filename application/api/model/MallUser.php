@@ -15,12 +15,20 @@ use think\Model;
 class MallUser extends BaseModel
 {
     protected $autoWriteTimestamp = true;
-    protected $hidden = ['create_time','update_time','from','user_id'];
+    protected $hidden = ['create_time', 'update_time', 'from', 'user_id'];
 
-    public function getWxHeadimageAttr($value,$data)
+    public function getWxHeadimageAttr($value, $data)
     {
-        return self::returnImageAttr($value,$data['from']);
+        return self::returnImageAttr($value, $data['from']);
     }
+
+    public static function getByOpenId($open_id)
+    {
+        $userObj = self::where('open_id','=',$open_id)
+            ->find();
+        return $userObj;
+    }
+
     /**
      * 签到增加用户积分
      */
@@ -70,6 +78,6 @@ class MallUser extends BaseModel
 
     public function malladdresss()
     {
-        return $this->hasMany('MallAddress','user_id')->field('address_id,name,phone,address,address_detail,is_default');
+        return $this->hasMany('MallAddress','user_id','user_id')->field('address_id,name,phone,address,address_detail,is_default');
     }
 }

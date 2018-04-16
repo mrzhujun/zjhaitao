@@ -2,44 +2,31 @@
 
 namespace app\api\controller;
 
+use app\api\service\UserToken;
+use app\api\validate\TokenGet;
 use app\common\controller\Api;
 
 /**
- * Token接口
+ * swagger: Token接口
  */
 class Token extends Api
 {
 
-    protected $noNeedLogin = [];
+    protected $noNeedLogin = ['*'];
     protected $noNeedRight = '*';
 
-    public function _initialize()
-    {
-        parent::_initialize();
-    }
-
     /**
-     * 检测Token是否过期
-     *
+     * post: 获取用户open_id
+     * path: getToken
+     * param: code - {string} 微信登陆获取到的code
      */
-    protected function check()
+    public function getToken($code)
     {
-        $token = $this->auth->getToken();
-        $tokenInfo = \app\common\library\Token::get($token);
-        $this->success('', ['token' => $tokenInfo['token'], 'expires_in' => $tokenInfo['expires_in']]);
-    }
-
-    /**
-     * 刷新Token
-     *
-     */
-    protected function refresh()
-    {
-        $token = $this->auth->getToken();
-        $tokenInfo = \app\common\library\Token::get($token);
-        $tokenInfo->expiretime = time() + 2592000;
-        $tokenInfo->save();
-        $this->success('', ['token' => $tokenInfo['token'], 'expires_in' => $tokenInfo['expires_in']]);
+        (new TokenGet())->goCheck();
+        $ut = new UserToken($code);
+        $token = $ut->get($code);
+        $return['token'] = $token;
+        $this->success('',$return,200);
     }
 
 }
