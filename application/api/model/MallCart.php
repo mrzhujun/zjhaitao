@@ -38,4 +38,21 @@ class MallCart extends BaseModel
         return $return;
     }
 
+    /**
+     * 获取购物车列表
+     * @param $user_id
+     * @return false|\PDOStatement|string|\think\Collection
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public static function cart_list($user_id)
+    {
+        $list = self::where('user_id','=',$user_id)->select();
+        foreach ($list as $k => $v){
+            $list[$k]['goods_detail'] = self::oneDetail($v->goods_id,$v->spec_id);
+        }
+        return $list;
+    }
+
 }

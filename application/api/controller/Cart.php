@@ -36,10 +36,7 @@ class Cart extends Common
             throw new UserException();
         }
         //显示购物车数据
-        $list = MallCart::where('user_id','=',$user_id)->select();
-        foreach ($list as $k => $v){
-            $list[$k]['goods_detail'] = MallCart::oneDetail($v->goods_id,$v->spec_id);
-        }
+        $list = MallCart::cart_list($user_id);
         $this->success('获取成功',$list,200);
     }
 
@@ -68,13 +65,26 @@ class Cart extends Common
         $result = $cartModel->allowField(true)->save();
 
         //显示购物车数据
-        $list = MallCart::all('user_id','=',$user_id)->select();
-        foreach ($list as $k => $v){
-            $list[$k]['goods_detail'] = MallCart::oneDetail($v->goods_id,$v->spec_id);
-        }
+        $list = $cartModel::cart_list($user_id);
         if (!$result) {
             $this->error('添加失败',$list,500);
         }
         $this->success('添加成功',$list,201);
+    }
+
+    /**
+     * delete: 删除购物车
+     * path: delete
+     * param: token - {string} token方法获取
+     * param: cart_id - {int} 购物车id
+     */
+    public function delete()
+    {
+        $userObj = $this->check_user();
+        $rs = MallCart::where('cart_id','=',input('cart_id'))->where('user_id','=',$userObj->user_id)->delete();
+        if (!$rs) {
+            $this->error('删除失败',MallCart::cart_list($userObj->user_id),500);
+        }
+        return $this->success('删除成功',MallCart::cart_list($userObj->user_id),200);
     }
 }
