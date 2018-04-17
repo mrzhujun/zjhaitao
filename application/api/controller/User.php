@@ -5,8 +5,8 @@ namespace app\api\controller;
 
 
 use app\api\model\MallUser;
-use app\wx\controller\Wx;
-use think\Exception;
+use app\api\service\Token as ServiceToken;
+use app\lib\exception\UserException;
 
 /**
  * swagger: 用户
@@ -21,40 +21,24 @@ class User extends Common
 
 
     /**
-     * get: 获取用户open_id
-     * path: getopenid
-     * param: code - {string} 微信登陆获取到的code
-     */
-    public function getopenid($code) {
-        $wx = new Wx();
-        try {
-            $open_id = $wx->getopenid($code);
-        }catch (Exception $e){
-            $this->error($e->getMessage(),'',500);
-        }
-        $this->success('获取成功',$open_id,201);
-    }
-
-
-    /**
-     * get: 返回用户注册状态
+     * get: 返回用户注册状态(status判断是否需要上传头像昵称)
      * path: user_status
-     * param: open_id - {string} open_id
+     * param: token - {string} token方法获取
      */
     public function user_status()
     {
-        $open_id = $this->request->param()['open_id'];
-
-        $userObj = MallUser::where("open_id='{$open_id}'")->field('user_id,open_id,wx_name,wx_headimage,update_time')->find();
+        $user_id = ServiceToken::getCurrentUserId();
+        $userObj = MallUser::get($user_id);
         if (!$userObj) {
-            $return['status'] = 0;
-            $return['msg'] = '该用户还未注册';
-            $return['data'] = [];
-            return $this->success('返回成功',$return,200);
+            throw new UserException();
         }
+
+        $userObj = MallUser::get($user_id);
+
+
         //头像昵称每个月更新一次
-        if ($userObj && (!$userObj->wx_name ||!$userObj->wx_headimage||$userObj->update_time+30*24*3600)<time()) {
-            $return['status'] = 2;
+        if (!$userObj->wx_name ||$userObj->wx_headimage=='19t582g994.iask.in'||$userObj->update_time+30*24*3600<time()) {
+            $return['status'] = 0;
             $return['msg'] = '需要继续上传昵称头像';
             $return['data'] = $userObj->toArray();
             return $this->success('返回成功',$return,200);
@@ -67,20 +51,24 @@ class User extends Common
 
 
     /**
-     * post: 用户注册及更新头像昵称
-     * path: register
-     * param: open_id - {string} open_id
+     * post: 用户更新头像昵称
+     * path: update
+     * param: token - {string} token方法获取
      * param: wx_name - {string} 微信昵称
      * param: wx_headimage - {file} 微信头像
      */
-    public function register($open_id,$wx_name)
+    public function update($token,$wx_name)
     {
-        if (!$open_id || !$wx_name) {
+        $user_id = ServiceToken::getCurrentUserId();
+        $userObj = MallUser::get($user_id);
+        if (!$userObj) {
+            throw new UserException();
+        }
+        if (!$token || !$wx_name) {
             $this->error('信息填写不完整',400);
         }
-        $model = new MallUser();
-        $userObj = $model::where(['open_id'=>$open_id])->field('user_id,wx_name,wx_headimage,jifen,jifen_total,update_time')->find();
-        if ($userObj && $userObj->wx_name && $userObj->wx_headimage && $userObj->update_time+30*24*3600>time()) {
+
+        if ($userObj->wx_name && $userObj->wx_headimage!='19t582g994.iask.in' && $userObj->update_time+30*24*3600>time()) {
             $this->error('该用户暂不需要修改状态',$userObj,400);
         }
         $filePath = $this->upload('wx_headimage',1);
@@ -89,11 +77,7 @@ class User extends Common
         }
         //存入数据库
         $_POST['wx_headimage'] = $filePath['data']['url'];
-        if (!$userObj) {
-            $rst = $model->allowField(true)->save($_POST);
-        }else{
-            $rst = $model->allowField(true)->save($_POST,['open_id'=>$open_id]);
-        }
+        $rst = $userObj->allowField(true)->save($_POST);
         if (!$rst) {
             $this->error('更新用户信息失败',$userObj,500);
         }else{
@@ -105,13 +89,14 @@ class User extends Common
     /**
      * get: 获取用户信息
      * path: user_info
-     * param: user_id - {int} 用户user_id
+     * param: token - {string} token方法获取
      */
-    public function user_info($user_id)
+    public function user_info()
     {
+        $user_id = ServiceToken::getCurrentUserId();
         $userObj = MallUser::get($user_id);
         if (!$userObj) {
-            $this->error('该用户不存在');
+            throw new UserException();
         }
         switch ($userObj->jifen_total){
             case $userObj->jifen_total<50000:

@@ -15,7 +15,7 @@ use think\Model;
 class MallUser extends BaseModel
 {
     protected $autoWriteTimestamp = true;
-    protected $hidden = ['create_time', 'update_time', 'from', 'user_id'];
+    protected $hidden = ['create_time', 'update_time', 'from', 'open_id'];
 
     public function getWxHeadimageAttr($value, $data)
     {

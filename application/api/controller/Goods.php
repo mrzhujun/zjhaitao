@@ -35,8 +35,16 @@ class Goods extends Api
     public function goods_detail($goods_id)
     {
         $goodsDetail = MallGoods::with('mallattrs')->find($goods_id);
+
         if ($goodsDetail) {
+            $goodsDetail = $goodsDetail->toArray();
             $goodsDetail['active'] = MallGoods::active($goods_id);
+            if ($goodsDetail['active']['status']) {
+                $goodsDetail['promote_price'] = $goodsDetail['active']['promote_price'];
+                foreach ($goodsDetail['mallattrs'] as $k => $v){
+                    $goodsDetail['mallattrs'][$k]['promote_price'] = $goodsDetail['active']['promote_price'];
+                }
+            }
             $this->success('返回成功',$goodsDetail,200);
         } else{
             $this->error('商品不存在','',404);
