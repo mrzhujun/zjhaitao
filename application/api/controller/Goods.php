@@ -34,7 +34,7 @@ class Goods extends Api
      */
     public function goods_detail($goods_id)
     {
-        $goodsDetail = MallGoods::with('mallattrs')->find($goods_id);
+        $goodsDetail = MallGoods::with('mallattrs')->field('goods_id,goods_name,goods_brief,goods_desc,shop_price,goods_images,sell_count,is_onsale,from')->find($goods_id);
 
         if ($goodsDetail) {
             $goodsDetail = $goodsDetail->toArray();

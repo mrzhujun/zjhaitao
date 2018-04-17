@@ -10,8 +10,8 @@ use think\Exception;
 class BaseException extends Exception
 {
     public $code = 400;
-    public $msg = 'invalid parameters';
-    public $errorCode = 999;
+    public $message = 'invalid parameters';
+//    public $errorCode = 999;
 
     public $shouldToClient = true;
 

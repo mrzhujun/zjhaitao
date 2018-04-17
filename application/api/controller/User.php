@@ -93,11 +93,7 @@ class User extends Common
      */
     public function user_info()
     {
-        $user_id = ServiceToken::getCurrentUserId();
-        $userObj = MallUser::get($user_id);
-        if (!$userObj) {
-            throw new UserException();
-        }
+        $userObj = $this->check_user();
         switch ($userObj->jifen_total){
             case $userObj->jifen_total<50000:
                 $userObj->vip = '普通会员';

@@ -5,15 +5,14 @@ namespace app\api\controller;
 
 use app\api\model\MallAddress;
 use app\api\model\MallUser;
-use app\common\controller\Api;
-use app\api\validate\Address as ValidateAddress;
 use app\api\service\Token as ServiceToken;
+use app\api\validate\Address as ValidateAddress;
 use app\lib\exception\UserException;
 
 /**
  * swagger: 用户地址
  */
-class Address extends Api
+class Address extends Common
 {
     // 无需验证登录的方法
     protected $noNeedLogin = ['*'];
@@ -38,11 +37,8 @@ class Address extends Api
         if (!$rst['status']) {
             $this->error($rst['msg'],'',400);
         }
-        $user_id = ServiceToken::getCurrentUserId();
-        $userObj = MallUser::get($user_id);
-        if (!$userObj) {
-            throw new UserException();
-        }
+        $userObj = $this->check_user();
+        $user_id  = $userObj->user_id;
         $_POST['address'] = $_POST['p'].','.$_POST['c'].','.$_POST['t'];
         $_POST['user_id'] = $user_id;
         $model = new MallAddress($_POST);
@@ -68,11 +64,8 @@ class Address extends Api
      */
     public function edit()
     {
-        $user_id = ServiceToken::getCurrentUserId();
-        $userObj = MallUser::get($user_id);
-        if (!$userObj) {
-            throw new UserException();
-        }
+        $userObj = $this->check_user();
+        $user_id  = $userObj->user_id;
         $params = $this->request->param();
         $validate = new \think\Validate([
             'address_id' => 'require|number',

@@ -11,7 +11,7 @@ namespace app\api\model;
 
 class MallGoods extends BaseModel
 {
-    protected $visible = ['goods_id','goods_name','goods_brief','goods_desc','shop_price','goods_images','sell_count','is_onsale','mallattrs','active'];
+    protected $hidden = ['add_time','from'];
 
     public function mallattrs()
     {
@@ -69,5 +69,14 @@ class MallGoods extends BaseModel
         }
         $return['active_type'] = $activeObj->active_type;
         return $return;
+    }
+
+    public function checkGoodsStock($goods_id,$num)
+    {
+        if (self::get($goods_id)->goods_count>=$num) {
+            return true;
+        }else{
+            return false;
+        }
     }
 }

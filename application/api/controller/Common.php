@@ -2,9 +2,11 @@
 
 namespace app\api\controller;
 
+use app\api\model\MallUser;
+use app\api\service\Token as ServiceToken;
+use app\api\validate\Cart as ValidateCart;
 use app\common\controller\Api;
-use app\common\model\Area;
-use app\common\model\Version;
+use app\lib\exception\UserException;
 use fast\Random;
 use think\Config;
 
@@ -131,6 +133,26 @@ class Common extends Api
             $newArr[] = $v[$field];
         }
         return $newArr;
+    }
+
+    /**
+     * 检查用户并且返回用户信息
+     * @return null|static
+     * @throws UserException
+     * @throws \app\lib\exception\TokenException
+     * @throws \think\Exception
+     * @throws \think\exception\DbException
+     */
+    protected function check_user()
+    {
+        (new ValidateCart())->goCheck();
+        $user_id = ServiceToken::getCurrentUserId();
+        $userObj = MallUser::get($user_id);
+
+        if (!$userObj) {
+            throw new UserException();
+        }
+        return $userObj;
     }
 
 }
