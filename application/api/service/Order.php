@@ -79,7 +79,7 @@ class Order
         $save['num'] = $num;
         if ($spec_id) {
             $specObj = MallAttr::get($spec_id);
-            $save['spec_info'] = $specObj->sttr_name;
+            $save['spec_info'] = $specObj->attr_name;
         }
 
         $MallOrderGoodslist = new MallOrderGoodslist($save);

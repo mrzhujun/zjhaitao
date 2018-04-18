@@ -13,7 +13,8 @@ class ConfirmOrder extends BaseValidate
         'goods_id' => 'require|isPositiveInreger',
         'spec_id' =>'isPositiveInreger',
         'num' => 'require|isPositiveInreger',
-        'coupons_id' => 'isPositiveInreger'
+        'coupons_user_id' => 'isPositiveInreger',
+        'address_id' => 'isPositiveInreger'
     ];
 
 }

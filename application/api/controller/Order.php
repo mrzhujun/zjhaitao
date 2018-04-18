@@ -83,7 +83,10 @@ class Order extends Common
         //启动事务
         Db::startTrans();
         try{
-            (new ConfirmOrder())->goCheck();
+            $rs = (new ConfirmOrder())->goCheck();
+            if (!$rs['status']) {
+                throw new Exception($rs['msg']);
+            }
             if (!input('address_id')) {
                 throw new Exception('地址id不能为空');
             }
@@ -96,12 +99,14 @@ class Order extends Common
             $totalPrice = $ServiceOrder->goodstoorder($orderObj->order_num,input('goods_id'),input('num'),input('spec_id'));
 
             //3.优惠券
-            if (input('coupons_id')) {
+            if (input('coupons_user_id')) {
                 $couponsObj = MallCouponsUser::get(input('coupons_user_id'));
-                if ($couponsObj->man > $totalPrice) {
+                if (!$couponsObj) {
+                    throw new Exception('优惠券不存在');
+                }
+                if ($couponsObj->man > $totalPrice || $couponsObj->is_use == 1) {
                     throw new Exception('优惠券不可用');
                 }
-
                 $orderObj->coupons_user_id = input('coupons_user_id');
                 $orderObj->coupons_off = $couponsObj->jian;
                 $orderObj->final_price = $totalPrice-$couponsObj->jian;
@@ -122,7 +127,7 @@ class Order extends Common
         {
             //如发生错误数据回滚
             Db::rollback();
-            dump($e);
+            $this->error($e->getMessage());
         }
 
 
