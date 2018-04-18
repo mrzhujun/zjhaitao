@@ -8,7 +8,7 @@ use app\api\model\MallGoods;
 use app\api\model\MallUser;
 use app\common\controller\Api;
 use app\api\validate\Cart as ValidateCart;
-use app\api\service\Token as ServiceToken;
+use app\lib\exception\CartException;
 use app\lib\exception\UserException;
 use think\Exception;
 
@@ -29,15 +29,10 @@ class Cart extends Common
      */
     public function cart_list()
     {
-
-        $user_id = ServiceToken::getCurrentUserId();
-        $userObj = MallUser::get($user_id);
-        if (!$userObj) {
-            throw new UserException();
-        }
+        $userObj = $this->check_user();
         //显示购物车数据
-        $list = MallCart::cart_list($user_id);
-        $this->success('获取成功',$list,200);
+        $list = MallCart::cart_list($userObj->user_id);
+        $this->success('获取成功',$list);
     }
 
 
@@ -51,14 +46,19 @@ class Cart extends Common
      */
     public function add()
     {
+        $rst = (new ValidateCart())->goCheck();
+        if (!$rst['status']) {
+            $this->error($rst['msg'],'');
+        }
         $userObj = $this->check_user();
         $user_id  = $userObj->user_id;
         //判断购物车商品是否足够
         //添加购物车
         $goodsObj = MallGoods::where('goods_id','=',input('goods_id'))->field('goods_count')->find();
-        if (!$goodsObj->checkGoodsStock(input('goods_id'),input('num'))) {
-            $this->error('商品库存不足','',404);
+        if (!$goodsObj) {
+            $this->error('商品不存在');
         }
+
         $params = $this->request->param();
         $params['user_id'] = $user_id;
         $cartModel = new MallCart($params);
@@ -67,9 +67,9 @@ class Cart extends Common
         //显示购物车数据
         $list = $cartModel::cart_list($user_id);
         if (!$result) {
-            $this->error('添加失败',$list,500);
+            $this->error('添加失败',$list);
         }
-        $this->success('添加成功',$list,201);
+        $this->success('添加成功',$list);
     }
 
     /**
@@ -83,8 +83,41 @@ class Cart extends Common
         $userObj = $this->check_user();
         $rs = MallCart::where('cart_id','=',input('cart_id'))->where('user_id','=',$userObj->user_id)->delete();
         if (!$rs) {
-            $this->error('删除失败',MallCart::cart_list($userObj->user_id),500);
+            $this->error('删除失败',MallCart::cart_list($userObj->user_id));
         }
-        return $this->success('删除成功',MallCart::cart_list($userObj->user_id),200);
+        return $this->success('删除成功',MallCart::cart_list($userObj->user_id));
+    }
+
+    /**
+     * put: 修改购物车
+     * path: edit
+     * param: token - {string} token方法获取
+     * param: cart_id - {int} 购物车id
+     * param: num - {int} 商品数量
+     * param: spec_id - {int} 商品规格id
+     */
+    public function edit()
+    {
+        $rst = (new ValidateCart())->goCheck();
+        if (!$rst['status']) {
+            $this->error($rst['msg'],'');
+        }
+        $userObj = $this->check_user();
+        $cartObj = MallCart::where('cart_id','=',input('cart_id'))->find();
+        if (!$cartObj) {
+            $this->error('该购物车已不存在',MallCart::cart_list($userObj->user_id));
+        }
+
+        if ($cartObj->user_id != $userObj->user_id) {
+            throw new CartException();
+        }
+        $cartObj->num = input('num');
+        $cartObj->spec_id = input('spec_id');
+        $rs = $cartObj->save();
+        if (!$rs) {
+            $this->error('修改失败',MallCart::cart_list($userObj->user_id));
+        }else{
+            $this->success('修改成功',MallCart::cart_list($userObj->user_id));
+        }
     }
 }

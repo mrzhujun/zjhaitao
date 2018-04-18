@@ -25,10 +25,10 @@ class Banner extends Api
             'in' => 'require|number'
         ]);
         if (!$validate->check(input())) {
-            $this->error($validate->getError(),'',403);
+            $this->error($validate->getError(),'');
         }
         $list = MallBanner::where("banner_in='{$in}'")->select();
-        $this->success('返回成功',$list,200);
+        $this->success('返回成功',$list);
 
     }
 }

@@ -31,7 +31,7 @@ class Search extends Api
         ]);
         $rst = $validate->check(input());
         if (!$rst) {
-            $this->error($validate->getError(),'',400);
+            $this->error($validate->getError(),'');
         }
 
         $keywords = input('keywords');
@@ -57,10 +57,10 @@ class Search extends Api
         }
 
         if (!$list) {
-            $this->error('没有搜索到结果','',404);
+            $this->error('没有搜索到结果','');
         }
 
-        $this->success('获取成功',$list,200);
+        $this->success('获取成功',$list);
 
     }
 
@@ -74,9 +74,9 @@ class Search extends Api
         $keywords = input('keywords');
         $list = MallArticle::where('title','like',"%{$keywords}%")->select();
         if (!$list) {
-            $this->error('没有搜索到结果','',404);
+            $this->error('没有搜索到结果','');
         }
-        $this->success('获取成功',$list,200);
+        $this->success('获取成功',$list);
     }
 
 }

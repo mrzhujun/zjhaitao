@@ -35,7 +35,7 @@ class Address extends Common
     {
         $rst = (new ValidateAddress())->goCheck();
         if (!$rst['status']) {
-            $this->error($rst['msg'],'',400);
+            $this->error($rst['msg'],'');
         }
         $userObj = $this->check_user();
         $user_id  = $userObj->user_id;
@@ -43,9 +43,9 @@ class Address extends Common
         $_POST['user_id'] = $user_id;
         $model = new MallAddress($_POST);
         if (!$model->allowField(true)->save()) {
-            $this->error('数据保存出错','','500');
+            $this->error('数据保存出错','');
         }
-        $this->success('创建成功',$model,'201');
+        $this->success('创建成功',$model);
     }
 
 
@@ -77,13 +77,13 @@ class Address extends Common
             'is_default' => 'in:0,1'
         ]);
         if (!$validate->check($params)) {
-            $this->error($validate->getError(),'',403);
+            $this->error($validate->getError(),'');
         }
 
         $params['address'] = $params['p'].','.$params['c'].','.$params['t'];
         $addressObj = MallAddress::get($params['address_id']);
         if ($addressObj->name == $params['name'] && $addressObj->phone == $params['phone'] && $addressObj->address_detail == $params['address_detail'] && $addressObj->address = $params['p'].','.$params['c'].','.$params['t'] && $addressObj->is_default == $params['is_default']) {
-            $this->error('数据未改变',$addressObj,'400');
+            $this->error('数据未改变',$addressObj);
         }
         $rst = $addressObj->allowField('name,phone,address,address_detail,is_default')->save($params);
         if (!$rst) {
@@ -111,13 +111,13 @@ class Address extends Common
             'address_id' => 'require|number',
         ]);
         if (!$validate->check($params)) {
-            $this->error($validate->getError(),'',400);
+            $this->error($validate->getError(),'');
         }
         $rst = MallAddress::destroy($params['address_id']);
         if ($rst) {
-            $this->success('删除成功','',204);
+            $this->success('删除成功','');
         }else{
-            $this->error('删除失败','',500);
+            $this->error('删除失败','');
         }
     }
 

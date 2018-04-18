@@ -41,12 +41,12 @@ class User extends Common
             $return['status'] = 0;
             $return['msg'] = '需要继续上传昵称头像';
             $return['data'] = $userObj->toArray();
-            return $this->success('返回成功',$return,200);
+            return $this->success('返回成功',$return);
         }
         $return['status'] = 1;
         $return['mssage'] = '该用户已存在且不用上传头像昵称';
         $return['data'] = $userObj->toArray();
-        return $this->success('返回成功',$return,200);
+        return $this->success('返回成功',$return);
     }
 
 
@@ -65,23 +65,23 @@ class User extends Common
             throw new UserException();
         }
         if (!$token || !$wx_name) {
-            $this->error('信息填写不完整',400);
+            $this->error('信息填写不完整');
         }
 
         if ($userObj->wx_name && $userObj->wx_headimage!='19t582g994.iask.in' && $userObj->update_time+30*24*3600>time()) {
-            $this->error('该用户暂不需要修改状态',$userObj,400);
+            $this->error('该用户暂不需要修改状态',$userObj);
         }
         $filePath = $this->upload('wx_headimage',1);
         if ($filePath['code'] != 1) {
-            $this->error('上传头像失败',500);
+            $this->error('上传头像失败');
         }
         //存入数据库
         $_POST['wx_headimage'] = $filePath['data']['url'];
         $rst = $userObj->allowField(true)->save($_POST);
         if (!$rst) {
-            $this->error('更新用户信息失败',$userObj,500);
+            $this->error('更新用户信息失败',$userObj);
         }else{
-            $this->success('成功',$userObj,201);
+            $this->success('成功',$userObj);
         }
     }
 
@@ -111,7 +111,7 @@ class User extends Common
                 $userObj->vip = '翡翠会员';
                 break;
         }
-        $this->success('获取成功',$userObj,200);
+        $this->success('获取成功',$userObj);
     }
 
 

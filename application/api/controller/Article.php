@@ -24,7 +24,7 @@ class Article extends Api
     public function all()
     {
         $list = MallArticle::order('article_id','DESC')->field('article_id,cover_image,title,intro')->select();
-        $this->success('获取成功',$list,'200');
+        $this->success('获取成功',$list);
     }
 
     /**
@@ -35,15 +35,15 @@ class Article extends Api
     public function detail($article_id)
     {
         if (!$article_id ||!is_numeric($article_id)) {
-            $this->error('参数错误','',403);
+            $this->error('参数错误','');
         }
         $detail = MallArticle::field('goods_id,top_image,title,content')->find($article_id);
         if (!$detail) {
-            $this->error('文章不存在','',404);
+            $this->error('文章不存在','');
         }
         $detail->active = MallGoods::active($detail->goods_id);
         $detail->goods = MallGoods::with('mallattrs')->field('goods_id,goods_name,goods_images,from')->find($detail->goods_id)->toArray();
 
-        $this->success('获取成功',$detail,200);
+        $this->success('获取成功',$detail);
     }
 }

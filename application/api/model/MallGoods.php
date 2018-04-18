@@ -71,12 +71,5 @@ class MallGoods extends BaseModel
         return $return;
     }
 
-    public function checkGoodsStock($goods_id,$num)
-    {
-        if (self::get($goods_id)->goods_count>=$num) {
-            return true;
-        }else{
-            return false;
-        }
-    }
+
 }

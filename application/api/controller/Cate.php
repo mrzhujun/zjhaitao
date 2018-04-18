@@ -25,7 +25,7 @@ class Cate extends Api
         //普通分类
         $list = Category::where("type='category' and pid='0'")->field('id,name,image,description,image_from')->select();
         if (!$list) {
-            $this->error('没有获取到分类列表','',404);
+            $this->error('没有获取到分类列表','');
         }
 
         foreach ($list as $k => $v){
@@ -39,7 +39,7 @@ class Cate extends Api
         $return['category'] = $list;
         $return['brand'] = $list2;
 
-        $this->success('获取成功',$return,200);
+        $this->success('获取成功',$return);
     }
 
     /**
@@ -60,7 +60,7 @@ class Cate extends Api
         ]);
         $rst = $validate->check(input());
         if (!$rst) {
-            $this->error($validate->getError(),'',400);
+            $this->error($validate->getError(),'');
         }
         if (input('order')==0) {
             $order = 'DESC';
@@ -87,7 +87,7 @@ class Cate extends Api
 
         $return['category_detail'] = Category::get(input('category_id'));
 
-        $this->success('获取成功',$return,200);
+        $this->success('获取成功',$return);
     }
 
 

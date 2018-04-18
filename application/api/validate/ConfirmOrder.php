@@ -1,18 +1,19 @@
 <?php
 /**
  * Author: zhujun
- * DateTime: 2018/4/17 10:39
+ * DateTime: 2018/4/18 11:19
  */
 
 namespace app\api\validate;
 
 
-class Cart extends BaseValidate
+class ConfirmOrder extends BaseValidate
 {
     protected $rule = [
         'goods_id' => 'require|isPositiveInreger',
         'spec_id' =>'isPositiveInreger',
-        'num' => 'isPositiveInreger',
+        'num' => 'require|isPositiveInreger',
+        'coupons_id' => 'isPositiveInreger'
     ];
 
 }

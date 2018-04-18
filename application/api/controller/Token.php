@@ -18,7 +18,7 @@ class Token extends Api
     /**
      * post: 获取用户open_id
      * path: getToken
-     * param: code - {string} 微信登陆获取到的code
+     * param: code - {string} 微信登陆获取到的code(若返回的code!=1,则重新调用此接口获取)
      */
     public function getToken($code)
     {
@@ -26,7 +26,7 @@ class Token extends Api
         $ut = new UserToken($code);
         $token = $ut->get($code);
         $return['token'] = $token;
-        $this->success('',$return,200);
+        $this->success('',$return);
     }
 
 }

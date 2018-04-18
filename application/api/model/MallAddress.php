@@ -40,4 +40,16 @@ class MallAddress extends Model
 
 
     }
+
+    public static function getDefaultAddress($user_id)
+    {
+        $addressObj = self::where('user_id','=',$user_id)
+            ->where('is_default','=',1)
+            ->field('address_id,name,phone,address,address_detail')
+            ->find();
+        if (!$addressObj) {
+            throw new Exception('该用户没有默认地址');
+        }
+        return $addressObj;
+    }
 }

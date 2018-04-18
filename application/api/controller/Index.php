@@ -123,7 +123,7 @@ class Index extends Api
         }
         $return['page_detail'] = $pageDetail;
         $return['active_list'] = $activeList;
-        $this->success('获取成功',$return,200);
+        $this->success('获取成功',$return);
     }
 
 }

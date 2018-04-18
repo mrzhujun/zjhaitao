@@ -23,7 +23,7 @@ class Goods extends Api
     {
         parent::__construct($request);
         if (!input('goods_id') ||!is_numeric(input('goods_id'))) {
-            $this->error('参数错误','',403);
+            $this->error('参数错误','');
         }
     }
 
@@ -45,9 +45,9 @@ class Goods extends Api
                     $goodsDetail['mallattrs'][$k]['promote_price'] = $goodsDetail['active']['promote_price'];
                 }
             }
-            $this->success('返回成功',$goodsDetail,200);
+            $this->success('返回成功',$goodsDetail);
         } else{
-            $this->error('商品不存在','',404);
+            $this->error('商品不存在','');
         }
     }
 
@@ -61,13 +61,13 @@ class Goods extends Api
     {
         $goodsObj = db('mall_goods')->where("goods_id={$goods_id}")->field('cat_id')->find();
         if (!$goodsObj) {
-            $this->error('商品不存在','',404);
+            $this->error('商品不存在','');
         }
         $list = db('mall_goods')->where("goods_id!={$goods_id} and cat_id={$goodsObj['cat_id']}")->field('goods_id,goods_name,shop_price,goods_images')->select();
         if (!$list) {
-            $this->error('没有推荐信息',$list,400);
+            $this->error('没有推荐信息',$list);
         }
-        $this->success('返回成功',$list,200);
+        $this->success('返回成功',$list);
     }
 
 
@@ -80,14 +80,14 @@ class Goods extends Api
     {
         $goodsObj = db('mall_goods')->where("goods_id={$goods_id}")->field('brand_id')->find();
         if (!$goodsObj) {
-            $this->error('商品不存在','',404);
+            $this->error('商品不存在','');
         }
         $list = db('mall_goods')->where("goods_id!={$goods_id} and brand_id={$goodsObj['brand_id']}")->field('goods_id,goods_name,shop_price,goods_images')->select();
         if (!$list) {
-            $this->error('没有推荐信息',$list,400);
+            $this->error('没有推荐信息',$list);
         }
 
-        $this->success('返回成功',$list,200);
+        $this->success('返回成功',$list);
     }
     
 }

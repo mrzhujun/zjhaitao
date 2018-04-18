@@ -36,14 +36,14 @@ class Qiandao extends Common
         $list = $modelQiandao->where("user_id={$user_id} and date like '{$thisMonth}%'")->field('date')->select();
         if ($isQiandao != 0) {
             $list = $this->array2array($list,'date');
-            $this->error('已经签到',$list,403);
+            $this->error('已经签到',$list);
         }
         $userModel = new MallUser();
         $rst = $userModel->jifen_add($user_id);
 
         if (!$rst['status']) {
             $list = $this->array2array($list,'date');
-            $this->error('积分增加失败'.$list['msg'],$list,500);
+            $this->error('积分增加失败'.$list['msg'],$list);
         }
         $qiandao = MallQiandao::create([
             'user_id' => $user_id,
@@ -56,9 +56,9 @@ class Qiandao extends Common
         $list = $this->array2array($list,'date');
         $return['datelist'] = $list;
         if ($qiandao) {
-            $this->success('签到成功',$return,201);
+            $this->success('签到成功',$return);
         }else{
-            $this->error('签到失败',$return,500);
+            $this->error('签到失败',$return);
         }
     }
 
@@ -78,11 +78,11 @@ class Qiandao extends Common
         $qiandaoModel = new MallQiandao();
         $list = $qiandaoModel->where("user_id={$user_id}")->field('date')->select();
         if (!$list) {
-            $this->error('暂无数据',$list,404);
+            $this->error('暂无数据',$list);
         }
 
         $list = $this->array2array($list,'date');
-        $this->success('获取成功',$list,200);
+        $this->success('获取成功',$list);
     }
 
 

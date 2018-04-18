@@ -9,8 +9,6 @@
 namespace app\api\model;
 
 
-use think\Model;
-
 class MallAttr extends BaseModel
 {
     protected $visible = ['attr_id','attr_name','attr_price','attr_image','goods_number'];
