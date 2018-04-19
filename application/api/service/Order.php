@@ -172,5 +172,29 @@ class Order
         return $return;
     }
 
+    /**
+     * 关闭订单(需要开启事务)
+     */
+    public static function order_close($order_num)
+    {
+        $orderObj = MallOrder::get($order_num);
+        if ($orderObj->status != 0) {
+            throw new Exception('已支付订单暂不能关闭');
+        }
+        if ($orderObj->coupons_user_id) {
+            $couponsUserObj = MallCouponsUser::get($orderObj->coupons_user_id);
+            $couponsUserObj -> is_use = 0;
+            $rs = $couponsUserObj -> save();
+            if (!$rs) {
+                throw new Exception('优惠券更改状态失败，订单关闭失败');
+            }
+        }
+        $orderObj->status = 4;
+        $rs2 = $orderObj->save();
+        if (!$rs2) {
+            throw new Exception('订单关闭失败');
+        }
+    }
+
 
 }

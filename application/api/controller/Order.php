@@ -162,42 +162,29 @@ class Order extends Common
         }catch (Exception $e)
         {
             Db::rollback();
-            dump($e);
         }
     }
-
 
     /**
-     * get: 取出默认优惠券id
-     * path: default_coupons
+     * post: 关闭订单
+     * path: order_close
      * param: token - {string} token方法获取
-     * param: goods_id - {int} 商品id
-     * param: spec_id - {int} 规格id
-     * param: num - {int} 商品数量
+     * param: order_num - {string} 订单号
      */
-    public function get_default_coupons()
+    public function order_close()
     {
-        $userCouponsObj = $this->default_coupons();
-        if (!$userCouponsObj) {
-            $this->error('暂无优惠券可用');
+        $this->check_user();
+        Db::startTrans();
+        try{
+            ServiceOrder::order_close(input('order_num'));
+            $this->success('关闭成功');
+        }catch (Exception $e)
+        {
+            $this->error($e->getMessage());
         }
-        return $this->success('获取成功',$userCouponsObj);
     }
 
-    public function default_coupons()
-    {
-        (new ConfirmOrder())->goCheck();
-        $userObj = $this->check_user();
-        $goodsObj = MallGoods::get(input('goods_id'));
-        $serviceOrder = new ServiceOrder();
-        $unitPrice = $serviceOrder->getUnitPriceOfGoods($goodsObj,input('spec_id'));
-        $userCouponsObj = MallCouponsUser::where('start_time','<',time())
-            ->where('end_time','>',time())
-            ->where('is_use','=',0)
-            ->where('user_id','=',$userObj->user_id)
-            ->where('man','<',$unitPrice*input('num'))
-            ->order('jian DESC')
-            ->select();
-        return $userCouponsObj;
-    }
+
+
+
 }
