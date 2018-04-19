@@ -64,6 +64,10 @@ class Order
         $goodsObj = MallGoods::get($goods_id);
         $this->checkStockOfGoods($goodsObj,$spec_id,$num);
 
+        if ($goodsObj->goods_count < $num) {
+            throw new Exception('商品库存不足');
+        }
+        $save['goods_count'] = $goodsObj->goods_count-$num;
         $save['order_num'] = $order_num;
         $save['goods_id'] = $goods_id;
         $save['goods_name'] = $goodsObj->goods_name;
@@ -79,6 +83,10 @@ class Order
             $specObj = MallAttr::get($spec_id);
             $save['spec_info'] = $specObj->attr_name;
             $save['image'] = $specObj->attr_image;
+            if ($specObj->goods_number < $num) {
+                throw new Exception('所选商品规格库存不足');
+            }
+            $save['goods_number'] = $specObj->goods_number-$num;
         }else{
             $save['image'] = explode(',',$goodsObj->getData('goods_images'))[0];
         }
@@ -93,7 +101,6 @@ class Order
         }else{
             throw new Exception('添加商品信息出错');
         }
-
     }
 
 

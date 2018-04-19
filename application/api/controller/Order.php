@@ -27,7 +27,6 @@ class Order extends Common
      */
     public function order_list()
     {
-
         $userObj = $this->check_user();
         $orderList = MallOrder::where('user_id','=',$userObj->user_id)
             ->with(['order_goodslists'=>function($query){$query->field('order_num,goods_id,goods_name,price,spec_info,image');}])
@@ -175,7 +174,6 @@ class Order extends Common
      */
     public function order_close()
     {
-        echo __DIR__;exit();
         $this->check_user();
         Db::startTrans();
         try{
@@ -198,7 +196,7 @@ class Order extends Common
         $userObj = $this->check_user();
         $orderDetail = MallOrder::get(input('order_num'));
         $money = $orderDetail->final_price;
-        $weixinpay = new WeixinPay(config('wx.app_id'), $userObj->open_id, config('wx.mch_id'), config('wx.mch_secret'), $money ,config('wxpay_notify_url') , input('order_num'));
+        $weixinpay = new WeixinPay(config('wx.app_id'), $userObj->open_id, config('wx.mch_id'), config('wx.mch_secret'), $money ,config('setting.img_prefix').config('wxpay_notify_url') , input('order_num'));
         $return = $weixinpay -> pay();
         //返回5个支付参数和sign
         return json($return);
@@ -212,7 +210,7 @@ class Order extends Common
     {
         $xml = file_get_contents('php://input');
         // 这句file_put_contents是用来查看服务器返回的XML数据 测试完可以删除了
-        file_put_contents(__DIR__.'/public/statics/log/log.txt',$xml,FILE_APPEND);
+        file_put_contents('/log.txt',$xml,FILE_APPEND);
 
         $arr = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
 
@@ -225,10 +223,17 @@ class Order extends Common
         //验签名。默认支持MD5
         if ( $sign === $arr['sign']) {
             //获取服务器返回的数据
-            $order_sn = $arr['out_trade_no'];          //订单单号
+            $order_num = $arr['out_trade_no'];          //订单单号
             $openid = $arr['openid'];                  //付款人openID
             $total_fee = $arr['total_fee'];            //付款金额
             $transaction_id = $arr['transaction_id'];  //微信支付订单号
+            $orderObj = MallOrder::get($order_num);
+            if ($orderObj->final_price != $total_fee) {
+                $orderObj->status = 5;
+            }else{
+                $orderObj->status = 1;
+            }
+            $orderObj->save();
         }else{
             $result = false;
         }
