@@ -15,4 +15,11 @@ class MallOrder extends BaseModel
     protected $autoWriteTimestamp = true;
 
     protected $deleteTime = 'delete_time';
+
+    protected $hidden = ['create_time','update_time','delete_time','wxpay_order_num','status'];
+
+    public function orderGoodslists()
+    {
+        return $this->hasMany('MallOrderGoodslist','order_num','order_num');
+    }
 }

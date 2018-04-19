@@ -5,33 +5,28 @@
  */
 namespace app\api\validate;
 
+use app\lib\exception\ParameterException;
 use think\Exception;
 use think\Request;
 use think\Validate;
 
 class BaseValidate extends Validate
 {
+    protected $rule = [];
     public function goCheck()
     {
-        //获取http传入的参数对这些参数进行检验
         $request = Request::instance();
         $params = $request->param();
 
-        $result = $this->batch()->check($params);
-        if (!$result) {
-            // $this->error有一个问题，并不是一定返回数组，需要判断
-            $msg = is_array($this->error) ? implode(';', $this->error) : $this->error;
-            $return['msg'] = $msg;
-            $return['status'] = false;
-        }else{
-            $return['status'] = true;
+        $validate = new Validate($this->rule);
+        if (!$validate->check($params)) {
+            throw new Exception($validate->getError());
         }
-        return $return;
     }
 
     protected function isPositiveInreger($value,$rule = '',$data = '',$filed = '')
     {
-        if (is_numeric($value) && is_int($value+0) && ($value + 0) > 0) {
+        if (is_numeric($value) && ($value + 0) > 0) {
             return true;
         }else{
             return false;

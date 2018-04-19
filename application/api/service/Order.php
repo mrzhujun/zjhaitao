@@ -69,18 +69,22 @@ class Order
         $save['goods_name'] = $goodsObj->goods_name;
         $save['price'] = $this->getUnitPriceOfGoods($goodsObj);
         //如果有活动保存活动信息
-        if ($goodsObj->active_id != 0 && $goodsObj['promote_start_time']<time() && $goodsObj['promote_end_time']>time()) {
-            $save['active_off'] =  ($goodsObj['shop_price']-$goodsObj['promote_price'])*$num;
-            $save['active_id'] = $goodsObj['active_id'];
+        if ($goodsObj->active_id != 0 && $goodsObj->promote_start_time<time() && $goodsObj->promote_end_time>time()) {
+            $save['active_off'] =  ($goodsObj->shop_price-$goodsObj->promote_price)*$num;
+            $save['active_id'] = $goodsObj->active_id;
         }
 
-        $save['image'] = $goodsObj->goods_images;
-        $save['from'] = $goodsObj->from;
-        $save['num'] = $num;
+        //判断如果有规格id传进来则取规格图片
         if ($spec_id) {
             $specObj = MallAttr::get($spec_id);
             $save['spec_info'] = $specObj->attr_name;
+            $save['image'] = $specObj->attr_image;
+        }else{
+            $save['image'] = explode(',',$goodsObj->getData('goods_images'))[0];
         }
+
+        $save['from'] = $goodsObj->from;
+        $save['num'] = $num;
 
         $MallOrderGoodslist = new MallOrderGoodslist($save);
         $rs = $MallOrderGoodslist->allowField(true)->save();
@@ -135,6 +139,37 @@ class Order
             return false;
         }
         return true;
+    }
+
+    /**
+     * 使用优惠券
+     * @param $totalPrice
+     * @throws Exception
+     * @throws \think\exception\DbException
+     */
+    public static function selectCoupons($totalPrice)
+    {
+        if (input('coupons_user_id')) {
+            $couponsObj = MallCouponsUser::get(input('coupons_user_id'));
+            if (!$couponsObj) {
+                throw new Exception('优惠券不存在');
+            }
+            if ($couponsObj->man > $totalPrice || $couponsObj->is_use == 1) {
+                throw new Exception('优惠券不可用');
+            }
+            $couponsObj->is_use = 1;
+
+            $rs = $couponsObj->save();
+            if (!$rs) {
+                throw new Exception('优惠券更改状态失败');
+            }
+            $return['coupons_off'] = $couponsObj->jian;
+            $return['final_price'] = $totalPrice-$couponsObj->jian;
+        }else{
+            $return['final_price'] = $totalPrice;
+            $return['coupons_off'] = 0;
+        }
+        return $return;
     }
 
 

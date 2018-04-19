@@ -145,7 +145,6 @@ class Common extends Api
      */
     protected function check_user()
     {
-        (new ValidateCart())->goCheck();
         $user_id = ServiceToken::getCurrentUserId();
         $userObj = MallUser::get($user_id);
 
