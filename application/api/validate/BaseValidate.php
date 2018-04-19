@@ -18,9 +18,10 @@ class BaseValidate extends Validate
         $request = Request::instance();
         $params = $request->param();
 
-        $validate = new Validate($this->rule);
-        if (!$validate->check($params)) {
-            throw new Exception($validate->getError());
+        if (!$this->check($params)) {
+            throw new Exception($this->getError());
+        }else{
+            return true;
         }
     }
 

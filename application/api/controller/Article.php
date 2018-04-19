@@ -23,7 +23,7 @@ class Article extends Api
      */
     public function all()
     {
-        $list = MallArticle::order('article_id','DESC')->field('article_id,cover_image,title,intro')->select();
+        $list = MallArticle::order('article_id','DESC')->field('article_id,cover_image,title,intro,from2')->select();
         $this->success('获取成功',$list);
     }
 
