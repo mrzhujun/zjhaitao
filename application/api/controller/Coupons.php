@@ -5,6 +5,7 @@ use app\api\model\MallCouponsUser;
 use app\api\model\MallGoods;
 use app\api\validate\ConfirmOrder;
 use app\api\service\Order as ServiceOrder;
+use app\lib\exception\MissException;
 
 /**
  * swagger: 优惠券
@@ -23,9 +24,11 @@ class Coupons extends Common
     {
         $userCouponsObj = $this->default_coupons();
         if (!$userCouponsObj) {
-            $this->error('暂无优惠券可用');
+            throw new MissException([
+                'msg' => '暂无优惠券可用'
+            ]);
         }
-        return $this->success('获取成功',$userCouponsObj);
+       return json($userCouponsObj);
     }
 
     /**
@@ -37,7 +40,7 @@ class Coupons extends Common
     {
         $userObj = $this->check_user();
         $couponsObj = MallCouponsUser::where('user_id','=',$userObj->user_id)->select();
-        $this->success('获取成功',$couponsObj);
+        return json($couponsObj);
     }
 
 

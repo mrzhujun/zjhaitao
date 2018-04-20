@@ -4,6 +4,7 @@ namespace app\api\controller;
 
 use app\api\model\MallBanner;
 use app\common\controller\Api;
+use app\api\validate\Banner as ValidateBanner;
 
 /**
  * swagger: banner
@@ -17,18 +18,13 @@ class Banner extends Api
     /**
      * get: 获取banner列表
      * path: banner_list
-     * param: in - {int} = [0] 哪里的banner 0=首页
+     * param: in - {int} = [0|1] 哪里的banner 0=首页
      */
     public function banner_list($in)
     {
-        $validate = new \think\Validate([
-            'in' => 'require|number'
-        ]);
-        if (!$validate->check(input())) {
-            $this->error($validate->getError(),'');
-        }
+        (new ValidateBanner())->goCheck();
         $list = MallBanner::where("banner_in='{$in}'")->select();
-        $this->success('返回成功',$list);
+        return json($list);
 
     }
 }

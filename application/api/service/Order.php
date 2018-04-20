@@ -13,6 +13,9 @@ use app\api\model\MallCouponsUser;
 use app\api\model\MallGoods;
 use app\api\model\MallOrder;
 use app\api\model\MallOrderGoodslist;
+use app\lib\exception\MissException;
+use app\lib\exception\OrderException;
+use app\lib\exception\ParamsException;
 use think\Exception;
 
 class Order
@@ -159,17 +162,20 @@ class Order
         if (input('coupons_user_id')) {
             $couponsObj = MallCouponsUser::get(input('coupons_user_id'));
             if (!$couponsObj) {
-                throw new Exception('优惠券不存在');
+                throw new MissException([
+                    'msg' => '优惠券不存在',
+                    'errorCode' => 90000
+                ]);
             }
             if ($couponsObj->man > $totalPrice || $couponsObj->is_use == 1) {
-                throw new Exception('优惠券不可用');
+                throw new ParamsException([
+                    'msg' => '优惠券不可用',
+                    'errorCode' => 90001
+                ]);
             }
             $couponsObj->is_use = 1;
+            $couponsObj->save();
 
-            $rs = $couponsObj->save();
-            if (!$rs) {
-                throw new Exception('优惠券更改状态失败');
-            }
             $return['coupons_off'] = $couponsObj->jian;
             $return['final_price'] = $totalPrice-$couponsObj->jian;
         }else{
@@ -186,21 +192,18 @@ class Order
     {
         $orderObj = MallOrder::get($order_num);
         if ($orderObj->status != 0) {
-            throw new Exception('已支付订单暂不能关闭');
+            throw new OrderException([
+                'mag' => '已支付过订单暂不能关闭',
+                'errorCode' => 80003
+            ]);
         }
         if ($orderObj->coupons_user_id) {
             $couponsUserObj = MallCouponsUser::get($orderObj->coupons_user_id);
             $couponsUserObj -> is_use = 0;
-            $rs = $couponsUserObj -> save();
-            if (!$rs) {
-                throw new Exception('优惠券更改状态失败，订单关闭失败');
-            }
+            $couponsUserObj -> save();
         }
         $orderObj->status = 4;
-        $rs2 = $orderObj->save();
-        if (!$rs2) {
-            throw new Exception('订单关闭失败');
-        }
+        $orderObj->save();
     }
 
 

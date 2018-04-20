@@ -6,6 +6,7 @@ namespace app\api\controller;
 use app\api\model\MallGoods;
 use app\common\controller\Api;
 use \app\api\model\Category;
+use app\lib\exception\MissException;
 
 /**
  * swagger: 分类
@@ -25,7 +26,9 @@ class Cate extends Api
         //普通分类
         $list = Category::where("type='category' and pid='0'")->field('id,name,image,description,image_from')->select();
         if (!$list) {
-            $this->error('没有获取到分类列表','');
+            throw new MissException([
+                'msg' => '未查询到分类'
+            ]);
         }
 
         foreach ($list as $k => $v){
@@ -39,7 +42,7 @@ class Cate extends Api
         $return['category'] = $list;
         $return['brand'] = $list2;
 
-        $this->success('获取成功',$return);
+        return json($return);
     }
 
     /**
@@ -87,7 +90,7 @@ class Cate extends Api
 
         $return['category_detail'] = Category::get(input('category_id'));
 
-        $this->success('获取成功',$return);
+        return json($return);
     }
 
 

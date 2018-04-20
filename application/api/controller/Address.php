@@ -7,6 +7,10 @@ use app\api\model\MallAddress;
 use app\api\model\MallUser;
 use app\api\service\Token as ServiceToken;
 use app\api\validate\Address as ValidateAddress;
+use app\lib\exception\DSuccessMessage;
+use app\lib\exception\NoChangeException;
+use app\lib\exception\ParamsException;
+use app\lib\exception\SuccessMessage;
 use app\lib\exception\UserException;
 
 /**
@@ -33,19 +37,14 @@ class Address extends Common
      */
     public function add()
     {
-        $rst = (new ValidateAddress())->goCheck();
-        if (!$rst['status']) {
-            $this->error($rst['msg'],'');
-        }
+        (new ValidateAddress())->goCheck();
         $userObj = $this->check_user();
         $user_id  = $userObj->user_id;
         $_POST['address'] = $_POST['p'].','.$_POST['c'].','.$_POST['t'];
         $_POST['user_id'] = $user_id;
         $model = new MallAddress($_POST);
-        if (!$model->allowField(true)->save()) {
-            $this->error('数据保存出错','');
-        }
-        $this->success('创建成功',$model);
+        $model->allowField(true)->save();
+        throw new SuccessMessage();
     }
 
 
@@ -64,8 +63,7 @@ class Address extends Common
      */
     public function edit()
     {
-        $userObj = $this->check_user();
-        $user_id  = $userObj->user_id;
+        $this->check_user();
         $params = $this->request->param();
         $validate = new \think\Validate([
             'address_id' => 'require|number',
@@ -77,19 +75,18 @@ class Address extends Common
             'is_default' => 'in:0,1'
         ]);
         if (!$validate->check($params)) {
-            $this->error($validate->getError(),'');
+            throw new ParamsException([
+                'msg' => $validate->getError()
+            ]);
         }
 
         $params['address'] = $params['p'].','.$params['c'].','.$params['t'];
         $addressObj = MallAddress::get($params['address_id']);
         if ($addressObj->name == $params['name'] && $addressObj->phone == $params['phone'] && $addressObj->address_detail == $params['address_detail'] && $addressObj->address = $params['p'].','.$params['c'].','.$params['t'] && $addressObj->is_default == $params['is_default']) {
-            $this->error('数据未改变',$addressObj);
+            throw new NoChangeException();
         }
-        $rst = $addressObj->allowField('name,phone,address,address_detail,is_default')->save($params);
-        if (!$rst) {
-            $this->error('数据保存出错','','500');
-        }
-        $this->success('更改成功',$addressObj,'201');
+        $addressObj->allowField('name,phone,address,address_detail,is_default')->save($params);
+        throw new SuccessMessage();
     }
 
     /**
@@ -113,12 +110,8 @@ class Address extends Common
         if (!$validate->check($params)) {
             $this->error($validate->getError(),'');
         }
-        $rst = MallAddress::destroy($params['address_id']);
-        if ($rst) {
-            $this->success('删除成功','');
-        }else{
-            $this->error('删除失败','');
-        }
+        MallAddress::destroy($params['address_id']);
+        throw new SuccessMessage();
     }
 
     /**
@@ -133,12 +126,8 @@ class Address extends Common
         if (!$userObj) {
             throw new UserException();
         }
-        $userObj = MallUser::get($user_id);
-        if (!$userObj) {
-            $this->error('该用户不存在');
-        }
         $list = $userObj->malladdresss()->select();
-        $this->success('返回成功',$list,200);
+        return json($list);
     }
 
 }

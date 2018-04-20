@@ -6,6 +6,7 @@
 namespace app\api\service;
 
 use app\api\model\MallUser;
+use app\lib\exception\TokenException;
 use think\Exception;
 
 class UserToken extends Token
@@ -67,7 +68,10 @@ class UserToken extends Token
 
         $result = cache($key,$value,$expire_in);
         if (!$result) {
-            throw new Exception('服务器缓存异常');
+            throw new TokenException([
+                'msg' => '服务器缓存异常',
+                'errorCode' => 10005
+            ]);
         }
         return $key;
     }

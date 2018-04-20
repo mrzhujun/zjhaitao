@@ -7,6 +7,7 @@
 namespace app\api\service;
 
 
+use app\lib\exception\MissException;
 use app\lib\exception\TokenException;
 use think\Cache;
 use think\Exception;
@@ -46,7 +47,10 @@ class Token
             if (array_key_exists($key,$vars)) {
                 return $vars[$key];
             }else{
-                throw new Exception('尝试获取的Token变量不存在');
+                throw new MissException([
+                    'msg' => '尝试获取的Token变量不存在',
+                    'errorCode' => 10005
+                ]);
             }
 
         }

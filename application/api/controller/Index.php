@@ -7,6 +7,7 @@ use app\api\model\MallActive;
 use app\api\model\MallGoods;
 use app\api\model\MallShop;
 use app\common\controller\Api;
+use app\lib\exception\MissException;
 
 /**
  * swagger: 首页
@@ -27,7 +28,7 @@ class Index extends Api
         $return = db('mall_shop')->field('head_image,intro_image')->find();
         $return['head_image'] = add_url($return['head_image']);
         $return['intro_image'] = add_url($return['intro_image']);
-        $this->success('返回成功',$return);
+        return json($return);
     }
 
 
@@ -40,7 +41,10 @@ class Index extends Api
         $time = time();
         $goodsList = MallActive::where("active_type='1' and start_time<{$time} and end_time>{$time}")->field('goods_id')->limit(2)->select();
         if (!$goodsList) {
-            $this->error('暂无活动商品');
+            throw new MissException([
+                'msg' => '没有活动信息',
+                'errorCode' => 30000
+            ]);
         }
         $arr = [];
         foreach ($goodsList as $k => $v){
@@ -49,7 +53,7 @@ class Index extends Api
         }
         $return['image'] = MallShop::where(0)->field('xin_image')->find();
         $return['goods_list'] = $arr;
-        $this->success('获取成功',$return);
+        return json($return);
     }
 
     /**
@@ -60,7 +64,10 @@ class Index extends Api
     {
         $goodsList = MallActive::where("active_type='2'")->field('goods_id')->limit(20)->select();
         if (!$goodsList) {
-            $this->error('暂无活动商品');
+            throw new MissException([
+                'msg' => '该活动没有商品',
+                'errorCode' => 30002
+            ]);
         }
         $arr = [];
         foreach ($goodsList as $k => $v){
@@ -69,7 +76,7 @@ class Index extends Api
         }
         $return['image'] = MallShop::where(0)->field('xin_image')->find();
         $return['goods_list'] = $arr;
-        $this->success('获取成功',$return);
+        return json($return);
     }
 
 
@@ -82,12 +89,18 @@ class Index extends Api
     {
         $shopObj = MallShop::get(0);
         if ($shopObj->temai_start_time>time() || $shopObj->temai_end_time<time()) {
-            $this->error('不在特卖活动时间内');
+            throw new MissException([
+                'msg' => '不在活动时间内',
+                'errorCode' => 30004
+            ]);
         }
 
         $goodsList = MallActive::where("active_type='3'")->field('goods_id')->select();
         if (!$goodsList) {
-            $this->error('暂无活动商品');
+            throw new MissException([
+                'msg' => '该活动没有商品',
+                'errorCode' => 30002
+            ]);
         }
         $arr = [];
         foreach ($goodsList as $k => $v){
@@ -96,7 +109,7 @@ class Index extends Api
         }
         $return['image'] = MallShop::where(0)->field('temai_image')->find();
         $return['goods_list'] = $arr;
-        $this->success('获取成功',$return);
+        return json($return);
     }
 
 
@@ -113,9 +126,10 @@ class Index extends Api
         $maxPage = ceil($count/$num);
         $pageDetail['total_page'] = $maxPage;
         $pageDetail['now_page'] = $page;
-        if ($page>$maxPage) {
-            $this->error('没有下一页了');
-        }
+        throw new MissException([
+            'msg' => '没有下一页了',
+            'errorCode' => 30005
+        ]);
         $activeList = MallActive::where("active_type",4)->limit($page-1,$num)->select();
 
         foreach ($activeList as $k => $v){
@@ -123,7 +137,7 @@ class Index extends Api
         }
         $return['page_detail'] = $pageDetail;
         $return['active_list'] = $activeList;
-        $this->success('获取成功',$return);
+        return json($return);
     }
 
 }

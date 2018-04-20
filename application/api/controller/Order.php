@@ -11,6 +11,7 @@ use app\api\service\Order as ServiceOrder;
 use app\api\service\WeixinPay;
 use app\api\validate\CarToOrder;
 use app\api\validate\ConfirmOrder;
+use app\lib\exception\OrderSuccessMessage;
 use think\Db;
 use think\Exception;
 
@@ -31,7 +32,7 @@ class Order extends Common
         $orderList = MallOrder::where('user_id','=',$userObj->user_id)
             ->with(['order_goodslists'=>function($query){$query->field('order_num,goods_id,goods_name,price,spec_info,image');}])
             ->select();
-        $this->success('获取成功',$orderList);
+        return json($orderList);
     }
 
 
@@ -66,7 +67,7 @@ class Order extends Common
             $return['coupons_detail'] = $this->default_coupons();
         }
 
-        $this->success('',$return);
+        return json($return);
     }
 
 
@@ -103,20 +104,17 @@ class Order extends Common
             $orderObj->coupons_off = $couponsObj['jian'];
             $orderObj->final_price = $totalPrice-$couponsObj['jian'];
             //4.保存订单信息
-            $rs = $orderObj->save();
-
-            if (!$rs) {
-                throw new Exception('订单创建失败');
-            }
+            $orderObj->save();
             //提交事务
             Db::commit();
-            $this->success('订单创建成功',['order_num'=>$orderObj->order_num]);
+            throw new OrderSuccessMessage([
+                'order_num' => $orderObj->order_num
+            ]);
         }
         catch (Exception $e)
         {
             //如发生错误数据回滚
             Db::rollback();
-            $this->error($e->getMessage());
         }
     }
 
@@ -152,11 +150,7 @@ class Order extends Common
             $orderObj->coupons_off = $couponsObj['jian'];
             $orderObj->final_price = $totalPrice-$couponsObj['jian'];
             //4.保存订单信息
-            $rs = $orderObj->save();
-
-            if (!$rs) {
-                throw new Exception('订单创建失败');
-            }
+            $orderObj->save();
             //提交事务
             Db::commit();
             $this->success('订单创建成功',['order_num'=>$orderObj->order_num]);

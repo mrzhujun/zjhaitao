@@ -11,4 +11,5 @@ class UserException extends BaseException
 {
     public $code = 404;
     public $message = '当前用户不存在';
+    public $errorCode = 60000;
 }

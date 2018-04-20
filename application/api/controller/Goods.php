@@ -6,7 +6,10 @@ namespace app\api\controller;
 
 use app\api\model\MallGoods;
 use app\common\controller\Api;
+use app\lib\exception\GoodsException;
+use app\lib\exception\MissException;
 use think\Request;
+use app\api\validate\Goods as ValidateGoods;
 
 
 /**
@@ -22,9 +25,7 @@ class Goods extends Api
     public function __construct(Request $request = null)
     {
         parent::__construct($request);
-        if (!input('goods_id') ||!is_numeric(input('goods_id'))) {
-            $this->error('参数错误','');
-        }
+        (new ValidateGoods())->goCheck();
     }
 
     /**
@@ -45,9 +46,9 @@ class Goods extends Api
                     $goodsDetail['mallattrs'][$k]['promote_price'] = $goodsDetail['active']['promote_price'];
                 }
             }
-            $this->success('返回成功',$goodsDetail);
+            return json($goodsDetail);
         } else{
-            $this->error('商品不存在','');
+            throw new GoodsException();
         }
     }
 
@@ -61,13 +62,16 @@ class Goods extends Api
     {
         $goodsObj = db('mall_goods')->where("goods_id={$goods_id}")->field('cat_id')->find();
         if (!$goodsObj) {
-            $this->error('商品不存在','');
+            throw new GoodsException();
         }
         $list = db('mall_goods')->where("goods_id!={$goods_id} and cat_id={$goodsObj['cat_id']}")->field('goods_id,goods_name,shop_price,goods_images')->select();
         if (!$list) {
-            $this->error('没有推荐信息',$list);
+            throw new MissException([
+                'msg' => '没有推荐信息',
+                'errorCode' => 20001
+            ]);
         }
-        $this->success('返回成功',$list);
+        return json($list);
     }
 
 
@@ -80,14 +84,17 @@ class Goods extends Api
     {
         $goodsObj = db('mall_goods')->where("goods_id={$goods_id}")->field('brand_id')->find();
         if (!$goodsObj) {
-            $this->error('商品不存在','');
+            throw new GoodsException();
         }
         $list = db('mall_goods')->where("goods_id!={$goods_id} and brand_id={$goodsObj['brand_id']}")->field('goods_id,goods_name,shop_price,goods_images')->select();
         if (!$list) {
-            $this->error('没有推荐信息',$list);
+            throw new MissException([
+                'msg' => '没有推荐信息',
+                'errorCode' => 20001
+            ]);
         }
 
-        $this->success('返回成功',$list);
+        return json($list);
     }
     
 }
