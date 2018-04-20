@@ -206,5 +206,35 @@ class Order
         $orderObj->save();
     }
 
+    /**
+     * 取出默认优惠券信息
+     */
+    public static function default_coupons($user_id,$final_price)
+    {
+        $userCouponsObj = MallCouponsUser::where('start_time','<',time())
+            ->where('end_time','>',time())
+            ->where('is_use','=',0)
+            ->where('user_id','=',$user_id)
+            ->where('man','<',$final_price)
+            ->order('jian DESC')
+            ->select();
+        return $userCouponsObj;
+    }
 
+
+    /**
+     * 确认订单页面单个商品信息
+     */
+    public function confirm_goods_detail($goods_id,$spec_id)
+    {
+        //商品信息
+        $goodsObj = MallGoods::where('goods_id','=',$goods_id)
+            ->field('goods_name,goods_images,active_id,promote_start_time,promote_end_time,promote_price,from')
+            ->find();
+        $goodsObj->goods_images = $goodsObj->goods_images[0];
+
+        $goodsObj->unit_price = $this->getUnitPriceOfGoods($goodsObj,$spec_id);
+        $goodsObj->num = input('num');
+        return $goodsObj;
+    }
 }

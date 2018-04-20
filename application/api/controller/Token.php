@@ -26,7 +26,8 @@ class Token extends Api
         $ut = new UserToken($code);
         $token = $ut->get($code);
         $return['token'] = $token;
-        $this->success('',$return);
+        $return['token_expire_in'] = config('setting.token_expire_in');
+        return json($return);
     }
 
 }

@@ -7,6 +7,7 @@ namespace app\api\service;
 
 use app\api\model\MallUser;
 use app\lib\exception\TokenException;
+use app\lib\exception\WxException;
 use think\Exception;
 
 class UserToken extends Token
@@ -30,11 +31,15 @@ class UserToken extends Token
         $result = curl_get($this->wxLoginUrl);
         $wxResult = json_decode($result,true);
         if (empty($wxResult)) {
-            throw new Exception('获取session_key及open_id时异常，微信内部错误');
+            throw new WxException([
+                'msg' => '获取session_key及open_id时异常，微信内部错误'
+            ]);
         }else{
             $loginFail = array_key_exists('errcode',$wxResult);
             if ($loginFail) {
-                throw new Exception($wxResult['errmsg']);
+                throw new WxException([
+                    'msg' => '微信服务器获取出错，错误原因:'.$wxResult['errmsg']
+                ]);
             }else{
                 return $this->grantToken($wxResult);
             }

@@ -6,8 +6,10 @@ namespace app\api\controller;
 use app\api\model\MallAddress;
 use app\api\model\MallUser;
 use app\api\service\Token as ServiceToken;
+use app\api\service\UserAuth as ServiceUserAuth;
 use app\api\validate\Address as ValidateAddress;
 use app\lib\exception\DSuccessMessage;
+use app\lib\exception\MissException;
 use app\lib\exception\NoChangeException;
 use app\lib\exception\ParamsException;
 use app\lib\exception\SuccessMessage;
@@ -63,7 +65,7 @@ class Address extends Common
      */
     public function edit()
     {
-        $this->check_user();
+        $userObj = $this->check_user();
         $params = $this->request->param();
         $validate = new \think\Validate([
             'address_id' => 'require|number',
@@ -82,7 +84,15 @@ class Address extends Common
 
         $params['address'] = $params['p'].','.$params['c'].','.$params['t'];
         $addressObj = MallAddress::get($params['address_id']);
-        if ($addressObj->name == $params['name'] && $addressObj->phone == $params['phone'] && $addressObj->address_detail == $params['address_detail'] && $addressObj->address = $params['p'].','.$params['c'].','.$params['t'] && $addressObj->is_default == $params['is_default']) {
+        if (!$addressObj) {
+            throw new MissException([
+                'msg' => '请求的地址不存在',
+                'errorCode' => 60001
+            ]);
+        }
+
+        (new ServiceUserAuth())->checkUserAuth($addressObj->user_id,$userObj->user_id);
+        if ($addressObj->name == $params['name'] && $addressObj->phone == $params['phone'] && $addressObj->address_detail == $params['address_detail'] && $addressObj->address == $params['p'].','.$params['c'].','.$params['t'] && $addressObj->is_default == $params['is_default']) {
             throw new NoChangeException();
         }
         $addressObj->allowField('name,phone,address,address_detail,is_default')->save($params);
@@ -110,7 +120,15 @@ class Address extends Common
         if (!$validate->check($params)) {
             $this->error($validate->getError(),'');
         }
-        MallAddress::destroy($params['address_id']);
+        $addressObj = MallAddress::get($params['address_id']);
+        if(!$addressObj){
+            throw new MissException([
+                'msg' => '请求的地址不存在',
+                'errorCode' => 60001
+            ]);
+        }
+        (new ServiceUserAuth())->checkUserAuth($user_id,$addressObj['user_id']);
+        $addressObj::destroy($params['address_id']);
         throw new SuccessMessage();
     }
 

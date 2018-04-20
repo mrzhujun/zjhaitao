@@ -1,0 +1,4 @@
+---------------------------------------------------------------
+[ 2018-04-20T16:46:27+08:00 ] 0.0.0.0 POST /api/token/getToken
+[ error ] [0]invalid code, hints: [ req_id: rnnWMa0987th48 ]
+[ error ] invalid code, hints: [ req_id: rnnWMa0987th48 ]

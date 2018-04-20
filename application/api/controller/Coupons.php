@@ -5,6 +5,7 @@ use app\api\model\MallCouponsUser;
 use app\api\model\MallGoods;
 use app\api\validate\ConfirmOrder;
 use app\api\service\Order as ServiceOrder;
+use app\api\validate\DefaultCoupons;
 use app\lib\exception\MissException;
 
 /**
@@ -14,7 +15,7 @@ class Coupons extends Common
 {
     /**
      * get: 取出默认优惠券id
-     * path: default_coupons
+     * path: get_default_coupons
      * param: token - {string} token方法获取
      * param: goods_id - {int} 商品id
      * param: spec_id - {int} 规格id
@@ -22,12 +23,18 @@ class Coupons extends Common
      */
     public function get_default_coupons()
     {
-        $userCouponsObj = $this->default_coupons();
+        (new DefaultCoupons())->goCheck();
+        $userObj = $this->check_user();
+        $goodsObj = MallGoods::get(input('goods_id'));
+        $serviceOrder = new ServiceOrder();
+        $unitPrice = $serviceOrder->getUnitPriceOfGoods($goodsObj,input('spec_id'));
+        $userCouponsObj = ServiceOrder::default_coupons($userObj->user_id,$unitPrice*input('num'));
         if (!$userCouponsObj) {
             throw new MissException([
                 'msg' => '暂无优惠券可用'
             ]);
         }
+
        return json($userCouponsObj);
     }
 
@@ -44,21 +51,4 @@ class Coupons extends Common
     }
 
 
-
-    public function default_coupons()
-    {
-        (new ConfirmOrder())->goCheck();
-        $userObj = $this->check_user();
-        $goodsObj = MallGoods::get(input('goods_id'));
-        $serviceOrder = new ServiceOrder();
-        $unitPrice = $serviceOrder->getUnitPriceOfGoods($goodsObj,input('spec_id'));
-        $userCouponsObj = MallCouponsUser::where('start_time','<',time())
-            ->where('end_time','>',time())
-            ->where('is_use','=',0)
-            ->where('user_id','=',$userObj->user_id)
-            ->where('man','<',$unitPrice*input('num'))
-            ->order('jian DESC')
-            ->select();
-        return $userCouponsObj;
-    }
 }

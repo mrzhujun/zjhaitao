@@ -8,6 +8,7 @@ use app\api\model\MallGoods;
 use app\api\model\MallUser;
 use app\api\validate\CartDelete;
 use app\common\controller\Api;
+use app\api\validate\CartAdd as ValidateCartAdd;
 use app\api\validate\Cart as ValidateCart;
 use app\lib\exception\CartException;
 use app\lib\exception\ForbiddenException;
@@ -51,7 +52,7 @@ class Cart extends Common
      */
     public function add()
     {
-        (new ValidateCart())->goCheck();
+        (new ValidateCartAdd())->goCheck();
         $userObj = $this->check_user();
         $user_id  = $userObj->user_id;
         //判断购物车商品是否足够

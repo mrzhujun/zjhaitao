@@ -11,6 +11,7 @@ use app\api\service\Order as ServiceOrder;
 use app\api\service\WeixinPay;
 use app\api\validate\CarToOrder;
 use app\api\validate\ConfirmOrder;
+use app\api\validate\DefaultCoupons;
 use app\lib\exception\OrderSuccessMessage;
 use think\Db;
 use think\Exception;
@@ -24,7 +25,7 @@ class Order extends Common
      * get: 订单列表
      * path: order_list
      * param: token - {string} token方法获取
-     * param: type - {int} = ['0','2','3','5'] (待付款，待收货，已完成，全部订单)
+     * param: type - {int} = [0|2|3|5] (待付款，待收货，已完成，全部订单)
      */
     public function order_list()
     {
@@ -55,8 +56,10 @@ class Order extends Common
         $return['address_detail'] = $addressObj;
         //商品信息
         $goodsObj = MallGoods::where('goods_id','=',input('goods_id'))
-            ->field('goods_name,goods_images')
+            ->field('goods_name,goods_images,active_id,promote_start_time,promote_end_time,promote_price,from')
             ->find();
+        $goodsObj->goods_images = $goodsObj->goods_images[0];
+
         $goodsObj->unit_price = (new ServiceOrder())->getUnitPriceOfGoods($goodsObj,input('spec_id'));
         $goodsObj->num = input('num');
         $return['goods_detail'] = $goodsObj;
@@ -64,7 +67,7 @@ class Order extends Common
         if (!input('coupons_id')) {
             $return['coupons_detail'] = [];
         }else{
-            $return['coupons_detail'] = $this->default_coupons();
+            $return['coupons_detail'] = ServiceOrder::default_coupons($userObj->user_id,$goodsObj->unit_price*$goodsObj->num);
         }
 
         return json($return);

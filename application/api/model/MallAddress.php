@@ -7,6 +7,7 @@
 namespace app\api\model;
 
 
+use app\lib\exception\MissException;
 use think\Exception;
 use think\Model;
 
@@ -20,21 +21,13 @@ class MallAddress extends Model
                 throw new Exception('请传入user_id');
             }
             if ($address->is_default == 1) {
-                try {
-                    MallAddress::where("user_id={$address->user_id}")->update(['is_default' => 0]);
-                }catch (Exception $e){
-                    throw new Exception($e->getMessage());
-                }
+                MallAddress::where("user_id={$address->user_id}")->update(['is_default' => 0]);
             }
         });
 
         MallAddress::event('after_update',function ($address){
             if ($address->is_default == 1) {
-                try {
-                    MallAddress::where("user_id={$address->user_id} and address_id!={$address->address_id}")->update(['is_default' => 0]);
-                }catch (Exception $e){
-                    throw new Exception($e->getMessage());
-                }
+                MallAddress::where("user_id={$address->user_id} and address_id!={$address->address_id}")->update(['is_default' => 0]);
             }
         });
 
@@ -48,7 +41,9 @@ class MallAddress extends Model
             ->field('address_id,name,phone,address,address_detail')
             ->find();
         if (!$addressObj) {
-            throw new Exception('该用户没有默认地址');
+            throw new MissException([
+                'msg' => '该用户没有默认地址'
+            ]);
         }
         return $addressObj;
     }
