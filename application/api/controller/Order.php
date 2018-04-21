@@ -96,33 +96,33 @@ class Order extends Common
             $userObj = $this->check_user();
             //1.生成订单总表
             $ServiceOrder = new ServiceOrder();
-            $orderObj = $ServiceOrder->neworder(input('address_id'),input('comment'),$userObj->user_id);
+            //验证商品信息与其规格信息
+            $ServiceOrder->valicate_goods_info(input('goods_id'),input('spec_id'));
 
+            $orderObj = $ServiceOrder->neworder(input('address_id'),input('comment'),$userObj->user_id);
             //2.添加商品信息到商品附加表
             $totalPrice = $ServiceOrder->goodstoorder($orderObj->order_num,input('goods_id'),input('num'),input('spec_id'));
 
             //3.优惠券
             $couponsObj = ServiceOrder::selectCoupons($totalPrice);
             $orderObj->coupons_user_id = input('coupons_user_id');
-            $orderObj->coupons_off = $couponsObj['jian'];
+            $orderObj->coupons_off = $couponsObj['coupons_off'];
 
             //4.运费
             $orderObj->wuliu_price = $ServiceOrder->trans_price($totalPrice);
-            $orderObj->final_price = $totalPrice-$couponsObj['jian']+$orderObj->wuliu_price;
+            $orderObj->final_price = $totalPrice-$couponsObj['coupons_off']+$orderObj->wuliu_price;
 
-            $orderObj->final_price = $totalPrice-$couponsObj['jian'];
             //5.保存订单信息
             $orderObj->save();
             //提交事务
             Db::commit();
-            throw new OrderSuccessMessage([
-                'order_num' => $orderObj->order_num
-            ]);
+            $this->success('创建订单成功',['order_num'=>$orderObj->order_num],201);
         }
         catch (Exception $e)
         {
             //如发生错误数据回滚
             Db::rollback();
+            throw new $e;
         }
     }
 

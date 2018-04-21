@@ -13,6 +13,8 @@ use app\api\model\MallCouponsUser;
 use app\api\model\MallGoods;
 use app\api\model\MallOrder;
 use app\api\model\MallOrderGoodslist;
+use app\lib\exception\ForbiddenException;
+use app\lib\exception\GoodsException;
 use app\lib\exception\MissException;
 use app\lib\exception\OrderException;
 use app\lib\exception\ParamsException;
@@ -249,5 +251,20 @@ class Order
             $transMoney = 0;
         }
         return $transMoney;
+    }
+
+    /**
+     * 验证商品信息
+     */
+    public function valicate_goods_info($goods_id,$spec_id)
+    {
+        $goodsCount = db('mall_goods')->where("goods_id={$goods_id}")->count();
+        if ($goodsCount == 0) {
+            throw new GoodsException();
+        }
+        $attrCount = db('mall_attr')->where("attr_id={$spec_id} and goods_id={$goods_id}")->count();
+        if (!$attrCount) {
+            throw new ForbiddenException();
+        }
     }
 }

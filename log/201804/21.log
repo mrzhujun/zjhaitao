@@ -1,0 +1,12 @@
+---------------------------------------------------------------
+[ 2018-04-21T16:24:05+08:00 ] 0.0.0.0 POST /api/order/add
+[ error ] [0]类型错误: Too few arguments to function think\exception\ErrorException::__construct(), 0 passed in E:\www\zjhaitao\application\api\controller\Order.php on line 126 and at least 4 expected
+[ error ] Type error: Too few arguments to function think\exception\ErrorException::__construct(), 0 passed in E:\www\zjhaitao\application\api\controller\Order.php on line 126 and at least 4 expected
+---------------------------------------------------------------
+[ 2018-04-21T16:24:06+08:00 ] 0.0.0.0 POST /api/order/add
+[ error ] [0]类型错误: Too few arguments to function think\exception\ErrorException::__construct(), 0 passed in E:\www\zjhaitao\application\api\controller\Order.php on line 126 and at least 4 expected
+[ error ] Type error: Too few arguments to function think\exception\ErrorException::__construct(), 0 passed in E:\www\zjhaitao\application\api\controller\Order.php on line 126 and at least 4 expected
+---------------------------------------------------------------
+[ 2018-04-21T16:24:18+08:00 ] 0.0.0.0 POST /api/order/add
+[ error ] [0]类型错误: Too few arguments to function think\exception\ErrorException::__construct(), 0 passed in E:\www\zjhaitao\application\api\controller\Order.php on line 126 and at least 4 expected
+[ error ] Type error: Too few arguments to function think\exception\ErrorException::__construct(), 0 passed in E:\www\zjhaitao\application\api\controller\Order.php on line 126 and at least 4 expected
