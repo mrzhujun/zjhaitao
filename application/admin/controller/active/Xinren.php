@@ -91,6 +91,7 @@ class Xinren extends Backend
         {
             $params = $this->request->post("row/a");
             if ($params)
+                dump($params);exit();
             $goodsObj = db('mall_goods')->where("goods_id={$params['goods_id']}")->field('is_promote,promote_end_time')->find();
                 if($goodsObj['promote_end_time'] > time()){
                     $this->error('该商品正在活动中');
@@ -168,7 +169,7 @@ class Xinren extends Backend
                     $result = $row->allowField(true)->save($params);
                     if ($result !== false)
                     {
-                        db('mall_goods')->where("goods_id={$params['goods_id']}")->update(['promote_price'=>$params['active_price'],'promote_end_time'=>strtotime($params['end_time'])]);
+                        db('mall_goods')->where("goods_id={$params['goods_id']}")->update(['promote_price'=>$params['active_price'],'promote_end_time'=>strtotime($params['end_time']),'promote_start_time'=>strtotime($params['start_time'])]);
                         $this->success();
                     }
                     else

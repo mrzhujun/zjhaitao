@@ -65,6 +65,17 @@ class Goods extends Backend
                 $brand = db('category')->where("id={$v['brand_id']}")->field('name')->find();
                 $list[$k]['brand_id'] = $brand['name'];
                 $list[$k]['cat_id'] = $cate['name'];
+                //计算是否促销
+                if ($v['promote_price'] <= 0 || $v['promote_start_time']>time() || $v['promote_end_time']<time()) {
+                    $list[$k]['is_promote'] = 0;
+                    $list[$k]['is_promote_text'] = '否';
+                    $list[$k]['promote_price'] = '-';
+                }else{
+                    $list[$k]['is_promote'] = 1;
+                    $list[$k]['is_promote_text'] = '是';
+
+                }
+
             }
             $result = array("total" => $total, "rows" => $list);
 
@@ -72,6 +83,4 @@ class Goods extends Backend
         }
         return $this->view->fetch();
     }
-
-
 }

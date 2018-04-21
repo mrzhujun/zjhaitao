@@ -47,7 +47,7 @@ class Cart extends Common
      * path: add
      * param: token - {string} token方法获取
      * param: goods_id - {int} 商品id
-     * param: spec_id - {int} 规格id
+     * param: spec_id - {int} = '' 规格id
      * param: num - {int} 数量
      */
     public function add()
