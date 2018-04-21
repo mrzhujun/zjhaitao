@@ -237,4 +237,17 @@ class Order
         $goodsObj->num = input('num');
         return $goodsObj;
     }
+
+    /**
+     * 计算运费
+     */
+    public function trans_price($totalmoney)
+    {
+        $transDetail = db('mall_trans')->find();
+        $transMoney = $transDetail['default_price'];
+        if ($transDetail['man'] && $transDetail['man'] <= $totalmoney) {
+            $transMoney = 0;
+        }
+        return $transMoney;
+    }
 }

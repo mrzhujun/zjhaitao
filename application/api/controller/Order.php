@@ -105,8 +105,13 @@ class Order extends Common
             $couponsObj = ServiceOrder::selectCoupons($totalPrice);
             $orderObj->coupons_user_id = input('coupons_user_id');
             $orderObj->coupons_off = $couponsObj['jian'];
+
+            //4.运费
+            $orderObj->wuliu_price = $ServiceOrder->trans_price($totalPrice);
+            $orderObj->final_price = $totalPrice-$couponsObj['jian']+$orderObj->wuliu_price;
+
             $orderObj->final_price = $totalPrice-$couponsObj['jian'];
-            //4.保存订单信息
+            //5.保存订单信息
             $orderObj->save();
             //提交事务
             Db::commit();
@@ -151,8 +156,12 @@ class Order extends Common
             $couponsObj = ServiceOrder::selectCoupons($totalPrice);
             $orderObj->coupons_user_id = input('coupons_user_id');
             $orderObj->coupons_off = $couponsObj['jian'];
-            $orderObj->final_price = $totalPrice-$couponsObj['jian'];
-            //4.保存订单信息
+
+            //4.运费
+            $orderObj->wuliu_price = $ServiceOrder->trans_price($totalPrice);
+            $orderObj->final_price = $totalPrice-$couponsObj['jian']+$orderObj->wuliu_price;
+
+            //5.保存订单信息
             $orderObj->save();
             //提交事务
             Db::commit();
