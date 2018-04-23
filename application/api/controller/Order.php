@@ -202,7 +202,7 @@ class Order extends Common
         $userObj = $this->check_user();
         $orderDetail = MallOrder::get(input('order_num'));
         $money = $orderDetail->final_price;
-        $weixinpay = new WeixinPay(config('wx.app_id'), $userObj->open_id, config('wx.mch_id'), config('wx.mch_secret'), $money ,config('setting.img_prefix').config('wxpay_notify_url') , input('order_num'));
+        $weixinpay = new WeixinPay(config('wx.app_id'), $userObj->open_id, config('wx.mch_id'), config('wx.mch_secret'), $money ,config('setting.img_prefix').config('wx.wxpay_notify_url') , input('order_num'));
         $return = $weixinpay -> pay();
         //返回5个支付参数和sign
         return json($return);

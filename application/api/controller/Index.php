@@ -5,6 +5,7 @@ namespace app\api\controller;
 
 use app\api\model\MallActive;
 use app\api\model\MallGoods;
+use app\api\model\MallRecommend;
 use app\api\model\MallShop;
 use app\common\controller\Api;
 use app\lib\exception\MissException;
@@ -31,6 +32,16 @@ class Index extends Api
         return json($return);
     }
 
+    /**
+     * get: 关于我们页面详情
+     * path: about_us
+     */
+    public function about_us()
+    {
+        $return = MallShop::field('bout_us_content')->find();
+        return json($return);
+    }
+
 
     /**
      * get: 新人活动
@@ -48,7 +59,7 @@ class Index extends Api
         }
         $arr = [];
         foreach ($goodsList as $k => $v){
-            $goodsDetail = MallGoods::where('goods_id',$v->goods_id)->field('goods_id,goods_name,shop_price,promote_price,goods_images')->find();
+            $goodsDetail = MallGoods::where('goods_id',$v->goods_id)->field('goods_id,goods_name,shop_price,promote_price,goods_images,from')->find();
             $arr[] = $goodsDetail;
         }
         $return['image'] = MallShop::where(0)->field('xin_image')->find();
@@ -71,7 +82,7 @@ class Index extends Api
         }
         $arr = [];
         foreach ($goodsList as $k => $v){
-            $goodsDetail = MallGoods::where('goods_id',$v->goods_id)->field('goods_id,goods_name,goods_images')->find();
+            $goodsDetail = MallGoods::where('goods_id',$v->goods_id)->field('goods_id,goods_name,goods_images,from')->find();
             $arr[] = $goodsDetail;
         }
         $return['image'] = MallShop::where(0)->field('xin_image')->find();
@@ -104,7 +115,7 @@ class Index extends Api
         }
         $arr = [];
         foreach ($goodsList as $k => $v){
-            $goodsDetail = MallGoods::where('goods_id',$v->goods_id)->field('goods_id,goods_name,goods_images,shop_price,promote_price,goods_images')->find();
+            $goodsDetail = MallGoods::where('goods_id',$v->goods_id)->field('goods_id,goods_name,goods_images,shop_price,promote_price,goods_images,from')->find();
             $arr[] = $goodsDetail;
         }
         $return['image'] = MallShop::where(0)->field('temai_image')->find();
@@ -116,28 +127,48 @@ class Index extends Api
     /**
      * get: 专场
      * path: special
-     * param: page - {int} 页数
+     * param: page - {int} = '1' 页数
+     * param: limit - {int} = '5' 每页显示
      */
-    public function special($page = 1)
+    public function special($page = 1,$limit = 5)
     {
         $page<1?$page = 1:$page = $page;
-        $count = MallActive::where('active_type',4)->count();
-        $num = 5;
-        $maxPage = ceil($count/$num);
+        $count = MallActive::where('active_type','=',4)->count();
+        $maxPage = ceil($count/$limit);
         $pageDetail['total_page'] = $maxPage;
         $pageDetail['now_page'] = $page;
-        throw new MissException([
-            'msg' => '没有下一页了',
-            'errorCode' => 30005
-        ]);
-        $activeList = MallActive::where("active_type",4)->limit($page-1,$num)->select();
+
+        if ($page > $maxPage) {
+            throw new MissException([
+                'msg' => '没有下一页了',
+                'errorCode' => 30005
+            ]);
+        }
+
+        $activeList = MallActive::where("active_type",4)->limit($page-1,$limit)->select();
 
         foreach ($activeList as $k => $v){
-            $activeList[$k]['goods_id'] = MallGoods::where("goods_id in ({$v['goods_id']})")->field('goods_id,goods_name,shop_price,goods_images')->select();
+            $activeList[$k]['goods_id'] = MallGoods::where("goods_id in ({$v['goods_id']})")->field('goods_id,goods_name,shop_price,goods_images,from')->select();
         }
         $return['page_detail'] = $pageDetail;
         $return['active_list'] = $activeList;
         return json($return);
     }
+
+    /**
+     * get: 图片分类或品牌推荐
+     * path: recommend
+     */
+    public function recommend()
+    {
+        $one = MallRecommend::where('size','=','0')->select();
+        $two = MallRecommend::where('size','=','1')->select();
+        $return['one']['data'] = $one;
+        $return['one']['msg'] = '这个一行排一个';
+        $return['two']['data'] = $two;
+        $return['two']['msg'] = '这个一行排两个';
+        return json($return);
+    }
+
 
 }

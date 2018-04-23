@@ -1,0 +1,187 @@
+<head>
+    <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="/statics/layui-master/dist/layui.js" ></script>
+    <script src="/statics/line-chart/echarts.min.js" ></script>
+    <link rel="stylesheet" href="/statics/layui-master/dist/css/layui.css"  media="all">
+	<style type="text/css">
+	body{
+         	background: #F2F2F2;
+         	padding: 20px;
+            font-size: 12px;
+         }
+         .content-top{
+         	background: #fff;
+         	width: 100%;
+         	height: auto;
+         	border:1px solid  #ccc;
+         	padding:16px;
+         }
+         .content-top-one{
+         	background: #f8f8f8;
+         	display:-webkit-flex;
+         	flex-direction: row;
+         	height: 100px;
+         	justify-content: center;
+         	align-items: center;
+         }
+         .content-top-one-text{
+         	flex:1;display:-webkit-flex;flex-direction: column;justify-content: center;align-items: center;
+         }
+         .content-top-one-texts{
+         	color:#3388FF;font-size: 32px
+         }
+         a{color:#3388FF}
+         .content-top-seven-days{
+         	border-left:4px solid #FF6600;padding-left: 6px;flex:1;text-align: left;
+         }
+         .line-chart{
+         	display: -webkit-flex;flex-direction: row;margin-top:20px;
+             
+         }
+         .line-chart-left{
+         	width: 400px;
+         	height: 240px;
+         	background: #f8f8f8;
+         	margin-right: 8px;
+            display: -webkit-flex;
+            flex-direction: column;
+         }
+         .line-chart-right{
+         	width: 1100px;
+         	height: 240px;
+         	border:1px solid #ccc;
+         	flex:1;
+         	text-align: right;
+         }
+         
+	</style>
+     
+</head>
+<body>
+	<div style="height:auto;width:100%"> 
+		
+	    <div class="content-top">
+	        <!-- 顶部数据统计 -->	
+            <div class="content-top-one">
+            	<div class="content-top-one-text" >
+	            	<div>7天下单笔数</div>
+	            	<div class="content-top-one-texts">1614</div>
+            	</div>
+            	<div class="content-top-one-text">
+	            	<div>待付款</div>
+	            	<div class="content-top-one-texts">1</div>
+            	</div>
+            	<div class="content-top-one-text">
+	            	<div>待发货</div>
+	            	<div class="content-top-one-texts">21</div>
+            	</div>
+            	<div class="content-top-one-text">
+	            	<div>积压维权</div>
+	            	<div class="content-top-one-texts">5</div>
+            	</div>
+            	<div class="content-top-one-text">
+	            	<div>7天收入 | <font color="#3388ff"><a href="http://www.baidu.com">提现</a></font></div>
+	            	<div class="content-top-one-texts">1614</div>
+            	</div>            	
+            </div>
+            <!-- 7天订单详情 -->
+		    <div class="content-top-one" style="height: 50px;margin-top:35px;padding-left:14px; ">
+	            <div class="content-top-seven-days" >7天订单趋势<a style="margin-left:20px;">详情</a></div>
+	            <div style="flex: 1;"></div>
+		    </div>
+		    <!-- 昨天下单统计图 折线图 -->
+			<div class=" line-chart">
+                <div class="line-chart-left">
+                    <div class="content-top-one-text" >
+	            	    <div>昨日下单笔数</div>
+	            	    <div class="content-top-one-texts">1614</div>
+	            	</div>
+	            	<div class="content-top-one-text">
+		            	<div>昨日付款订单</div>
+		            	<div class="content-top-one-texts">1</div>
+	            	</div>
+                </div>
+                <div class="line-chart-right">
+
+                   <!--  <button id="test2">Layer+Echarts构建弹出层折线图</button> -->
+                    <!-- style="display: none;" -->
+                        <div id="speedChart" >
+                            <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+	                        <div id="speedChartMain" style="width: 1000px; height: 230px;margin:0 auto;"></div>
+	                    </div>
+			            <!-- <div id="dfd">
+			                <span>Layer+Echarts构建弹出层折线图</span>
+			                <p>Layer+Echarts构建弹出层折线图</p>
+		                </div> -->
+                </div>
+		    </div>
+		   
+
+	    </div>
+       
+	   
+
+	    
+	</div>
+	 <div style="clear: both;"></div>
+</body>
+<script type="text/javascript">
+     // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('speedChartMain'));
+        option = {
+    tooltip: {
+        trigger: 'axis'
+    },
+    legend: {
+        data:['下单笔数','付款订单']
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    toolbox: {
+        feature: {
+            saveAsImage: {}
+        }
+    },
+    xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: ['周一','周二','周三','周四','周五','周六','周日']
+    },
+    yAxis: {
+
+        type: 'value'
+    },
+    series: [
+        {
+            name:'下单笔数',
+            type:'line',
+            stack: '总量',
+            data:[120, 132, 101, 134, 90, 230, 210]
+        },
+        {
+            name:'付款订单',
+            type:'line',
+            stack: '总量',
+            data:[220, 182, 191, 234, 290, 330, 310]
+        }
+    ]
+};
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+        //弹出一个页面层
+        $('#test2').on('click', function() {
+            layer.open({
+                title:'',
+                type: 1,
+                shade: false,
+                area: ['620px', '460px'],
+                shadeClose: false, //点击遮罩关闭
+                content: $("#speedChart")
+            });
+        });
+
+</script>

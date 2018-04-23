@@ -1,0 +1,450 @@
+
+<head>
+<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="/statics/layui-master/dist/layui.js" ></script>
+<link rel="stylesheet" href="/statics/layui-master/dist/css/layui.css"  media="all">
+<style type="text/css">
+        
+         .content{
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 16px;          
+         }
+         .content-top{
+            width: 100%;
+            height: 100px;
+            border:1px solid #ccc;
+         }
+         .content-top-one{
+            padding-left: 16px;
+         }
+*{margin:0;padding:0;list-style-type:none;}
+a,img{border:0;}
+body{background:#f2f2f2; padding: 20px;font:124x/180% Arial, Helvetica, sans-serif, "新宋体";}
+
+.stepInfo{position:relative;margin:10px auto 0 auto;width:1200px;}
+.stepInfo_1{margin:40px auto 0 auto;width:1200px;display:-webkit-flex; flex-direction: row; position:relative;color: #80CCFF;font-weight: bold;}
+.stepIco_1{bottom:1em;width:10em;margin-left:-4em;flex: 1;text-align:center;position: absolute;}
+.stepInfo li{float:left;width:48%;height:0.15em;background:#999;}
+.stepIco{border-radius:2em;padding:0.03em;background:#999;text-align:center;line-height:2em;color:#fff; position:absolute;width:2em;height:2em;}
+.stepIco1{top:-0.7em;left:0%;}
+.stepIco2{top:-0.7em;left:33%;}
+.stepIco3{top:-0.7em;left:66%;}
+.stepIco4{top:-0.7em;left:96%;}
+/*.stepIco5{top:-0.7em;left:95%;}*/
+.stepText{color:#666;margin-top:0.2em;width:10em;text-align:center;margin-left:-4em;color: #ccc;}
+.mid-content{ height: 404px;border:1px solid #ccc;margin-top: 18px;color: #666; }
+.order-flag{
+	height: 50px;display: -webkit-flex;flex-direction: row;
+}
+.zfc-top{
+            background:#F8F8F8;height: 40px;line-height: 40px;margin-top:20px; border:1px solid #e6e6e6;margin-left:20px;margin-right:20px;
+         }
+.zfc-mid{ margin-right: 20px;margin-left: 20px;padding-top: 10px;} 
+ 
+
+</style>
+
+</head>
+
+<body>
+	
+	<div style="height:auto;width:100%"> 
+	    <!-- 顶部选择 -->
+	    <div class="content-top">
+	        <div class="content-top-one">
+	            <input type="hidden" value={$orderdetail.status2} id="o_status" /><!--后台传到页面的数据-->
+	             <div class="stepInfo_1">
+			            <div class="stepIco_1" style="left:0%;">买家下单</div>
+		            	<div class="stepIco_1" style="left:33%;">买家付款</div>
+		            	<div class="stepIco_1" style="left:66%;">商家发货</div>
+		            	<div class="stepIco_1" style="left:95%;">交易完成</div>
+	            </div>
+	           <div class="stepInfo">
+                
+					<ul>
+						<li></li>
+						<li></li>
+					</ul>
+					
+	            	
+					<div class="stepIco stepIco1" id="create">1
+						<div class="stepText" id="createText">{$orderdetail.create_time}</div>
+						
+					</div>
+					<div class="stepIco stepIco2" id="check">2
+						<div class="stepText" id="checkText">{$orderdetail.pay_time}</div>
+					</div>
+					<div class="stepIco stepIco3" id="produce">3
+						<div class="stepText" id="produceText">{$orderdetail.send_time}</div>
+					</div>
+					<div class="stepIco stepIco4" id="delivery">4
+						<div class="stepText" id="deliveryText"></div>
+					</div>
+	            </div>
+	        </div>
+	    </div>
+
+	    <!-- 中间部分 -->
+        <div class="layui-row mid-content">		    
+		    <div class="layui-col-md3" style="border-right: 1px solid #ccc;height: 404px;padding:16px;">
+		        <div style="font-weight: bold;">订单编号</div>
+		        <div style="margin-top:12px;">订单编号：{$orderdetail.order_num}</div>
+		        <div style="margin-top:12px;">订单类型：普通订单</div>
+		        <div style="margin-top:12px;">付款方式：	微信安全支付</div>
+		        <div style="margin-top:12px;padding-bottom: 14px;border-bottom: 1px dashed #ccc;">买家：	{$orderdetail.user_id}</div>
+                <div style="margin-top:12px;">配送方式：	快递配送</div>
+		        <div style="margin-top:12px;" id="article">收货信息：	{$orderdetail.rec_address}, {$orderdetail.rec_name},{$orderdetail.rec_phone}</div>
+		        	<div style="color:#80CCFF;" id="copy"> [复制]</div>
+		        <div style="margin-top:12px;">买家留言：	{$orderdetail.comment}-</div>
+		    </div>
+		    <div class="layui-col-md9" style="padding:20px;">
+		    	<div style="height: 146px;border-bottom: 1px dashed #ccc; "> 
+		    		<div class="order-flag">
+				        <i class="layui-icon" style="font-size: 30px; color: #0278DD;">&#xe60b;</i>
+				        <div style="margin-left: 14px;">
+				            <font style="font-weight: bold;" >订单状态：{$orderdetail['message']}</font>
+				            <div style="font-size: 10px;margin-top: 10px;" >买家如在 <font color="#FF6600;">10天内</font> 没有申请退款，交易将自动完成；</div>
+				        </div> 				        
+			        </div>
+			        <div style="height: 30px;line-height: 30px;display: -webkit-flex;flex-direction: row;margin-top: 28px;">
+				        {if condition="$orderdetail.status eq '1'"}
+                        <div class=" layui-btn ayui-btn-sm  layui-btn-normal" id="fahuo bt" onclick="fahuo('{$orderdetail.order_num}')" style="margin-left: 44px;" > 发 货 </div>
+                        {/if}
+		                <div class=" layui-btn ayui-btn-sm  layui-btn-normal" id="wuliu bt" onclick="wuliu('{$orderdetail.order_num}')" style="" > 修改物流 </div>
+		                <!--<div class=" layui-btn ayui-btn-sm  layui-btn-normal" id="extend_sh bt" onclick="extend_sh()" style="" > 延长收货 </div> -->
+		                <!--<font style="margin-left:12px;" color="#3388FF" onclick="remark()">备注</font>-->
+	                </div>	                
+		        </div>
+		        <!--<div style="padding-top:14px;padding-left: 44px;color:#ccc;border-bottom: 1px dashed #ccc;height: 106px; ">卖家备注：圆通</div>-->
+		        
+		        <div style="padding-top: 23px;padding-left: 44px;font-size: 12px;color:#666;">
+		        	<div style="color:#FF6600;">友善提醒：</div>
+		        	<ul style="margin-top: 14px;">
+		        	<li>每家付款后，付款直接进入账户；</li>
+		        	<li>请及时关注你发出的包裹状态，确保能配送至买家手中；</li>
+		        	<li>如果买家表示未收到货或者货物有问题，请及时联系买家积极处理，友好协商；</li>
+		            </ul>
+		        </div>
+		    </div>
+		</div>
+
+		<!-- 商品列表 -->
+		<div class="layui-row" style="background:#F8F8F8;height: 40px;line-height: 40px;margin-top:26px; border:1px solid #e6e6e6;text-align: left;">                                  
+                <div class="layui-col-md1" style="padding-left: 10px;">
+                  
+                </div>
+                <div class="layui-col-md5">
+                    商品
+                </div>
+                <div class="layui-col-md2">
+                	价格(元)
+                </div>
+                <div class="layui-col-md1">
+                    数量    
+                </div>
+                <!--<div class="layui-col-md1">-->
+                   <!--优惠(元)-->
+                <!--</div>-->
+                <div class="layui-col-md1">
+                    小计(元)	   
+                </div>
+                <!--<div class="layui-col-md1">-->
+                    <!--状态-->
+                <!--</div>                        -->
+        </div>
+        <div class="layui-row" style="height: 40px;line-height: 40px;background: #FAFAFA;border-bottom: 1px solid #ccc;">
+            <!--<div class="layui-col-md1" style="padding-left: 10px;color: #666;">-->
+            	<!--包裹 - 1-->
+            <!--</div>-->
+            <div class="layui-col-md11" style="color: #666;">
+               {$orderdetail.wuliu}运单号：{$orderdetail.wuliu_num}
+            </div>
+        </div>
+
+        {volist name="goodslist" id="vo"}
+        <div class="layui-row" style="padding-top:26px; border:1px solid #e6e6e6;text-align: left;border-top:none;">                                  
+                <div class="layui-col-md1" style="padding:12px;">
+                	<img src="{$vo['image']}" style="background: red;width: 48px;height: 48px;">
+                </div>
+                <div class="layui-col-md5" style="">
+                     <div style="color: #3388ff;">{$vo.goods_name}</div>
+                     <div style="color: #999;">规格:{$vo.spec_info}</div>
+                     <!--<div style="color: #999;">规格编码: w01</div>-->
+                </div>
+                <div class="layui-col-md2">
+                    {$vo.price}
+                </div>
+                <div class="layui-col-md1">
+                    {$vo.num}
+                </div>
+                <!--<div class="layui-col-md1">-->
+                   	<!--<div>-80.00</div>-->
+                   	<!--<div style="color: #999;">限时折扣</div>-->
+                <!--</div>-->
+                <div class="layui-col-md1">
+                    {$vo.price*$vo.num}
+                </div>
+                <!--<div class="layui-col-md1">-->
+                    <!--已发货-->
+                <!--</div>                        -->
+        </div>
+        {/volist}
+
+        <div style="height:50px;line-height: 50px;font-size:14px;margin:20px auto;border-top:1px solid #ccc;border-bottom: 1px solid #ccc;">
+        	 <i class="layui-icon" style="font-size: 30px; color: #3388FF;float: right;margin-right:20px;margin-left: 10px;">&#xe60b;</i>
+            <font style="float: right;"> 订单共{$orderdetail.goods_count}件商品，优惠￥{$orderdetail.coupons_off}，总计：<font color="#FF6600";>￥{$orderdetail.final_price}</font>（含运费 ￥0.00）</font>
+          
+        </div>
+
+
+
+	</div>
+
+
+
+
+
+
+</body>
+
+<!-- 发货 -->
+<div id="zzc_fahuo">
+    <div style="padding-left:20px;padding-top:20px;color:#666;font-size:14px;" >待发货 2，已选 0</div>
+    <div class="layui-row zfc-top" style="padding-bottom:15px;">
+        <div class="layui-col-md1" style="padding-left: 10px;"><input type="checkbox" value="全选" id="checkAllChange" onclick="allSelect();" name="" title="" lay-skin="primary" ></div>
+        <div class="layui-col-md5">商品1</div>
+        <div class="layui-col-md1">数量</div>
+        <div class="layui-col-md4">物流 | 单号</div> 
+        <div class="layui-col-md1">状态</div>
+    </div>
+
+    <div class="layui-row zfc-mid" style="border:1px solid #ccc;border-top:none;">
+        <div class="layui-col-md1" style="padding-left: 10px;"><input type="checkbox" class="userid" id="Checkbox1" name="" title="" lay-skin="primary" ></div>
+        <div class="layui-col-md5" style="color:#3388FF;padding-right:20px;-"><div>万妮芬烟酰胺原液 亮肤补水面部淡斑改善暗哑保湿原液精华（不二大叔推荐）</div><div style="color:#ccc;">15ml</div></div>
+        <div class="layui-col-md1">1</div>
+        <div class="layui-col-md4" style="color:#999;"><div>圆通速递</div><div>888768486406953281</div></div> 
+        <div class="layui-col-md1" style="color:#44BB00;">已发货</div>
+    </div>
+     <div class="layui-row zfc-mid" style="border:1px solid #ccc;border-top:none;">
+        <div class="layui-col-md1" style="padding-left: 10px;"><input type="checkbox" class="userid" id="Checkbox2" name="" title="" lay-skin="primary" ></div>
+        <div class="layui-col-md5" style="color:#3388FF;padding-right:20px;-"><div>万妮芬烟酰胺原液 亮肤补水面部淡斑改善暗哑保湿原液精华（不二大叔推荐）</div><div style="color:#ccc;">15ml</div></div>
+        <div class="layui-col-md1">1</div>
+        <div class="layui-col-md4" style="color:#999;"><div>圆通速递</div><div>888768486406953281</div></div>  
+        <div class="layui-col-md1" style="color:#44BB00;">已发货</div>
+    </div>
+    <div style="padding-left:20px;padding-top:20px;color:#666;font-size:14px;">收货地址：<font style="margin-left:12px;">上海市 上海市 浦东新区 上海市民办尚德实验学校秀沿路1688号(近周园路), 田小姐, 18201899829</font></div>
+    <div style="padding-left:20px;padding-top:16px;color:#666;font-size:14px;">发货方式：<input type="radio" name="wl" value="wl" title="物流发货" checked style="margin-left:12px;">物流发货<input type="radio" name="wl" value="no_wl" title="无须物流" style="margin-left:12px;" >无须物流</div>
+    <div style="padding-left:20px;padding-top:20px;color:#666;font-size:14px;">
+
+    <div style="display:-webkit-flex;flex-direction:row;line-height:28px;">
+    <font>物流方式：</font><select name="wl_cp" lay-verify=""  style="margin-left:12px;width:200px;">
+    <option value="">请选择一个物流公司</option>
+    <option value="yzkd">邮政快递包裹</option>
+    <option value="sf">顺丰速运</option>
+    <option value="st">申通快递</option>
+    </select>
+    <font style="margin-left:70px;">快递单号:</font> <input type="text" name="title" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input" style="width:200px;height:28px;margin-left:15px;"> 
+    </div>
+    <div style="font-size:12px;color:#ccc;margin-top:14px;">*请仔细填写物流公司及快递单号，发货后24小时内仅支持做一次更正，逾期不可修改</div>
+    <button id="btnOK" onclick="submit()" class="layui-btn" style="margin-top:30px;float:right;margin-right:20px;margin-bottom:20px;" >提交</button>
+    </div>
+</div>
+
+      <!-- 物流信息 -->
+<div id="zzc_wuliu" >
+    <div style="margin-top: 20px;height: 38px;line-height: 38px;background: #FFF6CC;margin-left:20px;margin-right: 20px;">
+        <p class="update-express-tips">
+       <span class="layui-badge-dot" style="margin-left:10px;margin-right: 10px;"></span> 物流信息仅支持1次更正，请仔细填写并核对</p>   
+    </div>
+      <p style="margin-left: 20px;padding-top: 20px;"><font style="font-weight: bold;">包裹1</font> 共2件商品</p>
+    <div style="padding-left:20px;padding-top:16px;color:#666;font-size:14px;">
+        发货方式：
+        <input type="radio" name="wl" value="wl" title="物流发货" checked style="margin-left:12px;">
+        物流发货
+        <input type="radio" name="wl" value="no_wl" title="无须物流" style="margin-left:30px;" >无须物流
+        <div style="display:-webkit-flex;flex-direction:row;line-height:28px;margin-top: 15px;">
+            <font>物流方式：</font><select name="wl_cp" lay-verify=""  style="margin-left:12px;width:200px;">
+            <option value="">请选择一个物流公司</option>
+            <option value="yzkd">邮政快递包裹</option>
+            <option value="sf">顺丰速运</option>
+            <option value="st">申通快递</option>
+            </select>
+            <font style="margin-left:10px;">快递单号:</font> <input type="text" name="title" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input" style="width:200px;height:28px;margin-left:15px;"> 
+        </div>
+    </div>
+
+    <button id="btnOK" onclick="close_window()" class="layui-btn layui-btn-primary" style="margin-top:45px;float:right;margin-right:20px;margin-bottom:20px;" >取消</button>
+    <button id="btnOK" onclick="submit()" class="layui-btn" style="margin-top:45px;float:right;margin-right:20px;margin-bottom:20px;" >提交</button>   
+</div>
+    <!-- 延长收货 -->
+<div id="zzc_extend_sh" >
+    <div style="margin-top: 20px;height: 38px;line-height: 38px;background: #FFF6CC;margin-left:20px;margin-right: 20px;">
+        <p class="update-express-tips">
+       <span class="layui-badge-dot" style="margin-left:10px;margin-right: 10px;"></span> 确定延长收货时间？</p>   
+    </div>
+    <div style="margin-left:20px;margin-top:16px;">延长收货时间可以让买家有更多时间确认收货，而不急于申请退款；</div>
+    <div style="margin-left:20px;margin-top:16px;">延长本交易的“确认收货”期限为3天</div>    
+   <!--  <button id="btnOK" onclick="close_window()" class="layui-btn layui-btn-primary" style="margin-top:45px;float:right;margin-right:20px;margin-bottom:20px;" >取消</button>
+    <button id="btnOK" onclick="submit()" class="layui-btn" style="margin-top:45px;float:right;margin-right:20px;margin-bottom:20px;" >确定</button>  --> 
+</div>
+      <!-- 延长收货 -->
+<div id="remark" style="padding:20px;" >
+      <textarea placeholder="请输入内容" class="layui-textarea"></textarea>
+</div>
+<script type="text/javascript">
+
+  
+   function remark()
+    {      
+        console.log("remark");
+        //弹出层       
+            layer.open({
+              title: '卖家备注',
+              type: 1,
+              area: '450px',
+              shadeClose: true, //点击遮罩关闭
+              content: $('#remark'),
+              btn: ['确定'],
+              yes: function(index, layero){
+			    //do something
+			    layer.msg('提交成功');
+			    layer.close(index); //如果设定了yes回调，需进行手工关闭
+
+			  },                                         
+            });       
+    }
+ //关闭提示层
+    function close_window()
+    {  
+    layer.closeAll();
+    }
+ //发货弹出页面
+ function fahuo(order_num)
+ {
+     console.log(order_num);
+     $.ajax({
+         type: 'POST',
+         url: "{:url('/admin/order/all/fahuo')}", //tp这里的地址对应着方法
+         data: {
+             order_num:order_num
+         },
+         dataType: 'json',
+         success: function (data) {
+             $("#zzc_fahuo").empty()
+             $('#zzc_fahuo').append(data)
+         }
+     })
+     //弹出层
+     layer.open({
+         title: '商品发货',
+         type: 1,
+         area: '744px',
+         shadeClose: true, //点击遮罩关闭
+         content: $('#zzc_fahuo')
+     });
+ }
+ //修改物流弹出页面
+ function wuliu(order_num)
+ {
+     console.log(order_num);
+     $.ajax({
+         type: 'POST',
+         url: "{:url('/admin/order/all/fahuo_change')}", //tp这里的地址对应着方法
+         data: {
+             order_num:order_num
+         },
+         dataType: 'json',
+         success: function (data) {
+             $("#zzc_wuliu").empty()
+             $('#zzc_wuliu').append(data)
+         }
+     })
+     console.log("wuliu");
+     //弹出层
+     layer.open({
+         title: '修改物流',
+         type: 1,
+         area: '644px',
+         shadeClose: true, //点击遮罩关闭
+         content: $('#zzc_wuliu')
+     });
+ }
+  
+    function extend_sh()
+    {      
+        console.log("extend_sh");
+        //弹出层       
+            layer.open({
+              title: '延长收货时间',
+              type: 1,
+              area: '600px',
+              shadeClose: true, //点击遮罩关闭
+              content: $('#zzc_extend_sh') ,
+              btn: ['确定', '取消'],
+              yes: function(index, layero){
+			    //do something
+			    layer.msg('延长成功');
+			    layer.close(index); //如果设定了yes回调，需进行手工关闭
+
+			  },                                         
+            });    
+    }
+    $(document).ready(function() {   
+        // 全选/取消全部   
+        $("#checkAllChange").click(function() {   
+            if (this.checked == true) {   
+            $(".userid").each(function() {   
+            this.checked = true;   
+            });   
+            } else {   
+            $(".userid").each(function() {   
+            this.checked = false;   
+            });   
+            }   
+        });
+        //提示层的底层隐藏
+        $('#zzc_fahuo').css('display','none');
+        $('#zzc_wuliu').css('display','none');
+        $('#zzc_extend_sh').css('display','none');
+        $('#remark').css('display','none');
+        
+    });  
+	// 商品购买流程
+	
+	$(function() {
+		setTimeout("changeDivStyle();", 100); // 0.1秒后展示结果，因为HTML加载顺序，先加载脚本+样式，再加载body内容。所以加个延时
+	});
+	function changeDivStyle(){
+			var o_status = $("#o_status").val();	//获取隐藏框值
+
+		if(o_status==0){
+			$('#create').css('background', '#80CCFF');
+			$('#createText').css('color', '#80CCFF');
+		}else if(o_status==1||o_status==2){
+			$('#check').css('background', '#80CCFF');
+			$('#checkText').css('color', '#80CCFF');
+		}else if(o_status==3){
+			$('#produce').css('background', '#80CCFF');
+			$('#produceText').css('color', '#80CCFF');
+		}else if(o_status==4){
+			$('#delivery').css('background', '#80CCFF');
+			$('#deliveryText').css('color', '#80CCFF');
+		}
+	}
+	//
+	function copyArticle(event){
+        const range = document.createRange();
+        range.selectNode(document.getElementById('article'));
+
+        const selection = window.getSelection();
+        if(selection.rangeCount > 0) selection.removeAllRanges();
+        selection.addRange(range);
+        
+        document.execCommand('copy');
+        layer.msg('复制成功');
+
+    }
+
+    document.getElementById('copy').addEventListener('click', copyArticle, false);
+</script>

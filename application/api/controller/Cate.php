@@ -83,9 +83,9 @@ class Cate extends Api
                 break;
         }
         if (input('or') == 0) {
-            $return['goods_list'] = MallGoods::where('cat_id',input('category_id'))->order($by,$order)->select();
+            $return['goods_list'] = MallGoods::where('cat_id',input('category_id'))->field('goods_id,goods_name,shop_price,goods_images,from,sell_count')->order($by,$order)->select();
         }else{
-            $return['goods_list'] = MallGoods::where('brand_id',input('category_id'))->order($by,$order)->select();
+            $return['goods_list'] = MallGoods::where('brand_id',input('category_id'))->field('goods_id,goods_name,shop_price,goods_images,from,sell_count')->order($by,$order)->select();
         }
 
         $return['category_detail'] = Category::get(input('category_id'));

@@ -24,4 +24,11 @@ class MallShop extends BaseModel
         return self::returnImageAttr($value,0);
     }
 
+    public function getBoutUsContentAttr($value)
+    {
+        return self::returnContentAttr($value);
+    }
+
+
+
 }

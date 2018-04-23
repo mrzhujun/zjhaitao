@@ -1,0 +1,124 @@
+
+    
+<head>
+    <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="/statics/layui-master/dist/layui.js" ></script>
+    <link rel="stylesheet" href="/statics/layui-master/dist/css/layui.css"  media="all">
+    <style>
+        #fahuo{
+        	margin-top: 30px;
+        	margin-left: 30px;
+        }
+        #select_file{
+        	color: #3388FF;padding-left:145px;width:220px;z-index: 99;
+        }
+
+    </style>
+</head>
+
+<body>
+    <button class="layui-btn" id="fahuo">点击一键发货+</button>
+
+</body>
+
+
+   
+<!--   <form action="UploadFile.ashx" method="post" enctype="multipart/form-data">
+    <input type="file" name="fileUpload" />
+    <input type="submit" value="上传文件" />
+    </form> -->
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+  //弹出一个页面层
+  $('#fahuo').on('click', function(){
+    layer.open({
+      title: '上传文件',
+      type: 1,
+      area: ['600px', '280px'],
+      shadeClose: true, //点击遮罩关闭
+      content:  '<div id="showFileName" style="padding-left:90px;padding-top:24px;"></div>'+
+
+                '<label class="ui_button ui_button_primary" onclick="clickd(event)" for="xFile" id="select_file">上传文件..</label> ' +
+                '<form><input type="file" accept=".csv" name="uploadFile" id="uploadFile" style="position:absolute;clip:rect(0 0 0 0);" onchange="changImg(event)" ></form>' +
+                
+                ' <div style="color:#ccc;padding-left:145px;padding-bottom:10px;">支持 Excel的文件。</div>' +
+                '<a style="display: inline; padding-left: 145px;color: #3388FF;" href="/statics/excel/moban.csv" target="z_help">下载批量发货模版</a>' +
+                '<div id="not_csv" style="padding-left:16px;padding-top:20px;"></div>'+
+                '<button id="btnOK" onclick="submit()" class="layui-btn" style="margin-top:30px;float:right;margin-right:20px;" >提交</button>'
+    });
+  });
+
+  function clickd(event) {
+  	console.log("a",event)
+      $("#uploadFile").click();
+  }
+
+  //文件名回显
+  function changImg(e){
+    console.log(e.target.files[0].name,e);
+    var  filename = e.target.files[0].name
+    $("#showFileName").text("文件名："+filename);
+
+    var index = filename.lastIndexOf(".");
+    var ext = filename.substr(index+1);
+    console.log(ext,"后缀");
+    if(ext != "csv"){
+        $("#not_csv").text("请选择一个CSV文件。");
+        $('#tj_bt').prop('disabled', false);
+        $('#tj_bt').css('background-color', "#ccc");	
+    }
+  }
+
+  function submit() {
+      var formData = new FormData($('form')[0]);
+      console.log('开始上传文件')
+      var filename = $("#uploadFile").val();
+      if(filename==""){
+          alert( '导入文件不能为空!');
+          return;
+      }
+      // if(epath.substring(epath.lastIndexOf(".") + 1).toLowerCase()=="xlsx"){
+      //     alert( '03以上版本Excel导入暂不支持!');
+      //     return;
+      // }
+      if (filename.substring(filename.lastIndexOf(".") + 1).toLowerCase()!="csv") {
+          alert( '导入文件类型必须为.csv!');
+          return;
+      }
+
+      $.ajax({
+          url: "/admin/order/fahuo/upload",
+          type: 'POST',
+          cache: false,
+          data: formData,
+          processData: false,
+          contentType: false,
+          dataType:"json",
+          success : function(data) {
+              if (data.status) {
+                  alert("文件成功处理完成!" + data.message);
+              } else {
+                  alert("文件成功处理出错！原因：" + data.ErrorMessage);
+              }
+          }
+      });
+
+  }
+
+
+
+
+</script>
+
+

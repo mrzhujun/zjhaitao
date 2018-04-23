@@ -59,6 +59,9 @@ class UserToken extends Token
             $user_id = $this->newUser($open_id);
         }
 
+        //记录登陆日志
+        (new UserLog())->record($user_id);
+
         $cachedValue = $this->prepareCachedValue($wxResult,$user_id);
         $token = $this->saveToCache($cachedValue);
         return $token;

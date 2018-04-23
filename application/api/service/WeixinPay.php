@@ -11,6 +11,7 @@ namespace app\api\service;
  * 小程序微信支付
  */
 use app\lib\exception\WxPayExcrption;
+use think\Log;
 
 class WeixinPay {
     protected $appid;
@@ -61,6 +62,17 @@ class WeixinPay {
     private function weixinapp() {
         //统一下单接口
         $unifiedorder = $this -> unifiedorder();
+        //如果出问题记录日志
+        if (isset($unifiedorder['return_code'])) {
+            if ($unifiedorder['return_code'] == 'FAIL') {
+                Log::init([
+                    'type' => 'File',
+                    'path' => LOG_PATH,
+                    'level' => ['error']
+                ]);
+                Log::record($unifiedorder['return_msg'],'error');
+            }
+        }
         $parameters = array('appId' => $this -> appid, //小程序ID
             'timeStamp' => '' . time() . '', //时间戳
             'nonceStr' => $this -> createNoncestr(), //随机串

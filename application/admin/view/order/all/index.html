@@ -1,0 +1,539 @@
+
+<head>
+    <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="/statics/layui-master/dist/layui.js" ></script>
+    <link rel="stylesheet" href="/statics/layui-master/dist/css/layui.css"  media="all">
+    <style type="text/css">
+         body{
+            background: #F2F2F2;
+            padding: 20px;
+            font-size: 12px;
+         }
+         .content{
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 16px;          
+         }
+         .content-top{
+            background: #F8F8F8;
+            width: 100%;
+            height: 224px;
+         }
+         select{
+            width:118px;
+            height: 28px;
+            border: 1px solid #ccc;
+            padding-left: 10px;
+         }
+         input{
+            border: 1px solid #ccc;
+         }
+         .order-number{
+            
+         }
+         .content-top-one{
+            display:-webkit-flex;
+            flex-direction: row;
+            padding-top: 20px;
+            padding-left: 16px;
+         }
+         .order-number-text{
+            margin-left: 6px;
+         }
+         .font-xiadan{
+            line-height: 28px;
+            margin-left: 40px;
+         }
+         .jianxi-8{
+            margin-left:8px;
+         }
+         .jianxi-20{
+            margin-left:20px;
+         }
+         .jianxi-83{
+            margin-left:83px;
+         }
+         .font-bule{
+            color:#3388FF;
+         }
+         .font-inline{
+            line-height: 28px;
+         }
+         .content-top-two{
+            display: -webkit-flex;
+            flex-direction: row;
+            margin-top:12px;
+         }
+         .button-1{
+            background:#3388FF;
+            color: #fff; 
+            border:0;
+            padding: 6px 12px;
+            border-radius: 2px;
+            margin-left: 140px;
+         }
+         .button-2{
+            background: #fff;
+            margin-left:15px;
+            border: 1px solid #ccc;
+            padding: 6px 12px;
+         }
+         .goods-right-style{
+           border-right: 1px solid #e9e9e9;
+           text-align: right;
+           height: 95px;
+           padding-top: 10px;
+           padding-right: 10px;
+         }
+          .goods-right-center{
+           border-right: 1px solid #e9e9e9;
+           text-align: center;
+           height: 95px;
+           padding-top: 10px;
+         } 
+         .zfc-top{
+            background:#F8F8F8;height: 40px;line-height: 40px;margin-top:20px; border:1px solid #e6e6e6;margin-left:20px;margin-right:20px;
+         }
+         .zfc-mid{ margin-right: 20px;margin-left: 20px;padding-top: 10px;}  
+         select{
+            border-radius: 4px;
+         }
+         input{
+            border-radius: 4px;
+         }       
+    </style>
+     
+</head>
+<body>
+<div style="height:auto;width:100%"> 
+    <!-- 顶部选择 -->
+    <div class="content-top">
+           <div class="content-top-one">
+               <!-- <div class="order-number"> -->
+                    <select id="order_number_type" name="order_number_type" class="select">
+                        <option value="订单号">订单号</option>
+                        <option value="微信支付订单号">微信支付订单号</option>
+                        <option value="收货人姓名">收货人姓名</option>
+                        <option value="收货人手机后四位">收货人手机后四位</option>              
+                    </select>
+                <!-- </div> -->
+                <input type="type" name="order_number" class="order-number-text">
+
+                <font class="font-xiadan">下单时间:</font>
+                <input type="date" name="xiadan_date_begin" class="jianxi-8" />
+                <font class="font-inline" style="margin-left:4px;margin-right: 4px;"> 至 </font>
+                <input type="date" name="xiadan_date_end" />
+                <font color="#3388FF" class=" jianxi-20 font-inline">近7天</font>
+                <font color="#3388FF" class=" jianxi-20 font-inline">近30天</font>
+            </div>
+
+            <div class="content-top-two">
+                <font class="jianxi-83 font-inline" >商品名称:</font>
+                <input type="type" name="goods_name" class="order-number-text">
+
+                <font class="font-xiadan">订单状态:</font>
+                <select id="order_status" name="order_status" class="select jianxi-8" >
+                    <option selected value="">全部</option>
+                    <option value="0">待付款</option>
+                    <option value="1">待发货</option>
+                    <option value="2">已发货</option>
+                    <option value="3">已完成</option>
+                    <option value="4">已关闭</option>
+                    <!--<option value="退款中">退款中</option>            -->
+                </select>
+            </div>
+            <!--<div class="content-top-two">-->
+                <!--<font class="jianxi-83 font-inline">维权状态:</font>-->
+                <!--<select id="order_state" name="refued" class="select jianxi-8" >-->
+                    <!--<option value="全部">全部</option>-->
+                    <!--<option value="退款处理中">退款处理中</option>-->
+                    <!--<option value="退款结束">退款结束</option>-->
+                <!--</select>-->
+            <!--</div>-->
+            <div class="content-top-two">
+                <button id="submit" type="button"  class="button-1" >筛选</button>
+                <!--<button type="button"  class="button-2">批量导出</button>-->
+                <!--<button type="button"  class="button-2">查看已生成报表</button>-->
+            </div>      
+    </div>
+
+    <!-- 中间选项卡 -->
+    <div class="layui-tab">
+        <ul class="layui-tab-title">
+            <li class="layui-this" onclick="xuan(0)">全部</li>
+            <li onclick="xuan(1)">待付款</li>
+            <li onclick="xuan(2)">待发货</li>
+            <li onclick="xuan(3)">已发货</li>
+            <li onclick="xuan(4)">已完成</li>
+            <li onclick="xuan(5)">已关闭</li>
+            <!--<li>退款中</li>-->
+        </ul>
+       <!--<div class=" layui-btn" id="fahuo" onclick="fahuo()"> 发 货 </div>-->
+       <!--<div data-method="confirmTrans" class=" layui-btn layui-btn-danger" id="cancel_order" onclick="cancel_order()"> 取消订单 </div>-->
+      
+        <div class="layui-row" style="background:#F8F8F8;height: 40px;line-height: 40px;margin-top:26px; border:1px solid #e6e6e6;">
+            <div class="layui-col-md7" style="padding-left:12px;display: -webkit-flex;flex-direction: row;">
+             <text style="flex:1;text-align: left;">商品</text>   
+            <div class="layui-col-md2" style="padding-right: 10px;flex:1;text-align: right;">
+                单价/数量   
+                </div>  
+            </div>
+            <div class="layui-col-md5">
+                
+                <div class="layui-col-md2" style="text-align: center;width: 20%;">
+                售后
+                </div>
+                <div class="layui-col-md2" style="text-align: center;width: 20%;">
+                买家
+                </div>
+                <div class="layui-col-md2" style="text-align: center;width: 20%;">
+                下单时间
+                </div>
+                <div class="layui-col-md2" style="text-align: center;width: 20%;">
+                订单状态    
+                </div>
+                <div class="layui-col-md2" style="text-align: center;width: 20%;">
+                实付金额
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- 商品列表 -->
+        <div class="layui-tab-content" style="padding:0;">
+            <div id="content1" class="layui-tab-item layui-show" style="height: auto;line-height: 24px; ">
+
+                <!--循环开始-->
+
+                    <!--循环结束-->
+
+
+                </div>    
+
+
+                <!-- <div style="display: -webkit-flex;flex-direction: row;">
+                     
+                </div>
+ -->
+
+                <!-- 商品列表底部结束  -->
+
+
+                
+
+                <!-- 分页 -->
+                 
+            <div id="demo20" style="float: right;margin-top:20px"></div>                       
+                    
+               <!--<ul id="biuuu_city_list" style="clear: both;"></ul> -->
+
+           
+            </div>
+            <div class="layui-tab-item layui-show" style="height: auto;line-height: 24px; ">
+
+            </div>
+
+            <div class="layui-tab-item">内容2</div>
+            <div class="layui-tab-item">内容3</div>
+            <div class="layui-tab-item">内容4</div>
+            <div class="layui-tab-item">内容5</div>
+            <div class="layui-tab-item">内容6</div>
+
+
+        </div>    
+    </div>
+
+ </div>
+ <div style="clear:both;"></div>
+    <input id="page" type="hidden" value="1" />
+    <input id="limit" type="hidden" value="10" />
+</body>
+
+<!--  <div style="display: none;"> -->
+    <!-- 发货 -->
+<div id="zzc_fahuo">
+
+</div>
+
+      <!-- 物流信息 -->
+<div id="zzc_wuliu" >
+
+</div>
+<!--   </div> -->
+<script>
+
+    function cancel_order(order_num){
+        layer.msg('确定取消订单吗？取消将无法恢复！', {
+            time: 0 //不自动关闭
+            ,btn: ['确定', '取消']
+            ,yes: function(){
+                $.ajax({
+                    type: 'POST',
+                    url: "{:url('/admin/order/all/order_cancle')}", //tp这里的地址对应着方法
+                    data: {
+                        order_num:order_num
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.code) {
+                            layer.msg('取消成功');
+                        }else{
+                            layer.msg(data.message);
+                        }
+                        window.location.reload()
+                    }
+                })
+
+            }
+        });
+    }
+
+    //关闭提示层
+    function close_window()
+    {  
+    layer.closeAll();
+    }
+    //发货弹出页面
+    function fahuo(order_num)
+    {
+        console.log(order_num);
+        $.ajax({
+            type: 'POST',
+            url: "{:url('/admin/order/all/fahuo')}", //tp这里的地址对应着方法
+            data: {
+                order_num:order_num
+            },
+            dataType: 'json',
+            success: function (data) {
+                $("#zzc_fahuo").empty()
+                $('#zzc_fahuo').append(data)
+            }
+        })
+        //弹出层
+            layer.open({
+              title: '商品发货',
+              type: 1,
+              area: '744px',
+              shadeClose: true, //点击遮罩关闭
+              content: $('#zzc_fahuo')
+            });
+    }
+    //修改物流弹出页面
+    function wuliu(order_num)
+    {
+        console.log(order_num);
+        $.ajax({
+            type: 'POST',
+            url: "{:url('/admin/order/all/fahuo_change')}", //tp这里的地址对应着方法
+            data: {
+                order_num:order_num
+            },
+            dataType: 'json',
+            success: function (data) {
+                $("#zzc_wuliu").empty()
+                $('#zzc_wuliu').append(data)
+            }
+        })
+        console.log("wuliu");
+        //弹出层       
+            layer.open({
+              title: '修改物流',
+              type: 1,
+              area: '644px',
+              shadeClose: true, //点击遮罩关闭
+              content: $('#zzc_wuliu')                                          
+            });       
+    }
+    
+    $(document).ready(function() {   
+        // 全选/取消全部   
+        $("#checkAllChange").click(function() {   
+            if (this.checked == true) {   
+            $(".userid").each(function() {   
+            this.checked = true;   
+            });   
+            } else {   
+            $(".userid").each(function() {   
+            this.checked = false;   
+            });   
+            }   
+        });
+        //提示层的底层隐藏
+        $('#zzc_fahuo').css('display','none');
+        $('#zzc_wuliu').css('display','none');
+    });  
+
+    //点击筛选再次初始化分页按钮
+    $("#submit" ).click(function () {
+        var order_number_type = $('select[name=order_number_type]').val();
+        var order_number = $('input[name=order_number]').val();
+        var xiadan_date_begin = $('input[name=xiadan_date_begin]').val();
+        var xiadan_date_end = $('input[name=xiadan_date_end]').val();
+        var goods_name = $('input[name=goods_name]').val();
+        var order_status = $('select[name=order_status]').val();
+        $.ajax({
+            type: 'POST',
+            url: "{:url('/admin/order/all/search')}", //tp这里的地址对应着方法
+            data: {
+                page: 1,
+                order_number_type:order_number_type,
+                order_number:order_number,
+                xiadan_date_begin:xiadan_date_begin,
+                xiadan_date_end:xiadan_date_end,
+                goods_name:goods_name,
+                order_status:order_status,
+                limit:10
+            },
+            dataType: 'json',
+            success: function (data) {
+                $("#content1").empty()
+                $("#content1").append(data['html'])
+                turnpage(data['totalpage'],data['page'],data['totalcount'])
+            }
+        })
+
+    })
+    function getdata(limit,page) {
+        var order_number_type = $('select[name=order_number_type]').val();
+        var order_number = $('input[name=order_number]').val();
+        var xiadan_date_begin = $('input[name=xiadan_date_begin]').val();
+        var xiadan_date_end = $('input[name=xiadan_date_end]').val();
+        var goods_name = $('input[name=goods_name]').val();
+        var order_status = $('select[name=order_status]').val();
+        $.ajax({
+            type: 'POST',
+            url: "{:url('/admin/order/all/search')}", //tp这里的地址对应着方法
+            data: {
+                page: page,
+                order_number_type:order_number_type,
+                order_number:order_number,
+                xiadan_date_begin:xiadan_date_begin,
+                xiadan_date_end:xiadan_date_end,
+                goods_name:goods_name,
+                order_status:order_status,
+                limit:limit
+            },
+            dataType: 'json',
+            success: function (data) {
+                $("#content1").empty()
+                $("#content1").append(data['html'])
+                // turnpage(data['totalpage'],data['page'],data['totalcount'])
+            }
+        })
+    }
+
+    //生成分页按钮
+    function turnpage(totalpage,page,totalcount) {
+        layui.use(['laypage', 'layer'], function(){
+            var laypage = layui.laypage
+                ,layer = layui.layer;
+            //完整功能
+            laypage.render({
+                elem: 'demo20'
+                ,count: totalcount
+                ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                ,jump: function(obj){
+                    console.log(obj)
+                    var limit = obj.limit
+                    var page = obj.curr
+                    //limit每页限制 curr第几页
+                    getdata(limit,page);
+                }
+            });
+
+        });
+    }
+
+    getdata2();
+    //刚进入页面初始化
+    function getdata2() {
+        var page = $('input[id=page]').val();
+        var order_number_type = $('select[name=order_number_type]').val();
+        var order_number = $('input[name=order_number]').val();
+        var xiadan_date_begin = $('input[name=xiadan_date_begin]').val();
+        var xiadan_date_end = $('input[name=xiadan_date_end]').val();
+        var goods_name = $('input[name=goods_name]').val();
+        var order_status = $('select[name=order_status]').val();
+        $.ajax({
+            type: 'POST',
+            url: "{:url('/admin/order/all/search')}", //tp这里的地址对应着方法
+            data: {
+                page: page,
+                order_number_type:order_number_type,
+                order_number:order_number,
+                xiadan_date_begin:xiadan_date_begin,
+                xiadan_date_end:xiadan_date_end,
+                goods_name:goods_name,
+                order_status:order_status,
+                limit:10
+            },
+            dataType: 'json',
+            success: function (data) {
+                $("#content1").empty()
+                $("#content1").append(data['html'])
+                turnpage(data['totalpage'],data['page'],data['totalcount'])
+            }
+        })
+    }
+
+    $(function(){
+        //当鼠标滑入时将div的class换成divOver
+        $('.divbox').hover(function(){
+                $(this).addClass('divOver');
+            },function(){
+                //鼠标离开时移除divOver样式
+                $(this).removeClass('divOver');
+            }
+        );
+    });
+    //注意：选项卡 依赖 element 模块，否则无法进行功能性操作
+    layui.use('element', function(){
+        var element = layui.element;
+
+        //…
+    });
+    layui.use(['laypage', 'layer'], function() {
+        var laypage = layui.laypage
+            , layer = layui.layer;
+        //测试数据
+        var data = [];
+    })
+
+    function xuan(id) {
+        console.log('点击选项卡'+id)
+        var  ss = document.getElementById('order_status');
+        ss[id].selected = true;//选中
+        $("#submit").click();
+    }
+
+    //提交物流
+    function submit(order_num) {
+        var wuliu = $('select[id=wuliu]').val();
+        var is_wuliu = $('input[name=wl]:checked').val();
+        var danhao = $('input[id=danhao]').val();
+        console.log(is_wuliu+'aaaa'+wuliu+danhao+order_num)
+        $.ajax({
+            type: 'POST',
+            url: "{:url('/admin/order/all/fahuo_success')}", //tp这里的地址对应着方法
+            data: {
+                order_num:order_num,
+                is_wuliu:is_wuliu,
+                wuliu:wuliu,
+                danhao:danhao
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.code) {
+                    alert('发货成功');
+                    layer.closeAll();
+                    window.location.reload()
+                }
+
+            }
+        })
+
+    }
+
+
+</script>
