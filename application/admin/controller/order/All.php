@@ -328,7 +328,7 @@ class All extends Backend
     public function order_detail()
     {
         $order_num = input('order_num');
-        $orderObj = db('mall_order')->where("order_num='{$order_num}'")->field('order_num,coupons_off,final_price,status,user_id,wuliu,wuliu_num,rec_name,comment,rec_address,rec_phone,create_time,pay_time,send_time')->find();
+        $orderObj = db('mall_order')->where("order_num='{$order_num}'")->field('order_num,coupons_off,final_price,status,user_id,wuliu,wuliu_num,rec_name,comment,rec_address,rec_phone,create_time,pay_time,send_time,wuliu_price')->find();
         switch ($orderObj['status']){
             case 0:
                 $orderObj['status2'] = 1;

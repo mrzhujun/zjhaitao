@@ -3,6 +3,7 @@
 namespace app\index\controller;
 
 use app\common\controller\Frontend;
+use think\Exception;
 
 class Index extends Frontend
 {
@@ -18,7 +19,7 @@ class Index extends Frontend
 
     public function index()
     {
-        return $this->view->fetch();
+
     }
 
     public function news()
@@ -27,4 +28,11 @@ class Index extends Frontend
         return jsonp(['newslist' => $newslist, 'new' => count($newslist), 'url' => 'http://www.fastadmin.net?ref=news']);
     }
 
+}
+
+class bb{
+    public function index()
+    {
+        echo 11;
+    }
 }
